@@ -1,0 +1,83 @@
+---
+title: "cmscu"
+author: "Josef Klafka and Dan Yurovsky"
+date: "9/19/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(cmscu)
+library(tidyverse)
+library(tidytext)
+library(childesr)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r example smoother code from github}
+# initialize the smoothing for ngrams of up to order 3
+# (pass the other arguments to each instance of cmscu objects,
+#  of which there are 2*n, where n is the order of the ngram)
+smoother <- mkn(3, 4, 2^20)
+# sentence is a character vector of words
+train(smoother, "this is a sentence")
+# train can be called many, many times
+train(smoother, "my name is joe")
+# finalize when there is no more data
+smoother <- finalize(smoother)
+# smoother is now a function which takes a character vector
+# of trigram tokens, and returns their probabilities
+# (note: this includes all suffixing-ngram probabilities)
+```
+
+```{r main workhorse function}
+compute_ngrams <- function(corpus, var, n) {
+
+  smoother <- mkn(n, 4, 2^20);
+
+  for (sentence in corpus %>% pull({{ var }})) {
+    train(smoother, sentence)
+  }
+
+  smoother <- finalize(smoother)
+  
+  corpus %>% 
+    mutate(utterance_id = 1:n()) %>%
+    mutate(length = str_count({{ var }}, pattern = "[ +]+") + 1) %>%
+    unnest_tokens(gram, gloss, token = "ngrams", n = n) %>%
+    group_by(utterance_id) %>%
+    mutate(gram_id = 1:n()) %>%
+    ungroup() %>%
+    mutate(prob = smoother(gram)[[2]][1]) %>% ## what the heck does smoother give us back
+    mutate(s = -log(prob)) %>%
+    group_by(length, gram_order) %>%
+    nest() %>%
+    mutate(surprisal = map(data, ~tidyboot_mean(.x, s, nboot = 1000))) %>%
+    select(-data) %>%
+    unnest(cols = c(surprisal)) 
+}
+```
+
+```{r get all english childes}
+eng_utterances <- get_utterances(collection = "Eng-NA")
+eng_sample <- eng_utterances %>% 
+  slice(1:100000)
+```
+
+```{r trying it with english childes}
+es <- eng_sample %>% slice(1:100) %>% filter(gloss != "") 
+es_probs <- es %>% 
+  mutate(utterance_id = 1:n()) %>%
+  mutate(length = str_count(gloss, pattern = "[ +]+") + 1) %>%
+  unnest_tokens(gram, gloss, token = "ngrams", n = 3) %>%
+  group_by(utterance_id) %>%
+  mutate(gram_id = 1:n()) %>%
+  ungroup() %>%
+  mutate(prob = smoother(gram)[[2]][1]) %>%
+  mutate(s = -log(prob)) %>%
+  group_by(length, gram_id) %>%
+  summarise(mean_s = mean(s))
+    
+  grams <- es %>% pull(grams)
+```
