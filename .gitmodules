@@ -1,0 +1,3 @@
+[submodule "r-cmscu"]
+	path = r-cmscu
+	url = https://github.com/jasonkdavis/r-cmscu.git
