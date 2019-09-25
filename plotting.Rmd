@@ -1,0 +1,28 @@
+---
+title: "Plotting results"
+author: "Josef Klafka and Daniel Yurovsky"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(tidyverse)
+require(here)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r reading and plotting results from kenlm}
+results <- read_csv(here("childes_results.csv"), col_names = F) %>%
+  rename(gram_position = X1, s = X2, length = X3) %>%
+  mutate(gram_position = gram_position + 1) # python is zero-indexed
+
+#plotting 
+results %>%
+  filter(length %in% 5:10) %>% 
+  ggplot(aes(x = gram_position, y = s)) + 
+    geom_point() + 
+    geom_line() + 
+    scale_x_continuous(breaks = 1:10) + 
+    facet_wrap(~length)
+```
