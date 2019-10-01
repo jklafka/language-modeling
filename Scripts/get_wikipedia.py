@@ -53,10 +53,14 @@ def main(lang_name):
         for sentence in sentences:
             all_sentences.append(sentence)
 
-    with open(lang_name + "_df.csv", 'w') as f:
-        writer = csv.writer(f)
+    with open(lang_name + ".txt", 'w') as f:
         for sentence in all_sentences:
-            writer.writerow([sentence])
+            f.write("%s\n" % sentence)
+
+    # with open(lang_name + "_df.csv", 'w') as f:
+    #     writer = csv.writer(f)
+    #     for sentence in all_sentences:
+    #         writer.writerow([sentence])
 
     # delete the text files and datafile
     # may be several gigabytes large

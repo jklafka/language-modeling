@@ -2,10 +2,13 @@ require(childesr)
 require(dplyr)
 require(here)
 
-english <- get_utterances(collection = "Eng-NA")
+language = commandArgs(trailingOnly=TRUE)[1]
+column_to_use = commandArgs(trailingOnly=TRUE)[2]
 
-english %>%
+corpora <- get_utterances(collection = language)
+
+corpora %>%
   # filter(speaker_role %in% c("Target_Child", "Child")) %>%
   filter(speaker_role %in% c("Mother", "Father", "Adult")) %>%
-  select(gloss) %>%
-  write.table(here("Data/childes.txt"), sep="\n", row.names=FALSE)
+  select(column_to_use) %>%
+  write.table(here(paste0("Data/childes_", language, ".txt")), sep="\n", row.names=FALSE)

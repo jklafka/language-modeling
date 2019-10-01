@@ -14,7 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r reading and plotting results from kenlm}
-results <- read_csv(here("Data/childes_results.csv"), col_names = F) %>%
+results <- read_csv(here("Data/Spanish_results.csv"), col_names = F) %>%
   rename(gram_position = X1, s = X2, length = X3) %>%
   mutate(gram_position = gram_position + 1) # python is zero-indexed
 
