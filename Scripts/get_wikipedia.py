@@ -2,7 +2,7 @@ import json, sys, subprocess, csv
 import urllib.request
 import regex as re
 
-with open("../language_dict.json", 'r') as f:
+with open("language_dict.json", 'r') as f:
     file = f.read()
 LANG_DICT = json.loads(file) #maps languages to their wikipedia url prefixes
 
@@ -33,7 +33,7 @@ def main(lang_name):
     url = "https://dumps.wikimedia.org/other/cirrussearch/20190923/" + lang_prefix + \
         "wiki-20190923-cirrussearch-content.json.gz"
     urllib.request.urlretrieve(url, "datafile") #"Data/Files/" + lang_name + "_file")
-    subprocess.call(["python3", "cirrus-extract.py", \
+    subprocess.call(["python3", "Scripts/cirrus-extract.py", \
                     "datafile"])
                     #"Data/Files/" + lang_name + "_file"])
 

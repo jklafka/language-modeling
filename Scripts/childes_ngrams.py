@@ -2,12 +2,14 @@ import sys, csv, kenlm, argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("lang_name", help="Name of the language collection you're using from CHILDES")
+parser.add_argument("speaker", help="Are we looking at parent or child speech")
 args = parser.parse_args()
 
 lang_name = args.lang_name
+speaker = args.speaker
 
 # get model
-model = kenlm.LanguageModel("Models/childes_" + lang_name + ".klm")
+model = kenlm.LanguageModel("Models/childes_" + lang_name + '_' + speaker + ".klm")
 
 # gets surprisal from string based on the model's stored probabilities
 def surprisal(s):
@@ -23,7 +25,7 @@ def ngrams(s, n):
     return list(zip(joined_grams, range(len(joined_grams)), utt_length))
 
 # take data and turn it into ngrams
-childes = [utterance.strip('["\n]') for utterance in open("Data/childes_" + lang_name + ".txt", 'r')\
+childes = [utterance.strip('["\n]') for utterance in open("Data/childes_" + lang_name + '_' + speaker + ".txt", 'r')\
     .readlines()][1:]
 childes = [utterance for utterance in childes if utterance != ""]
 childes_ngrams = [gram for s in childes for gram in ngrams(s, 3)]
@@ -46,7 +48,7 @@ for length in lengths:
         results.append((j, sum, length))
 
 # write results
-with open("Data/" + lang_name + "_results.csv", 'w') as f:
+with open("Data/" + lang_name + '_' + speaker + "_results.csv", 'w') as f:
     writer = csv.writer(f)
     for line in results:
         writer.writerow(line)
