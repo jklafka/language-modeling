@@ -44,7 +44,7 @@ relative_slopes <- function(lang_df, pos_list) {
 
   divides <- pos_list %>%
     group_by(length) %>%
-    mutate(start_pos = position, end_pos = lead(position) - 1) %>%
+    mutate(start_pos = position, end_pos = lead(position)) %>%
     filter(!is.na(end_pos)) %>%
     group_by(length, quantile) %>%
     nest() %>%
@@ -79,7 +79,7 @@ NUM_SECTIONS <- 5
 alemanic <- read_csv(here("Data/wikipedia_Alemannic.csv"), 
                      col_names = c("position", "surprisal", "length")) %>%
   mutate(position = position + 1) %>%
-  filter(length >= 8, length <= 50)
+  filter(length >= 9, length <= 50)
 
 pos_list <- alemanic %>%
   group_by(length) %>%
