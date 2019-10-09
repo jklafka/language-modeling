@@ -1,4 +1,5 @@
-import kenlm, csv, argparse
+import kenlm
+import csv, argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("lang_name", help="Name of the language collection you're using from CHILDES")
@@ -13,7 +14,7 @@ def surprisal(s):
     return -model.score(s)
 
 # get ngrams from a string
-# returns list of (gram, gram position and length of utterance) tuples
+# returns list of (ngram, ngram position and length of utterance) tuples
 def ngrams(s, n):
     tokens = s.split()
     ngrams = lambda a, n: zip(*[a[i:] for i in range(n)])
@@ -25,24 +26,28 @@ def ngrams(s, n):
 childes = [utterance.strip('["\n]') for utterance in open(lang_name + ".txt", 'r')\
     .readlines()][1:]
 childes = [utterance for utterance in childes if utterance != ""]
-childes_ngrams = [gram for s in childes for gram in ngrams(s, 3)]
+childes_ngrams = [gram for utt in childes for gram in ngrams(utt, 3)]
 
-# get all the utterance length we're working with
-lengths = list({gram[2] for gram in childes_ngrams})
+# # get all the utterance length we're working with
+# lengths = list({gram[2] for gram in childes_ngrams})
+# results = []
+
+# # filter by length and get average surprisal for each gram position
+# for length in lengths:
+#     length_ngrams = list(filter(lambda x: x[2] == length, childes_ngrams))
+#     max_ngram = max(length_ngrams, key = lambda x: x[1])[1]
+#
+#     for j in range(max_ngram):
+#         jth_ngrams = list(filter(lambda x: x[1] == j, length_ngrams))
+#         sum = 0
+#         for ngram in jth_ngrams:
+#             sum += surprisal(ngram[0])
+#         sum /= len(jth_ngrams)
+#         results.append((j, sum, length))
+
 results = []
-
-# filter by length and get average surprisal for each gram position
-for length in lengths:
-    length_ngrams = list(filter(lambda x: x[2] == length, childes_ngrams))
-    max_ngram = max(length_ngrams, key = lambda x: x[1])[1]
-
-    for j in range(max_ngram):
-        jth_ngrams = list(filter(lambda x: x[1] == j, length_ngrams))
-        sum = 0
-        for x in jth_ngrams:
-            sum += surprisal(x[0])
-        sum /= len(jth_ngrams)
-        results.append((j, sum, length))
+for gram in childes_ngrams:
+    results.append((gram[1], surprisal(gram[0]), gram[2]))
 
 # write results
 with open("Data/wikipedia_" + lang_name + ".csv", 'w') as f:
