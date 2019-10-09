@@ -23,10 +23,14 @@ def ngrams(s, n):
     return list(zip(joined_grams, range(len(joined_grams)), utt_length))
 
 # take data and turn it into ngrams
-childes = [utterance.strip('["\n]') for utterance in open(lang_name + ".txt", 'r')\
+wikipedia = [utterance.strip('["\n]') for utterance in open(lang_name + ".txt", 'r')\
     .readlines()][1:]
-childes = [utterance for utterance in childes if utterance != ""]
-childes_ngrams = [gram for utt in childes for gram in ngrams(utt, 3)]
+wikipedia = [utterance for utterance in wikipedia if utterance != ""]
+wikipedia_ngrams = [gram for utt in wikipedia for gram in ngrams(utt, 3)]
+
+results = []
+for gram in wikipedia_ngrams:
+    results.append([gram[1], surprisal(gram[0]), gram[2]])
 
 # # get all the utterance length we're working with
 # lengths = list({gram[2] for gram in childes_ngrams})
@@ -45,9 +49,12 @@ childes_ngrams = [gram for utt in childes for gram in ngrams(utt, 3)]
 #         sum /= len(jth_ngrams)
 #         results.append((j, sum, length))
 
-results = []
-for gram in childes_ngrams:
-    results.append((gram[1], surprisal(gram[0]), gram[2]))
+# # add in sentence ids
+# wikipedia = list(zip(wikipedia, range(1, len(wikipedia))))
+# wikipedia_ngrams = [list(gram) + [utt[1]] for utt in wikipedia for gram in ngrams(utt[0], 3)]
+# results = []
+# for gram in wikipedia_ngrams:
+#     results.append([gram[1], surprisal(gram[0]), gram[2], gram[3]])
 
 # write results
 with open("Data/wikipedia_" + lang_name + ".csv", 'w') as f:

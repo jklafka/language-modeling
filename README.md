@@ -6,7 +6,9 @@ Run
 
 `python3 -m pip install https://github.com/kpu/kenlm/archive/master.zip`
 
-to install the python3 API for KenLM. More information on the installation and usage for KenLM in Python can be found at (https://github.com/kpu/kenlm) and KenLM in general at (https://kheafield.com/code/kenlm/).
+to install the Python3 API for KenLM. Follow the instructions on (https://kheafield.com/code/kenlm/) to download and install kenlm into the home directory for this project. The scripts handle using the Python and C++ modules, so you don't have to worry about anything besides installation. 
+
+More information on the installation and usage for KenLM in Python can be found at (https://github.com/kpu/kenlm) and KenLM in general at (https://kheafield.com/code/kenlm/).
 
 ## Usage
 

@@ -1,34 +1,17 @@
----
-title: Wikipedia Surprisal estimation
-author: Josef Klafka and Dan Yurovsky
-date: "`r Sys.Date()`"
-output: 
-  html_document:
-    toc: false
-    number_sections: false
-    theme: lumen
-    toc_float: false
-    code_folding: show 
----
+require(here)
+require(broom)
+require(janitor)
+require(dplyr)
+require(tibble)
+require(readr)
+require(tidyr)
 
-```{r setup, include=FALSE}
-# load packages
-library(knitr)
-library(here)
-library(broom)
-library(janitor)
-library(tidyverse)
+NUM_SECTIONS <- 5
+lang_name = commandArgs(trailingOnly=TRUE)[1]
 
-knitr::opts_chunk$set(echo = TRUE)
-
-opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, 
-               error = FALSE, cache = FALSE, tidy = FALSE)
-
-theme_set(theme_classic(base_size = 16))
-```
-
-helpers
-```{r}
+## helpers
+# Get the quantiles of the different sentence lengths i.e. the positions at the
+# different "fifths" of the sentence
 get_quantiles <- function(df, num_sections) {
   df %>%
     pull(position) %>%
@@ -39,7 +22,7 @@ get_quantiles <- function(df, num_sections) {
     mutate(quantile = 1:(num_sections + 1))
 }
 
-
+# Get the relative slopes for each fifth of the distribution at the quantiles
 relative_slopes <- function(lang_df, pos_list) {
 
   divides <- pos_list %>%
@@ -48,18 +31,18 @@ relative_slopes <- function(lang_df, pos_list) {
     filter(!is.na(end_pos)) %>%
     group_by(length, quantile) %>%
     nest() %>%
-    mutate(position = map(data, ~seq(.x$start_pos, .x$end_pos) %>% 
+    mutate(position = map(data, ~seq(.x$start_pos, .x$end_pos) %>%
                             enframe(name = NULL, value = "position"))) %>%
     select(-data) %>%
     unnest(cols = position)
-  
+
   quantile_groups <- divides %>%
     left_join(lang_df, by = c("length", "position")) %>%
     group_by(quantile, length) %>%
     mutate(position = 1:n()) %>%
     group_by(quantile) %>%
-    nest() 
-  
+    nest()
+
   quantile_groups %>%
     mutate(slope = map(data, ~lm(surprisal ~ length + I(length^2) +
                                    position, data  = .))) %>%
@@ -70,30 +53,30 @@ relative_slopes <- function(lang_df, pos_list) {
     select(-term) %>%
     clean_names()
 }
-```
 
-read data
-```{r}
-NUM_SECTIONS <- 5
-
-alemanic <- read_csv(here("Data/wikipedia_Alemannic.csv"), 
-                     col_names = c("position", "surprisal", "length", "sentence")) %>%
-  mutate(position = position + 1) %>%
+wikipedia_ngrams <- read_csv(here(paste0("Data/wikipedia_", lang_name, ".csv")),
+                     col_names = c("position", "surprisal", "length")) %>%
+  mutate(position = position + 1) %>% #python is 0 but R is 1-indexed
   filter(length >= 9, length <= 50)
 
-pos_list <- alemanic %>%
+pos_list <- wikipedia_ngrams %>%
   group_by(length) %>%
   nest() %>%
   mutate(quantiles = map(data, ~get_quantiles(.x, NUM_SECTIONS))) %>%
   select(-data) %>%
   unnest(cols = c(quantiles))
 
-slopes <- relative_slopes(alemanic, pos_list)
-```
+slopes <- relative_slopes(wikipedia_ngrams, pos_list)
 
-```{r}
-ggplot(slopes, aes(x = quantile, y = estimate)) + 
-  geom_pointrange(aes(ymin = estimate - 1.96 * std_error, 
-                      ymax = estimate + 1.96 * std_error )) + 
-  geom_line()
-```
+lang_slopes <- slopes %>%
+  pull(estimate) %>%
+  tibble() %>%
+  t() %>%
+  as_tibble() %>%
+  mutate(language = lang_name) %>%
+  rename(slope1 = V1, slope2 = V2, slope3 = V3, slope4 = V4, slope5 = V5)
+
+all_slopes <- read_csv(here("Data/Wikipedia/relative_slopes.csv"), col_names=T)
+all_slopes %>%
+  bind_rows(lang_slopes) %>%
+  write_csv(here("Data/Wikipedia/relative_slopes.csv"))
