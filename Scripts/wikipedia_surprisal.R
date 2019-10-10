@@ -1,10 +1,7 @@
 require(here)
 require(broom)
 require(janitor)
-require(dplyr)
-require(tibble)
-require(readr)
-require(tidyr)
+require(tidyverse)
 
 NUM_SECTIONS <- 5
 lang_name = commandArgs(trailingOnly=TRUE)[1]
