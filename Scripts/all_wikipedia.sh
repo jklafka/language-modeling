@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -a fullarr=("Basque" "Dutch" "Alemannic" "Wolof" "Bosnian" "Hindi"
+declare -a fullarr=("Tulu" "Kabiye" "Dutch" "Wolof" "Bosnian" "Hindi"
 	"Danish" "Russian" "Urdu" "German" "Swedish" "Afrikaans" "Anglo-Saxon"
 	"Icelandic" "Belarusian" "Bulgarian" "Croatian" "Macedonian" "Serbo-Croatian"
 	"Ukrainian" "Vietnamese" "Pangasinan" "Kapampangan" "Khmer" "Japanese"
@@ -23,7 +23,7 @@ declare -a fullarr=("Basque" "Dutch" "Alemannic" "Wolof" "Bosnian" "Hindi"
 	"Lao" "Thai" "Lezgian" "Malagasy" "Papiamentu" "Chavacano" "Albanian"
 	"Luganda" "Swahili" "Tswana" "Tsonga" "Yoruba" "Quechua" "Buryat" "Samoan"
 	"Tongan" "Nahuatl" "Somali" "Aymara" "Guarani" "Kabyle" "Hausa" "Tetum"
-	"Tulu" "Kabiye" "English")
+	"English")
 
   for i in "${fullarr[@]}"
   do
