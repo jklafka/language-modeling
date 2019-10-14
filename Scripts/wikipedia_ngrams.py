@@ -57,7 +57,7 @@ for gram in wikipedia_ngrams:
 #     results.append([gram[1], surprisal(gram[0]), gram[2], gram[3]])
 
 # write results
-with open("Data/wikipedia_" + lang_name + ".csv", 'w') as f:
+with open("Data/wikipedia_" + lang_name + ".csv", 'a') as f:
     writer = csv.writer(f)
     for line in results:
         writer.writerow(line)
