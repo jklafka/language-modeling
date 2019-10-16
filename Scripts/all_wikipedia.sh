@@ -1,8 +1,6 @@
 #!/bin/bash
 
-declare -a fullarr=("Sundanese" "Hakka" "Turkish"
-	"Kazakh" "Kirghiz" "Turkmen" "Hebrew" "Persian" "Arabic" "Tajik" "Latin"
-	"Galician" "Romanian" "Norman" "Corsican" "Maori" "Nepali" "Mongolian"
+declare -a fullarr=("Romanian" "Norman" "Corsican" "Maori" "Nepali" "Mongolian"
 	"Estonian" "Finnish" "Hungarian" "Bengali" "Waray" "Welsh" "Armenian" "Korean"
 	"Greek" "Catalan" "Walloon" "Yiddish" "Maltese" "Romansh" "Bavarian" "Faroese"
 	"Ripuarian" "Luxembourgish" "Limburgish" "Scots" "Zeelandic" "Aragonese"

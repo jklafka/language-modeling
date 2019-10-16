@@ -37,6 +37,7 @@ with open("Data/wikipedia_" + lang_name + ".csv", 'a') as f:
             # convert each utterance into a list of ngrams
             grams = ngrams(utterance, 3)
             for gram in grams:
-                #then write each gram/surprisal to a separate row of the file
-                writer.writerow([gram[1], surprisal(gram[0]), gram[2]], utterance_id)
+                # then write each gram/surprisal to a separate row of the file
+                # writer.writerow([gram[1], surprisal(gram[0]), gram[2], utterance_id])
+                writer.writerow([gram[1], surprisal(gram[0]), gram[2]])
             # utterance_id += 1

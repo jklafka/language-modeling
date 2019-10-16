@@ -2,11 +2,13 @@
 
 ## Setup
 
+The pipelines for CHILDES and Wikipedia are set up to work in a bash environment with curl and jq installed (if not install, Homebrew and apt-get work for installing both of them). You will need to install the regex and KenLM packages for Python (the installation process for KenLM is described below). You also need a working R installation with the tidyverse, janitor and here libraries installed. If you want to run the CHILDES pipeline, you will need the childes-r R library installed as well. 
+
 Run
 
 `python3 -m pip install https://github.com/kpu/kenlm/archive/master.zip`
 
-to install the Python3 API for KenLM. Follow the instructions on (https://kheafield.com/code/kenlm/) to download and install kenlm into the home directory for this project. The scripts handle using the Python and C++ modules, so you don't have to worry about anything besides installation. 
+to install the Python3 API for KenLM. Follow the instructions on (https://kheafield.com/code/kenlm/) to download and install kenlm into the home directory for this project. The scripts handle using the Python and C++ modules, so you don't have to worry about anything besides installation.
 
 More information on the installation and usage for KenLM in Python can be found at (https://github.com/kpu/kenlm) and KenLM in general at (https://kheafield.com/code/kenlm/).
 
