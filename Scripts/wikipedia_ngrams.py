@@ -29,6 +29,7 @@ wikipedia = [utterance.strip('["\n]') for utterance in open(lang_name + ".txt", 
     .readlines()][1:]
 
 # much less memory-intensive surprisal computation process
+# utterance_id = 0
 with open("Data/wikipedia_" + lang_name + ".csv", 'a') as f:
     writer = csv.writer(f)
     for utterance in wikipedia:
@@ -37,4 +38,5 @@ with open("Data/wikipedia_" + lang_name + ".csv", 'a') as f:
             grams = ngrams(utterance, 3)
             for gram in grams:
                 #then write each gram/surprisal to a separate row of the file
-                writer.writerow([gram[1], surprisal(gram[0]), gram[2]])
+                writer.writerow([gram[1], surprisal(gram[0]), gram[2]], utterance_id)
+            # utterance_id += 1

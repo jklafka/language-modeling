@@ -1,10 +1,5 @@
-import json, sys, subprocess, csv
-import urllib.request
+import csv, sys, subprocess
 import regex as re
-
-with open("language_dict.json", 'r') as f:
-    file = f.read()
-LANG_DICT = json.loads(file) #maps languages to their wikipedia url prefixes
 
 
 def extract_texts(upper_bound):
@@ -28,15 +23,6 @@ def main(lang_name):
     '''
     Main workhorse function
     '''
-    # get the Wikipedia dump file from the internet
-    lang_prefix = LANG_DICT[lang_name]
-    url = "https://dumps.wikimedia.org/other/cirrussearch/20190923/" + lang_prefix + \
-        "wiki-20190923-cirrussearch-content.json.gz"
-    urllib.request.urlretrieve(url, "datafile") #"Data/Files/" + lang_name + "_file")
-    subprocess.call(["python3", "Scripts/cirrus-extract.py", \
-                    "datafile"])
-                    #"Data/Files/" + lang_name + "_file"])
-
     # find the number of article files we want to combine
     directory_names = subprocess.check_output(["ls", "text"]).decode("utf-8")\
                                 .split('\n')[:-1]
@@ -57,15 +43,6 @@ def main(lang_name):
         for sentence in all_sentences:
             f.write("%s\n" % sentence)
 
-    # with open(lang_name + "_df.csv", 'w') as f:
-    #     writer = csv.writer(f)
-    #     for sentence in all_sentences:
-    #         writer.writerow([sentence])
-
-    # delete the text files and datafile
-    # may be several gigabytes large
-    subprocess.call(["rm", "-r", "text"])
-    subprocess.call(["rm", "datafile"])
 
 if __name__ == "__main__":
     main(sys.argv[1]) # takes the English name of a language as sole argument

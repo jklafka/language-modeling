@@ -1,11 +1,8 @@
 #!/bin/bash
 
-declare -a fullarr=("Russian" "Urdu" "German" "Swedish" "Afrikaans" "Anglo-Saxon"
-	"Belarusian" "Bulgarian" "Croatian" "Macedonian" "Serbo-Croatian"
-	"Ukrainian" "Vietnamese" "Pangasinan" "Kapampangan" "Khmer" "Japanese"
-	"Javanese" "Indonesian" "Polish" "Malay" "Sundanese" "Hakka" "Turkish"
+declare -a fullarr=("Sundanese" "Hakka" "Turkish"
 	"Kazakh" "Kirghiz" "Turkmen" "Hebrew" "Persian" "Arabic" "Tajik" "Latin"
-	"French" "Galician" "Romanian" "Norman" "Corsican" "Maori" "Nepali" "Mongolian"
+	"Galician" "Romanian" "Norman" "Corsican" "Maori" "Nepali" "Mongolian"
 	"Estonian" "Finnish" "Hungarian" "Bengali" "Waray" "Welsh" "Armenian" "Korean"
 	"Greek" "Catalan" "Walloon" "Yiddish" "Maltese" "Romansh" "Bavarian" "Faroese"
 	"Ripuarian" "Luxembourgish" "Limburgish" "Scots" "Zeelandic" "Aragonese"
@@ -22,7 +19,7 @@ declare -a fullarr=("Russian" "Urdu" "German" "Swedish" "Afrikaans" "Anglo-Saxon
 	"Lao" "Thai" "Lezgian" "Malagasy" "Papiamentu" "Chavacano" "Albanian"
 	"Luganda" "Swahili" "Tswana" "Tsonga" "Yoruba" "Quechua" "Buryat" "Samoan"
 	"Tongan" "Nahuatl" "Somali" "Aymara" "Guarani" "Kabyle" "Hausa" "Tetum"
-	"English")
+	"German" "Swedish" "Russian" "English")
 
   for i in "${fullarr[@]}"
   do
