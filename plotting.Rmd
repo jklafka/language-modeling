@@ -33,3 +33,12 @@ results %>%
   mutate(language = "English", speaker = "Parent") %>% 
   write_feather(here("Data/parent_results.feather"))
 ```
+
+```{r testing Julia}
+require(lme4)
+require(jglmm)
+
+cbpp <- mutate(cbpp, prop = incidence / size)
+gm <- jglmm(prop ~ period + (1 | herd), data = cbpp, family = "binomial",
+            weights = cbpp$size)
+```

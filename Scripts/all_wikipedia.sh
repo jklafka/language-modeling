@@ -1,11 +1,6 @@
 #!/bin/bash
 
-declare -a fullarr=("Romanian" "Norman" "Corsican" "Maori" "Nepali" "Mongolian"
-	"Estonian" "Finnish" "Hungarian" "Bengali" "Waray" "Welsh" "Armenian" "Korean"
-	"Greek" "Catalan" "Walloon" "Yiddish" "Maltese" "Romansh" "Bavarian" "Faroese"
-	"Ripuarian" "Luxembourgish" "Limburgish" "Scots" "Zeelandic" "Aragonese"
-	"Asturian" "Emilian-Romagnol" "Extremaduran" "Franco-Provençal" "Friulian"
-	"Ladino" "Lombard" "Mirandese" "Neapolitan" "Occitan" "Picard" "Sardinian"
+declare -a fullarr=("Occitan" "Picard" "Sardinian"
 	"Sicilian" "Venetian" "Czech" "Rusyn" "Slovenian" "Serbian" "Slovak"
 	"Silesian" "Acehnese" "Banyumasan" "Wu" "Azerbaijani" "Bashkir" "Chuvash"
 	"Gagauz" "Karachay-Balkar" "Sakha" "Tatar" "Uyghur" "Uzbek" "Amharic" "Zazaki"
