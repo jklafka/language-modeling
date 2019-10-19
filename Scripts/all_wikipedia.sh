@@ -11,7 +11,7 @@ declare -a fullarr=("Sakha" "Tatar" "Uyghur" "Uzbek" "Amharic" "Zazaki"
 	"Tongan" "Nahuatl" "Somali" "Aymara" "Guarani" "Kabyle" "Hausa" "Tetum"
 	"German" "Swedish" "Russian" "English" "Serbian")
 
-  for i in $fullarr[@]
+  for i in "${fullarr[@]}"
   do
     echo "$i"
     sh Scripts/wikipedia_process.sh "$i" $1
