@@ -1,0 +1,65 @@
+---
+title: "analysis"
+author: "Josef Klafka and Daniel Yurovsky"
+date: "10/22/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(tidyverse)
+require(lsa)
+require(broom)
+require(janitor)
+require(feather)
+require(here)
+require(lingtypology)
+require(lme4)
+require(directlabels)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load data}
+distances <- read_feather(here("Data/Wikipedia/all_spaces.feather"))
+```
+
+```{r plotting}
+# put cosines into same column with order ("gram") in a different column
+tidy_corr_data <- distances %>%
+  pivot_longer(c(unigram_cosine, trigram_cosine), names_to = "gram", values_to = "angle") %>%
+  mutate(gram = if_else(gram == "unigram_cosine", "unigram", "trigram"))
+
+ggplot(tidy_corr_data, aes(x = feature, y = angle, fill = gram,
+                           color = gram, group = gram,
+                           label = gram)) + 
+  geom_smooth(method = "lm") +
+  geom_jitter(alpha = .05) +
+  geom_dl(method = "smart.grid") + 
+  theme(legend.position = "none") + 
+  xlab("Number of WALS features in common") + 
+  ylab("Information curve distance")
+
+lmer(feature ~ angle * gram + (1|language1) + (1|language2),
+     data = tidy_corr_data) %>%
+  tidy()
+  
+```
+
+```{r compute trigram cosine distances}
+trigram_slopes <- read_csv(here("Data/Wikipedia/relative_slopes.csv"))
+ldn_unigram_wals <- read_feather(here("Data/Wikipedia/ldn_unigrams_wals_pairs.feather"))
+
+# compute trigram cosines: pairs of languages map to their cosine distances
+trigram_cosines <- trigram_slopes %>%
+  column_to_rownames("language") %>%
+  t() %>%
+  cosine() %>%
+  as_tibble(rownames = "language1") %>%
+  pivot_longer(-language1, names_to = "language2", values_to = "trigram_cosine")
+
+# add trigram cosines to stored language distance measures
+ldn_unigram_wals %>% 
+  left_join(trigram_cosines) %>%
+  write_feather(here("Data/Wikipedia/all_spaces.feather"))
+```
+
