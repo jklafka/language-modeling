@@ -32,9 +32,11 @@ tidy_corr_data <- distances %>%
          gram = factor(gram, levels = c("unigram", "trigram"))) %>%
   mutate(feature = scale(feature)) %>%
   group_by(gram) %>%
-  mutate(angle = scale(angle))
+  mutate(angle = 1 - (acos(angle) / pi),
+         angle = exp(angle),
+         angle = scale(angle))
 
-ggplot(tidy_corr_data, aes(x = angle, y = feature, fill = gram,
+ggplot(tidy_corr_data, aes(x = feature, y = angle, fill = gram,
                            color = gram, group = gram,
                            label = gram)) + 
   geom_smooth(method = "lm") +
@@ -44,7 +46,7 @@ ggplot(tidy_corr_data, aes(x = angle, y = feature, fill = gram,
   xlab("Number of WALS features in common") + 
   ylab("Information curve distance")
 
-model <- lmer(feature ~ angle * gram + (1|language1) + (1|language2),
+model <- lmer(angle ~ feature * gram + (1|language1) + (1|language2),
      data = tidy_corr_data) %>%
   tidy() %>%
   filter(effect == "fixed") %>%
