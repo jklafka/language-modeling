@@ -78,9 +78,8 @@ read data
 ```{r}
 NUM_SECTIONS <- 5
 
-malay <- fread(here("Data/wikipedia_Malay.csv"), 
-                     col.names = c("position", "surprisal", "length",
-                                   "sentence")) %>%
+malay <- fread(here("Data/wikipedia_Alemannic.csv"), 
+                     col.names = c("position", "surprisal", "length")) %>%
   mutate(position = position + 1) %>%
   filter(length >= 8, length <= 50) %>%
   as_tibble()
@@ -92,7 +91,7 @@ pos_list <- malay %>%
   select(-data) %>%
   unnest(cols = c(quantiles))
 
-slopes <- relative_slopes(malay_sample, pos_list)
+slopes <- relative_slopes(malay, pos_list)
 ```
 
 ```{r}

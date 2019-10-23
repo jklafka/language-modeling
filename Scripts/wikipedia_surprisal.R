@@ -2,6 +2,8 @@ require(here)
 require(broom)
 require(janitor)
 require(tidyverse)
+require(lme4)
+require(data.table)
 
 NUM_SECTIONS <- 5
 lang_name = commandArgs(trailingOnly=TRUE)[1]
@@ -19,7 +21,7 @@ get_quantiles <- function(df, num_sections) {
     mutate(quantile = 1:(num_sections + 1))
 }
 
-# Get the relative slopes for each fifth of the distribution at the quantiles
+
 relative_slopes <- function(lang_df, pos_list) {
 
   divides <- pos_list %>%
@@ -36,22 +38,22 @@ relative_slopes <- function(lang_df, pos_list) {
   quantile_groups <- divides %>%
     left_join(lang_df, by = c("length", "position")) %>%
     group_by(quantile, length) %>%
-    mutate(position = 1:n()) %>%
-    group_by(quantile) %>%
-    nest()
+    mutate(position = scale(position)) %>%
+    ungroup() %>%
+    mutate(quantile = factor(quantile), length = scale(length))
 
-  quantile_groups %>%
-    mutate(slope = map(data, ~lm(surprisal ~ length + I(length^2) +
-                                   position, data  = .))) %>%
-    mutate(slope = map(slope, tidy)) %>%
-    select(-data) %>%
-    unnest(cols = slope) %>%
-    filter(term == "position") %>%
-    select(-term) %>%
-    clean_names()
+  lm(surprisal ~ length * position : quantile + 0,
+                data = quantile_groups) %>%
+    tidy() %>%
+    filter(str_detect(term, "position"),
+           str_detect(term, "quantile"), !str_detect(term, "length")) %>%
+    clean_names() %>%
+    mutate(term = gsub("position:quantile", "", term),
+           term = as.numeric(term)) %>%
+    rename(quantile = term)
 }
 
-wikipedia_ngrams <- read_delim(here(paste0("Data/wikipedia_", lang_name, ".txt")),
+wikipedia_ngrams <- read_csv(here(paste0("Data/wikipedia_", lang_name, ".csv")),
                      col_names = c("position", "surprisal", "length")) %>%
   mutate(position = position + 1) %>% #python is 0 but R is 1-indexed
   filter(length >= 9, length <= 50)
@@ -73,7 +75,7 @@ lang_slopes <- slopes %>%
   mutate(language = lang_name) %>%
   rename(slope1 = V1, slope2 = V2, slope3 = V3, slope4 = V4, slope5 = V5)
 
-all_slopes <- read_csv(here("Data/Wikipedia/relative_slopes.csv"), col_names=T)
+all_slopes <- read_csv(here("Data/Wikipedia/new_relative_slopes.csv"), col_names=T)
 all_slopes %>%
   bind_rows(lang_slopes) %>%
-  write_csv(here("Data/Wikipedia/relative_slopes.csv"))
+  write_csv(here("Data/Wikipedia/new_relative_slopes.csv"))
