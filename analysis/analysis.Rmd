@@ -9,6 +9,7 @@ output: html_document
 require(tidyverse)
 require(lsa)
 require(broom)
+library(broom.mixed)
 require(janitor)
 require(feather)
 require(here)
@@ -27,21 +28,29 @@ distances <- read_feather(here("Data/Wikipedia/all_spaces.feather"))
 # put cosines into same column with order ("gram") in a different column
 tidy_corr_data <- distances %>%
   pivot_longer(c(unigram_cosine, trigram_cosine), names_to = "gram", values_to = "angle") %>%
-  mutate(gram = if_else(gram == "unigram_cosine", "unigram", "trigram"))
+  mutate(gram = if_else(gram == "unigram_cosine", "unigram", "trigram"),
+         gram = factor(gram, levels = c("unigram", "trigram"))) %>%
+  mutate(feature = scale(feature)) %>%
+  group_by(gram) %>%
+  mutate(angle = scale(angle))
 
-ggplot(tidy_corr_data, aes(x = feature, y = angle, fill = gram,
+ggplot(tidy_corr_data, aes(x = angle, y = feature, fill = gram,
                            color = gram, group = gram,
                            label = gram)) + 
   geom_smooth(method = "lm") +
-  geom_jitter(alpha = .05) +
+  #geom_jitter(alpha = .05) +
   geom_dl(method = "smart.grid") + 
   theme(legend.position = "none") + 
   xlab("Number of WALS features in common") + 
   ylab("Information curve distance")
 
-lmer(feature ~ angle * gram + (1|language1) + (1|language2),
+model <- lmer(feature ~ angle * gram + (1|language1) + (1|language2),
      data = tidy_corr_data) %>%
-  tidy()
+  tidy() %>%
+  filter(effect == "fixed") %>%
+  select(-group, -effect)
+
+View(model)
   
 ```
 

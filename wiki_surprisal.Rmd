@@ -15,8 +15,10 @@ output:
 # load packages
 library(knitr)
 library(here)
+library(lme4)
 library(broom)
 library(janitor)
+library(data.table)
 library(tidyverse)
 
 knitr::opts_chunk$set(echo = TRUE)
@@ -56,19 +58,19 @@ relative_slopes <- function(lang_df, pos_list) {
   quantile_groups <- divides %>%
     left_join(lang_df, by = c("length", "position")) %>%
     group_by(quantile, length) %>%
-    mutate(position = 1:n()) %>%
-    group_by(quantile) %>%
-    nest() 
-  
-  quantile_groups %>%
-    mutate(slope = map(data, ~lm(surprisal ~ length + I(length^2) +
-                                   position, data  = .))) %>%
-    mutate(slope = map(slope, tidy)) %>%
-    select(-data) %>%
-    unnest(cols = slope) %>%
-    filter(term == "position") %>%
-    select(-term) %>%
-    clean_names()
+    mutate(position = scale(position)) %>%
+    ungroup() %>%
+    mutate(quantile = factor(quantile), length = scale(length))
+
+  lm(surprisal ~ length * position : quantile + 0,
+                data = quantile_groups) %>%
+    tidy() %>%
+    filter(str_detect(term, "position"), 
+           str_detect(term, "quantile"), !str_detect(term, "length")) %>%
+    clean_names() %>%
+    mutate(term = gsub("position:quantile", "", term),
+           term = as.numeric(term)) %>%
+    rename(quantile = term)
 }
 ```
 
@@ -76,19 +78,21 @@ read data
 ```{r}
 NUM_SECTIONS <- 5
 
-alemanic <- read_csv(here("Data/wikipedia_Alemannic.csv"), 
-                     col_names = c("position", "surprisal", "length", "sentence")) %>%
+malay <- fread(here("Data/wikipedia_Malay.csv"), 
+                     col.names = c("position", "surprisal", "length",
+                                   "sentence")) %>%
   mutate(position = position + 1) %>%
-  filter(length >= 9, length <= 50)
+  filter(length >= 8, length <= 50) %>%
+  as_tibble()
 
-pos_list <- alemanic %>%
+pos_list <- malay %>%
   group_by(length) %>%
   nest() %>%
   mutate(quantiles = map(data, ~get_quantiles(.x, NUM_SECTIONS))) %>%
   select(-data) %>%
   unnest(cols = c(quantiles))
 
-slopes <- relative_slopes(alemanic, pos_list)
+slopes <- relative_slopes(malay_sample, pos_list)
 ```
 
 ```{r}

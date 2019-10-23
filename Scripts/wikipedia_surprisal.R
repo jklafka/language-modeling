@@ -51,7 +51,7 @@ relative_slopes <- function(lang_df, pos_list) {
     clean_names()
 }
 
-wikipedia_ngrams <- read_csv(here(paste0("Data/wikipedia_", lang_name, ".csv")),
+wikipedia_ngrams <- read_delim(here(paste0("Data/wikipedia_", lang_name, ".txt")),
                      col_names = c("position", "surprisal", "length")) %>%
   mutate(position = position + 1) %>% #python is 0 but R is 1-indexed
   filter(length >= 9, length <= 50)
