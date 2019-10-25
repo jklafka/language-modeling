@@ -1,15 +1,6 @@
 #!/bin/bash
 
-declare -a fullarr=("Macedonian" "Serbo-Croatian" "Pangasinan" "Kapampangan" "Khmer"
-	"Javanese" "Malay" "Sundanese" "Hakka" "Turkish" "Kazakh" "Kirghiz" "Turkmen"
-	"Persian" "Tajik" "Latin" "French" "Galician" "Romanian" "Norman" "Corsican"
-	"Estonian" "Finnish" "Hungarian" "Bengali" "Waray" "Welsh" "Armenian" "Korean"
-	"Greek" "Catalan" "Walloon" "Yiddish" "Maltese" "Romansh" "Bavarian" "Faroese"
-	"Ripuarian" "Luxembourgish" "Limburgish" "Scots" "Zeelandic" "Aragonese"
-	"Asturian" "Emilian-Romagnol" "Extremaduran" "Franco-Provençal" "Friulian"
-	"Ladino" "Lombard" "Mirandese" "Neapolitan" "Occitan" "Picard" "Sardinian"
-	"Sicilian" "Venetian" "Czech" "Rusyn" "Slovenian" "Serbian" "Slovak"
-	"Silesian" "Acehnese" "Banyumasan" "Wu" "Azerbaijani" "Bashkir" "Chuvash"
+declare -a fullarr=("Bashkir" "Chuvash"
 	"Gagauz" "Karachay-Balkar" "Sakha" "Tatar" "Uyghur" "Uzbek" "Amharic" "Zazaki"
 	"Gilaki" "Mazandarani" "Ossetian" "Pashto" "Võro" "Komi" "Vepsian" "Erzya"
 	"Assamese" "Bhojpuri" "Divehi" "Konkani" "Gujarati" "Marathi" "Odia"
@@ -23,13 +14,22 @@ declare -a fullarr=("Macedonian" "Serbo-Croatian" "Pangasinan" "Kapampangan" "Kh
 
 declare -a biglangs=("Dutch" "Hindi" "Danish" "Russian" "German" "Swedish"
 	"Ukrainian" "Vietnamese" "Japanese" "Indonesian" "Arabic" "Hebrew" "Polish"
-	"English" "Mandarin" "Spanish")
+	"English" "Mandarin" "Spanish" "French" "Serbian")
 
 declare -a donelangs=("Basque" "Alemannic" "Wolof" "Bosnian"
 	"Urdu" "Afrikaans" "Anglo-Saxon" "Icelandic" "Belarusian" "Bulgarian"
-	"Croatian")
+	"Croatian" "Macedonian" "Serbo-Croatian" "Pangasinan" "Kapampangan" "Khmer"
+	"Javanese" "Malay" "Sundanese" "Hakka" "Turkish" "Kazakh" "Kirghiz" "Turkmen"
+	"Persian" "Tajik" "Latin" "Galician" "Romanian" "Norman" "Corsican"
+	"Estonian" "Finnish" "Hungarian" "Bengali" "Waray" "Welsh" "Armenian" "Korean"
+	"Greek" "Catalan" "Walloon" "Yiddish" "Maltese" "Romansh" "Bavarian" "Faroese"
+	"Ripuarian" "Luxembourgish" "Limburgish" "Scots" "Zeelandic" "Aragonese"
+	"Asturian" "Emilian-Romagnol" "Extremaduran" "Franco-Provençal" "Friulian"
+	"Ladino" "Lombard" "Mirandese" "Neapolitan" "Occitan" "Picard" "Sardinian"
+	"Sicilian" "Venetian" "Czech" "Rusyn" "Slovenian" "Slovak"
+		"Silesian" "Acehnese" "Banyumasan" "Wu" )
 
-  for i in "${fullarr[@]}"
+for i in "${fullarr[@]}"
   do
     echo "$i"
     sh Scripts/wikipedia_process.sh "$i" $1

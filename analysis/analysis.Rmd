@@ -74,3 +74,48 @@ ldn_unigram_wals %>%
   write_feather(here("Data/Wikipedia/all_spaces.feather"))
 ```
 
+```{r feature similarity within feature category}
+# pass in a dataframe of wals category values (without language)
+# get back the average entropy of the dataframe
+category_entropy <- function(df) {
+  df %>%
+    lapply(table) %>%
+    lapply(entropy.empirical) %>%
+    unlist() %>%
+    mean()
+} # range is [0, ~5]
+
+features <- read_csv(here("Data/Wikipedia/wals_features.csv")) %>%
+  clean_names()
+
+#phonology  
+features %>%
+  select(x1a:x29a) %>% 
+  category_entropy()
+
+# nom_categories 
+features %>%
+  select(x30a:x57a) %>% 
+  category_entropy()
+
+# nom_syntax 
+features %>%
+  select(x58a:x64a) %>% 
+  category_entropy()
+
+# verb_categories 
+features %>%
+  select(x65a:x80a) %>% 
+  category_entropy()
+
+# word_order
+features %>%
+  select(x81a:x97a) %>% 
+  category_entropy()
+
+# clauses 
+features %>%
+  select(x98a:x120a) %>% 
+  category_entropy()
+```
+
