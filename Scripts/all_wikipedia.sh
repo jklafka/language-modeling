@@ -1,22 +1,6 @@
 #!/bin/bash
 
-declare -a fullarr=("Bashkir" "Chuvash"
-	"Gagauz" "Karachay-Balkar" "Sakha" "Tatar" "Uyghur" "Uzbek" "Amharic" "Zazaki"
-	"Gilaki" "Mazandarani" "Ossetian" "Pashto" "Võro" "Komi" "Vepsian" "Erzya"
-	"Assamese" "Bhojpuri" "Divehi" "Konkani" "Gujarati" "Marathi" "Odia"
-	"Maithili" "Sanskrit" "Sindhi" "Sinhalese" "Esperanto" "Interlingua"
-	"Interlingue" "Ido" "Lithuanian" "Latvian" "Samogitian" "Kannada" "Malayalam"
-	"Tamil" "Telugu" "Breton" "Irish" "Manx" "Burmese" "Georgian" "Mingrelian"
-	"Lao" "Thai" "Lezgian" "Malagasy" "Papiamentu" "Chavacano" "Albanian"
-	"Luganda" "Swahili" "Tswana" "Tsonga" "Yoruba" "Quechua" "Buryat" "Samoan"
-	"Tongan" "Nahuatl" "Somali" "Aymara" "Guarani" "Kabyle" "Hausa" "Tetum"
-	"Tulu" "Kabiye" "Maori" "Nepali" "Mongolian")
-
-declare -a biglangs=("Dutch" "Hindi" "Danish" "Russian" "German" "Swedish"
-	"Ukrainian" "Vietnamese" "Japanese" "Indonesian" "Arabic" "Hebrew" "Polish"
-	"English" "Mandarin" "Spanish" "French" "Serbian")
-
-declare -a donelangs=("Basque" "Alemannic" "Wolof" "Bosnian"
+declare -a fullarr=("Basque" "Alemannic" "Wolof" "Bosnian"
 	"Urdu" "Afrikaans" "Anglo-Saxon" "Icelandic" "Belarusian" "Bulgarian"
 	"Croatian" "Macedonian" "Serbo-Croatian" "Pangasinan" "Kapampangan" "Khmer"
 	"Javanese" "Malay" "Sundanese" "Hakka" "Turkish" "Kazakh" "Kirghiz" "Turkmen"
@@ -27,7 +11,22 @@ declare -a donelangs=("Basque" "Alemannic" "Wolof" "Bosnian"
 	"Asturian" "Emilian-Romagnol" "Extremaduran" "Franco-Provençal" "Friulian"
 	"Ladino" "Lombard" "Mirandese" "Neapolitan" "Occitan" "Picard" "Sardinian"
 	"Sicilian" "Venetian" "Czech" "Rusyn" "Slovenian" "Slovak"
-		"Silesian" "Acehnese" "Banyumasan" "Wu" )
+	"Silesian" "Acehnese" "Banyumasan" "Wu" "Bashkir" "Chuvash"
+	"Gagauz" "Karachay-Balkar" "Sakha" "Tatar" "Uyghur" "Uzbek" "Amharic" "Zazaki"
+	"Gilaki" "Mazandarani" "Ossetian" "Pashto" "Võro" "Komi" "Vepsian" "Erzya"
+	"Assamese" "Bhojpuri" "Divehi" "Konkani" "Gujarati" "Marathi" "Odia"
+	"Maithili" "Sanskrit" "Sindhi" "Sinhalese" "Esperanto"
+	"Ido" "Lithuanian" "Latvian" "Samogitian" "Kannada" "Malayalam"
+	"Tamil" "Telugu" "Breton" "Irish" "Manx" "Burmese" "Georgian" "Mingrelian"
+	"Lao" "Thai" "Lezgian" "Malagasy" "Papiamentu" "Chavacano" "Albanian"
+	"Luganda" "Swahili" "Tswana" "Tsonga" "Yoruba" "Quechua" "Buryat" "Samoan"
+	"Tongan" "Nahuatl" "Somali" "Aymara" "Guarani" "Kabyle" "Hausa" "Tetum"
+	"Tulu" "Kabiye" "Maori" "Nepali" "Mongolian" "Hindi" "Danish" "Hebrew"
+	"Indonesian" "Vietnamese" "Dutch" "Serbian")
+
+declare -a biglangs=("Russian" "German" "Swedish"
+	"Ukrainian" "Japanese" "Arabic" "Polish"
+	"English" "Mandarin" "Spanish" "French" )
 
 for i in "${fullarr[@]}"
   do
