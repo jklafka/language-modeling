@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# the largest language corpora (over 1.5gb) are on the last two lines
 declare -a fullarr=("Basque" "Alemannic" "Wolof" "Bosnian"
 	"Urdu" "Afrikaans" "Anglo-Saxon" "Icelandic" "Belarusian" "Bulgarian"
 	"Croatian" "Macedonian" "Serbo-Croatian" "Pangasinan" "Kapampangan" "Khmer"
@@ -22,13 +23,12 @@ declare -a fullarr=("Basque" "Alemannic" "Wolof" "Bosnian"
 	"Luganda" "Swahili" "Tswana" "Tsonga" "Yoruba" "Quechua" "Buryat" "Samoan"
 	"Tongan" "Nahuatl" "Somali" "Aymara" "Guarani" "Kabyle" "Hausa" "Tetum"
 	"Tulu" "Kabiye" "Maori" "Nepali" "Mongolian" "Hindi" "Danish" "Hebrew"
-	"Indonesian" "Vietnamese" "Dutch" "Serbian")
+	"Indonesian" "Vietnamese" "Dutch" "Serbian" "Ukrainian" "Russian" "German" )
 
-declare -a biglangs=("Russian" "German" "Swedish"
-	"Ukrainian" "Japanese" "Arabic" "Polish"
-	"English" "Mandarin" "Spanish" "French" )
+declare -a biglangs=("Swedish" "Japanese" "Arabic" "Polish"
+	"English" "Mandarin" "Spanish" "French")
 
-for i in "${fullarr[@]}"
+for i in "${biglangs[@]}"
   do
     echo "$i"
     sh Scripts/wikipedia_process.sh "$i" $1
