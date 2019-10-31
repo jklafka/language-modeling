@@ -36,14 +36,23 @@ tidy_corr_data <- distances %>%
          angle = exp(angle),
          angle = scale(angle))
 
-ggplot(tidy_corr_data, aes(x = feature, y = angle, fill = gram,
+# how are unigram and trigram angle measures correlated? r^2 = .2171
+tidy_corr_data %>% 
+  ungroup() %>% 
+  pivot_wider(names_from = gram, values_from = angle) %>% 
+  ggplot(aes(x = unigram, y =trigram)) + 
+    geom_jitter(alpha = .05) + 
+    geom_smooth(method = "lm", se=F)
+
+# unigram and trigram angle measures predict number of WALS features in common (small r^2)
+ggplot(tidy_corr_data, aes(x = ldn, y = angle, fill = gram,
                            color = gram, group = gram,
                            label = gram)) + 
   geom_smooth(method = "lm") +
   #geom_jitter(alpha = .05) +
   geom_dl(method = "smart.grid") + 
   theme(legend.position = "none") + 
-  xlab("Number of WALS features in common") + 
+  xlab("Mean normalized Levenshtein Distance") + 
   ylab("Information curve distance")
 
 model <- lmer(angle ~ feature * gram + (1|language1) + (1|language2),
@@ -57,7 +66,7 @@ View(model)
 ```
 
 ```{r compute trigram cosine distances}
-trigram_slopes <- read_csv(here("Data/Wikipedia/relative_slopes.csv"))
+trigram_slopes <- read_csv(here("Data/Wikipedia/new_relative_slopes.csv"))
 ldn_unigram_wals <- read_feather(here("Data/Wikipedia/ldn_unigrams_wals_pairs.feather"))
 
 # compute trigram cosines: pairs of languages map to their cosine distances
