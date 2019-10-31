@@ -20,7 +20,7 @@ kenlm/build/bin/build_binary Models/$1.arpa Models/$1.klm
 
 # split up the corpus into ngrams and evaluate surprisal on each
 python3 Scripts/wikipedia_ngrams.py $1
-# compute the slopes 
+# compute the slopes
 Rscript Scripts/wikipedia_surprisal.R $1
 
 # clean up

@@ -23,10 +23,10 @@ declare -a fullarr=("Basque" "Alemannic" "Wolof" "Bosnian"
 	"Luganda" "Swahili" "Tswana" "Tsonga" "Yoruba" "Quechua" "Buryat" "Samoan"
 	"Tongan" "Nahuatl" "Somali" "Aymara" "Guarani" "Kabyle" "Hausa" "Tetum"
 	"Tulu" "Kabiye" "Maori" "Nepali" "Mongolian" "Hindi" "Danish" "Hebrew"
-	"Indonesian" "Vietnamese" "Dutch" "Serbian" "Ukrainian" "Russian" "German" )
+	"Indonesian" "Vietnamese" "Dutch" "Serbian" "Ukrainian" "Russian" "German"
+	"Swedish" "Japanese" "Arabic" "Polish" "French" "Spanish")
 
-declare -a biglangs=("Swedish" "Japanese" "Arabic" "Polish"
-	"English" "Mandarin" "Spanish" "French")
+declare -a biglangs=("English" "Chinese" )
 
 for i in "${biglangs[@]}"
   do
