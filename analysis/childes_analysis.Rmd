@@ -1,0 +1,53 @@
+---
+title: "CHILDES smoothed analysis"
+author: "Josef Klafka and Daniel Yurovsky"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(tidyverse)
+require(here)
+require(feather)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r plotting data}
+childes <- read_feather(here("Data/CHILDES/childes_results.feather"))
+
+childes %>%
+  filter(length == 7, speaker == "Child") %>%
+  ggplot(aes(x = position, y = surprisal, group = language, color = language)) + 
+    geom_point(show.legend = F) + 
+    geom_line() + 
+    facet_wrap(~language)
+
+```
+
+
+The below code gets together the results from the CHILDES pipeline (with all languages given in the `langs` vector), labels the language and speaker role and writes everything into a single feather. You can change the input languages based on what you've run and the output name for clarity. 
+```{r knitting together childes results}
+# files <- list.files(path = "Data/CHILDES/",pattern = ".csv")
+# map_dfr(files, ~read_csv(here(paste0("Data/CHILDES/", .)), 
+#                          col_names = c("position", "surprisal", "length")))
+langs <- c("Chinese", "French", "German", "Spanish", "Japanese")
+output_name <- c("childes_results")
+
+get_childes_results <- function(lang) {
+  read_csv(here(paste0("Data/CHILDES/", lang, "_adult_results.csv")),
+                    col_names = c("position", "surprisal", "length")) %>%
+    mutate(speaker = "Adult")
+    bind_rows(
+      read_csv(here(paste0("Data/CHILDES/", lang, "_child_results.csv")),
+                      col_names = c("position", "surprisal", "length")) %>%
+        mutate(speaker = "Child")
+    ) %>%
+    mutate(language = lang)
+}
+
+childes_results <- map_dfr(langs, ~get_childes_results(.))
+
+childes_results %>% 
+  write_feather(here(paste0("Data/CHILDES/", childes_results, ".feather")))
+```
