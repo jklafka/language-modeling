@@ -131,19 +131,45 @@ compute_sim <- function(language1, language2, feature_type) {
     rename(language1 = language)
 }
 
-feature_sims <- expand_grid(language1 = unique(features$language),
+feature_sim_combos <- expand_grid(language1 = unique(features$language),
             language2 = unique(features$language),
-            type = unique(features$type))
+            type = unique(features$type)) %>%
+  filter(language1 != language2)
 
 feature_sims <- map_dfr(1:nrow(feature_sims), 
-                        ~compute_sim(feature_sims %>% slice(.x) %>% pull(language1),
-                                           feature_sims %>% slice(.x) %>% pull(language2),
-                                           feature_sims %>% slice(.x) %>% pull(type)))
+                        ~compute_sim(feature_sim_combos %>% 
+                                       slice(.x) %>% pull(language1),
+                                     feature_sim_combos %>% slice(.x) %>% 
+                                       pull(language2),
+                                     feature_sim_combos %>% slice(.x) %>% 
+                                       pull(type)))
 
-model <- lmer(angle ~ feature * gram + (1|language1) + (1|language2),
-     data = tidy_corr_data) %>%
+tidy_features <- feature_sims %>%
+  group_by(type) %>%
+  mutate(feature = scale(feature)) 
+
+category_data <- tidy_corr_data %>%
+  select(-feature) %>%
+  distinct() %>%
+  left_join(tidy_features, by = c("language1", "language2")) %>%
+  left_join(category_entropy, by = c("type")) #%>%
+  #bind_rows(mutate(tidy_corr_data, type = "all"))
+
+
+category_model <- lmer(angle ~ 0 + 
+                         feature : type : gram + 
+                         (1|language1) + (1|language2), 
+     data = category_data) %>%
   tidy() %>%
   filter(effect == "fixed") %>%
-  select(-group, -effect)
+  select(-group, -effect) 
+
+category_model %>%
+  mutate_at(vars(-term), round, digits = 2) %>%
+  mutate(order = str_detect(term, "trigram")) %>%
+  arrange(order, term) %>%
+  select(-order) %>%
+  View()
+
 
 ````
