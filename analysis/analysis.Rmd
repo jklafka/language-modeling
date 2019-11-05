@@ -15,6 +15,7 @@ require(feather)
 require(here)
 require(lingtypology)
 require(lme4)
+library(entropy)
 require(directlabels)
 
 knitr::opts_chunk$set(echo = TRUE)
@@ -30,7 +31,7 @@ tidy_corr_data <- distances %>%
   pivot_longer(c(unigram_cosine, trigram_cosine), names_to = "gram", values_to = "angle") %>%
   mutate(gram = if_else(gram == "unigram_cosine", "unigram", "trigram"),
          gram = factor(gram, levels = c("unigram", "trigram"))) %>%
-  mutate(feature = scale(feature)) %>%
+  mutate(feature = scale(as.double(feature)) %>% as.numeric()) %>%
   group_by(gram) %>%
   mutate(angle = 1 - (acos(angle) / pi),
          angle = exp(angle),
@@ -39,10 +40,16 @@ tidy_corr_data <- distances %>%
 # how are unigram and trigram angle measures correlated? r^2 = .2171
 tidy_corr_data %>% 
   ungroup() %>% 
-  pivot_wider(names_from = gram, values_from = angle) %>% 
-  ggplot(aes(x = unigram, y =trigram)) + 
-    geom_jitter(alpha = .05) + 
-    geom_smooth(method = "lm", se=F)
+  pivot_wider(names_from = gram, values_from = angle) %>%
+  summarise(cor_gram = cor(unigram, trigram),
+            cor_uni = cor(unigram, feature),
+            cor_tri = cor(trigram, feature))
+
+# 
+# %>% 
+#   ggplot(aes(x = unigram, y =trigram)) + 
+#     geom_jitter(alpha = .05) + 
+#     geom_smooth(method = "lm", se=F)
 
 # unigram and trigram angle measures predict number of WALS features in common (small r^2)
 ggplot(tidy_corr_data, aes(x = ldn, y = angle, fill = gram,
@@ -95,36 +102,48 @@ category_entropy <- function(df) {
 } # range is [0, ~5]
 
 features <- read_csv(here("Data/Wikipedia/wals_features.csv")) %>%
-  clean_names()
+  pivot_longer(-language, names_to = "feature", values_to = "value") %>%
+  left_join(read_csv(here("Data/feature_types.csv")), by = "feature")
 
-#phonology  
-features %>%
-  select(x1a:x29a) %>% 
-  category_entropy()
-
-# nom_categories 
-features %>%
-  select(x30a:x57a) %>% 
-  category_entropy()
-
-# nom_syntax 
-features %>%
-  select(x58a:x64a) %>% 
-  category_entropy()
-
-# verb_categories 
-features %>%
-  select(x65a:x80a) %>% 
-  category_entropy()
-
-# word_order
-features %>%
-  select(x81a:x97a) %>% 
-  category_entropy()
-
-# clauses 
-features %>%
-  select(x98a:x120a) %>% 
-  category_entropy()
+category_entropy <- features %>%
+  group_by(type) %>%
+  nest() %>%
+  mutate(entropy = map(data, category_entropy)) %>%
+  select(-data) %>%
+  unnest(cols = c(entropy))
 ```
 
+
+```{r}
+compute_sim <- function(language1, language2, feature_type) {
+  
+  features %>%
+    filter(language == language1, type == feature_type) %>%
+    rename(value1 = value) %>% 
+    left_join(features %>% filter(language == language2,type == feature_type) %>%
+                select(feature, value), 
+              by = "feature") %>%
+    mutate(same = value == value1) %>%
+    ungroup() %>%
+    group_by(language, type) %>%
+    summarise(feature = sum(same)) %>%
+    mutate(language2 = language2) %>%
+    rename(language1 = language)
+}
+
+feature_sims <- expand_grid(language1 = unique(features$language),
+            language2 = unique(features$language),
+            type = unique(features$type))
+
+feature_sims <- map_dfr(1:nrow(feature_sims), 
+                        ~compute_sim(feature_sims %>% slice(.x) %>% pull(language1),
+                                           feature_sims %>% slice(.x) %>% pull(language2),
+                                           feature_sims %>% slice(.x) %>% pull(type)))
+
+model <- lmer(angle ~ feature * gram + (1|language1) + (1|language2),
+     data = tidy_corr_data) %>%
+  tidy() %>%
+  filter(effect == "fixed") %>%
+  select(-group, -effect)
+
+````
