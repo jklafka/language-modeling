@@ -135,6 +135,7 @@ feature_sims <- expand_grid(language1 = unique(features$language),
             language2 = unique(features$language),
             type = unique(features$type))
 
+## this takes a long time to run
 feature_sims <- map_dfr(1:nrow(feature_sims), 
                         ~compute_sim(feature_sims %>% slice(.x) %>% pull(language1),
                                            feature_sims %>% slice(.x) %>% pull(language2),
