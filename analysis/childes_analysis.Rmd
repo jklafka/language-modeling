@@ -17,12 +17,23 @@ knitr::opts_chunk$set(echo = TRUE)
 childes <- read_feather(here("Data/CHILDES/childes_results.feather"))
 
 childes %>%
-  filter(length == 7, speaker == "Child") %>%
-  ggplot(aes(x = position, y = surprisal, group = language, color = language)) + 
+  # filter(language == "Eng-NA") %>%
+  filter(length == 7) %>% 
+  ggplot(aes(x = position, y = surprisal, color = speaker)) + 
     geom_point(show.legend = F) + 
     geom_line() + 
     facet_wrap(~language)
 
+# scale to percentage of distribution
+childes %>%
+  group_by(language, speaker, length) %>% 
+  mutate(percent_s = surprisal / sum(surprisal)) %>%
+  ungroup() %>%
+  filter(length == 8, speaker == "Adult") %>%
+  ggplot(aes(x = position, y = percent_s, group = language, color = language)) + 
+    geom_point(show.legend = F) + 
+    geom_line() + 
+    facet_wrap(~language)
 ```
 
 
@@ -31,13 +42,13 @@ The below code gets together the results from the CHILDES pipeline (with all lan
 # files <- list.files(path = "Data/CHILDES/",pattern = ".csv")
 # map_dfr(files, ~read_csv(here(paste0("Data/CHILDES/", .)), 
 #                          col_names = c("position", "surprisal", "length")))
-langs <- c("Chinese", "French", "German", "Spanish", "Japanese")
+langs <- c("Chinese", "French", "German", "Spanish", "Japanese", "Eng-NA")
 output_name <- c("childes_results")
 
 get_childes_results <- function(lang) {
   read_csv(here(paste0("Data/CHILDES/", lang, "_adult_results.csv")),
                     col_names = c("position", "surprisal", "length")) %>%
-    mutate(speaker = "Adult")
+    mutate(speaker = "Adult") %>%
     bind_rows(
       read_csv(here(paste0("Data/CHILDES/", lang, "_child_results.csv")),
                       col_names = c("position", "surprisal", "length")) %>%
@@ -49,5 +60,5 @@ get_childes_results <- function(lang) {
 childes_results <- map_dfr(langs, ~get_childes_results(.))
 
 childes_results %>% 
-  write_feather(here(paste0("Data/CHILDES/", childes_results, ".feather")))
+  write_feather(here(paste0("Data/CHILDES/", output_name, ".feather")))
 ```

@@ -72,6 +72,45 @@ View(model)
   
 ```
 
+```{r word order random effect}
+# get the average slope for each section for languages of each word order
+word_order_slopes <- trigram_slopes %>% 
+  inner_join(features %>% filter(feature == "81A") %>% select(language, value)) %>%
+  group_by(value) %>%
+  summarise(slope1 = mean(slope1), 
+            slope2 = mean(slope2), 
+            slope3 = mean(slope3), 
+            slope4 = mean(slope4), 
+            slope5 = mean(slope5)) %>%
+  rename(word_order = value)
+
+# construct what the actual computed curves would look like for utterances of length 8
+word_order_curves <- word_order_slopes %>% 
+  mutate(
+    `1` = 1, 
+    `2` = `1` + slope1,
+    `3` = `2` + slope2,
+    `4` = `3` + slope3,
+    `5` = `4` + slope4,
+    `6` = `5` + slope5
+  ) %>%
+  select(word_order, `1`:`6`) %>%
+  pivot_longer(-word_order, names_to = "position", values_to = "value")
+
+# plotting the sample curves
+word_order_curves %>% 
+  ggplot(aes(x = position, y = value, group = word_order, color = word_order)) + 
+    geom_point() + 
+    geom_line()
+
+# word_order_slopes %>%
+#   pivot_longer(-word_order, names_to = "position", values_to = "value") %>%
+#   group_by(word_order) %>%
+#   mutate(lag_value = lag(value)) %>%
+#   replace_na(is.na(.), 1) %>% 
+#   mutate(val = lag_value + value)
+```
+
 ```{r compute trigram cosine distances}
 trigram_slopes <- read_csv(here("Data/Wikipedia/new_relative_slopes.csv"))
 ldn_unigram_wals <- read_feather(here("Data/Wikipedia/ldn_unigrams_wals_pairs.feather"))
