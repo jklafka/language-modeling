@@ -136,6 +136,7 @@ feature_sim_combos <- expand_grid(language1 = unique(features$language),
             type = unique(features$type)) %>%
   filter(language1 != language2)
 
+## this takes a long time to run
 feature_sims <- map_dfr(1:nrow(feature_sims), 
                         ~compute_sim(feature_sim_combos %>% 
                                        slice(.x) %>% pull(language1),
