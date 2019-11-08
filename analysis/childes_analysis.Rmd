@@ -10,6 +10,8 @@ require(tidyverse)
 require(here)
 require(feather)
 require(childesr)
+library(broom)
+library(janitor)
 
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -20,6 +22,14 @@ eng <- get_utterances(collection = "Eng-NA")
 
 ```{r plotting trigrams data}
 childes <- read_feather(here("Data/CHILDES/childes_results.feather"))
+
+childes %>%
+  filter(language == "Eng-NA", length <= 15) %>%
+  ggplot(aes(x = position, y = surprisal, color = speaker)) + 
+  facet_wrap(~ length) + 
+  geom_point() + 
+  geom_line()
+
 
 childes %>%
   # filter(language == "Eng-NA") %>%
@@ -41,6 +51,77 @@ childes %>%
     facet_wrap(~language)
 ```
 
+
+helpers
+```{r}
+get_quantiles <- function(df, num_sections) {
+  df %>%
+    pull(position) %>%
+    quantile(., probs = seq(0, 1, 1/num_sections)) %>%
+    round() %>%
+    enframe(name = NULL) %>%
+    rename(position = value) %>%
+    mutate(quantile = 1:(num_sections + 1))
+}
+
+
+relative_slopes <- function(lang_df, pos_list) {
+
+  divides <- pos_list %>%
+    group_by(length) %>%
+    mutate(start_pos = position, end_pos = lead(position)) %>%
+    filter(!is.na(end_pos)) %>%
+    group_by(length, quantile) %>%
+    nest() %>%
+    mutate(position = map(data, ~seq(.x$start_pos, .x$end_pos) %>% 
+                            enframe(name = NULL, value = "position"))) %>%
+    select(-data) %>%
+    unnest(cols = position)
+  
+  quantile_groups <- divides %>%
+    left_join(lang_df, by = c("length", "position")) %>%
+    group_by(quantile, length) %>%
+    mutate(position = scale(position)) %>%
+    ungroup() %>%
+    mutate(quantile = factor(quantile), length = scale(length))
+
+  lm(surprisal ~ length * position : quantile + 0,
+                data = quantile_groups) %>%
+    tidy() %>%
+    filter(str_detect(term, "position"), 
+           str_detect(term, "quantile"), !str_detect(term, "length")) %>%
+    clean_names() %>%
+    mutate(term = gsub("position:quantile", "", term),
+           term = as.numeric(term)) %>%
+    rename(quantile = term)
+}
+```
+
+read data
+```{r}
+NUM_SECTIONS <- 5
+
+pos_list <- childes %>%
+  filter(speaker == "Adult") %>%
+  filter(length >= 8, length <= 15) %>%
+  group_by(length) %>%
+  nest() %>%
+  mutate(quantiles = map(data, ~get_quantiles(.x, NUM_SECTIONS))) %>%
+  select(-data) %>%
+  unnest(cols = c(quantiles))
+
+slopes <- relative_slopes(childes %>%
+                            filter(speaker == "Adult") %>%
+                            filter(length >= 8, length <= 15), pos_list)
+```
+
+```{r}
+ggplot(slopes, aes(x = quantile, y = estimate)) + 
+  geom_pointrange(aes(ymin = estimate - 1.96 * std_error, 
+                      ymax = estimate + 1.96 * std_error )) + 
+  geom_line()
+```
+
 Analyzing British National Corpus (BNC) and Switchboard results. 
 ```{r bnc and switch}
 switch_results <- read_csv(here("Data/corpus/Switchboard_results.csv"), 
@@ -54,6 +135,21 @@ bnc_results %>%
     geom_point(show.legend = F) + 
     geom_line() + 
     facet_wrap(~length)
+
+switch_results %>%
+  filter(length > 5, length <= 20 ) %>%
+  ggplot(aes(x = position, y = surprisal)) + 
+  facet_wrap(~ length) + 
+  geom_point() + 
+  geom_line()
+
+bnc_results %>%
+  filter(length > 5, length <= 20 ) %>%
+  ggplot(aes(x = position, y = surprisal)) + 
+  facet_wrap(~ length) + 
+  geom_point() + 
+  geom_line()
+
 ```
 
 
