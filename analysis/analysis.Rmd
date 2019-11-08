@@ -23,6 +23,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load data}
 distances <- read_feather(here("Data/Wikipedia/all_spaces.feather"))
+
 ```
 
 ```{r plotting}

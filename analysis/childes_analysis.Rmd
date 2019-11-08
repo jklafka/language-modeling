@@ -9,11 +9,16 @@ output: html_document
 require(tidyverse)
 require(here)
 require(feather)
+require(childesr)
 
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r plotting data}
+```{r childes unigrams}
+eng <- get_utterances(collection = "Eng-NA")
+```
+
+```{r plotting trigrams data}
 childes <- read_feather(here("Data/CHILDES/childes_results.feather"))
 
 childes %>%
@@ -36,6 +41,34 @@ childes %>%
     facet_wrap(~language)
 ```
 
+Analyzing British National Corpus (BNC) and Switchboard results. 
+```{r bnc and switch}
+switch_results <- read_csv(here("Data/corpus/Switchboard_results.csv"), 
+                           col_names = c("position", "surprisal", "length"))
+bnc_results <- read_csv(here("Data/corpus/bnc_results.csv"), 
+                           col_names = c("position", "surprisal", "length"))
+
+bnc_results %>%
+  filter(length %in% 20:25) %>% 
+  ggplot(aes(x = position, y = surprisal)) + 
+    geom_point(show.legend = F) + 
+    geom_line() + 
+    facet_wrap(~length)
+```
+
+
+A little over 30 percent of the utterances in Switchboard are only one or two words (probably "yeah" or "um"). There's a long tail after that, almost completely flattening out by 40 words. 
+```{r sentence length distribution for switchboard}
+bnc <- read_table(here("Data/corpus/trimmed_bnc.txt"), col_names = "text")
+switchboard <- read_table(here("Data/corpus/Switchboard.txt"), col_names = "text")
+
+switchboard %>% 
+  mutate(length = str_count(text, boundary("word"))) %>%
+  count(length) %>% 
+  mutate(n = n/sum(n)) %>%
+  ggplot(aes(x = length, y = n)) + 
+    geom_bar(stat = "identity")
+```
 
 The below code gets together the results from the CHILDES pipeline (with all languages given in the `langs` vector), labels the language and speaker role and writes everything into a single feather. You can change the input languages based on what you've run and the output name for clarity. 
 ```{r knitting together childes results}
