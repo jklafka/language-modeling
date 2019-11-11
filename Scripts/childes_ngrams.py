@@ -1,5 +1,7 @@
 import sys, csv, kenlm, argparse
 
+option = "childes"
+
 parser = argparse.ArgumentParser()
 parser.add_argument("lang_name", help="Name of the language collection you're using from CHILDES")
 parser.add_argument("speaker", help="Are we looking at parent or child speech")
@@ -27,28 +29,45 @@ def ngrams(s, n):
 # take data and turn it into ngrams
 childes = [utterance.strip('["\n]') for utterance in open("Data/childes_" + lang_name + '_' + speaker + ".txt", 'r')\
     .readlines()][1:]
-childes = [utterance for utterance in childes if utterance != ""]
-childes_ngrams = [gram for s in childes for gram in ngrams(s, 3)]
 
-# get all the utterance length we're working with
-lengths = list({gram[2] for gram in childes_ngrams})
-results = []
+if option == "childes":
+    childes = [utterance for utterance in childes if utterance != ""]
+    childes_ngrams = [gram for s in childes for gram in ngrams(s, 3)]
 
-# filter by length and get average surprisal for each gram position
-for length in lengths:
-    length_ngrams = list(filter(lambda x: x[2] == length, childes_ngrams))
-    max_ngram = max(length_ngrams, key = lambda x: x[1])[1]
+    # get all the utterance length we're working with
+    lengths = list({gram[2] for gram in childes_ngrams})
+    results = []
 
-    for j in range(max_ngram):
-        jth_ngrams = list(filter(lambda x: x[1] == j, length_ngrams))
-        sum = 0
-        for x in jth_ngrams:
-            sum += surprisal(x[0])
-        sum /= len(jth_ngrams)
-        results.append((j, sum, length))
+    # filter by length and get average surprisal for each gram position
+    for length in lengths:
+        length_ngrams = list(filter(lambda x: x[2] == length, childes_ngrams))
+        max_ngram = max(length_ngrams, key = lambda x: x[1])[1]
 
-# write results
-with open("Data/" + lang_name + '_' + speaker + "_results.csv", 'w') as f:
-    writer = csv.writer(f)
-    for line in results:
-        writer.writerow(line)
+        for j in range(max_ngram):
+            jth_ngrams = list(filter(lambda x: x[1] == j, length_ngrams))
+            sum = 0
+            for x in jth_ngrams:
+                sum += surprisal(x[0])
+            sum /= len(jth_ngrams)
+            results.append((j, sum, length))
+
+    # write results
+    with open("Data/" + lang_name + '_' + speaker + "_results.csv", 'w') as f:
+        writer = csv.writer(f)
+        for line in results:
+            writer.writerow(line)
+
+elif option == "wikipedia":
+    # much less memory-intensive surprisal computation process
+    # utterance_id = 0
+    with open("Data/childes_" + lang_name + ".csv", 'a') as f:
+        writer = csv.writer(f)
+        for utterance in childes:
+            if utterance != "":
+                # convert each utterance into a list of ngrams
+                grams = ngrams(utterance, 3)
+                for gram in grams:
+                    # then write each gram/surprisal to a separate row of the file
+                    # writer.writerow([gram[1], surprisal(gram[0]), gram[2], utterance_id])
+                    writer.writerow([gram[1], surprisal(gram[0]), gram[2]])
+                # utterance_id += 1
