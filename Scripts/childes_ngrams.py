@@ -1,6 +1,6 @@
 import sys, csv, kenlm, argparse
 
-option = "childes"
+option = "wikipedia"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("lang_name", help="Name of the language collection you're using from CHILDES")

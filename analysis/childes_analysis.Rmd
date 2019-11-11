@@ -51,6 +51,19 @@ childes %>%
     facet_wrap(~language)
 ```
 
+```{r}
+providence <- read_csv(here("Data/providence_adult_results_2start.csv"),
+                       col_names = c("position", "surprisal", "length"))
+
+
+providence %>%
+  filter(length <= 15) %>%
+  ggplot(aes(x = position, y = surprisal)) + 
+  facet_wrap(~length) + 
+  geom_point() + 
+  geom_line()
+```
+
 
 helpers
 ```{r}
@@ -95,24 +108,30 @@ relative_slopes <- function(lang_df, pos_list) {
            term = as.numeric(term)) %>%
     rename(quantile = term)
 }
+
+english_childes <- childes %>%
+    filter(speaker == "Adult", length >= 5, length <= 15, language == "Eng-NA")
+  
+
+english_childes %>%
+  filter(length == 7) %>%
+  group_by(position) %>%
+  summarise(mean = mean(surprisal))
+
 ```
 
 read data
 ```{r}
 NUM_SECTIONS <- 5
 
-pos_list <- childes %>%
-  filter(speaker == "Adult") %>%
-  filter(length >= 8, length <= 15) %>%
+pos_list <- english_childes %>%
   group_by(length) %>%
   nest() %>%
   mutate(quantiles = map(data, ~get_quantiles(.x, NUM_SECTIONS))) %>%
   select(-data) %>%
   unnest(cols = c(quantiles))
 
-slopes <- relative_slopes(childes %>%
-                            filter(speaker == "Adult") %>%
-                            filter(length >= 8, length <= 15), pos_list)
+slopes <- relative_slopes( english_childes, pos_list)
 ```
 
 ```{r}
