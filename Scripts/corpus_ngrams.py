@@ -1,6 +1,6 @@
 import sys, csv, kenlm, argparse
 
-option = "childes"
+option = "wikipedia"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("corpus", help="Name of the corpus you're using in the corpus folder")

@@ -60,7 +60,7 @@ if option == "childes":
 elif option == "wikipedia":
     # much less memory-intensive surprisal computation process
     # utterance_id = 0
-    with open("Data/childes_" + lang_name + ".csv", 'a') as f:
+    with open("Data/childes_" + lang_name + '_' + speaker + ".csv", 'a') as f:
         writer = csv.writer(f)
         for utterance in childes:
             if utterance != "":
