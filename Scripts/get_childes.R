@@ -30,4 +30,4 @@ corpora %>%
   filter(speaker_role %in% speaker_roles) %>%
   select(column_to_use) %>%
   write.table(here(paste0("Data/childes_", language, '_', speaker, ".txt")),
-              sep="\n", row.names=FALSE)
+              sep="\n", row.names=FALSE, col.names=FALSE)

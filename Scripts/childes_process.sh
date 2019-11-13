@@ -2,7 +2,7 @@
 
 # this script takes four arguments: the name of a CHILDES collection; the column (stem or gloss);
 # the speaker (child or adult) that you want to run the LM on; and the order of ngrams to use
-# Rscript Scripts/get_childes.R $1 $2 $3
+Rscript Scripts/get_childes.R $1 $2 $3
 # build the ngrams model
 cat Data/childes_$1_$3.txt | python3 Scripts/process_corpus.py | kenlm/build/bin/lmplz -o $4 > Models/childes_$1_$3.arpa
 # convert model to binary for faster reading and lower storage

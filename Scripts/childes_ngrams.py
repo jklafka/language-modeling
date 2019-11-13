@@ -14,8 +14,11 @@ speaker = args.speaker
 model = kenlm.LanguageModel("Models/childes_" + lang_name + '_' + speaker + ".klm")
 
 # gets surprisal from string based on the model's stored probabilities
-def surprisal(s):
-    return -model.score(s)
+def backoff_surprisal(s):
+    return -model.score(s, bos=True, eos=False)
+
+def trigram_surprisal(s):
+    return -model.score(s, bos=False, eos=False)
 
 # get ngrams from a string
 # returns list of (gram, gram position and length of utterance) tuples
@@ -23,6 +26,7 @@ def ngrams(s, n):
     tokens = s.split()
     ngrams = lambda a, n: zip(*[a[i:] for i in range(n)])
     joined_grams = [' '.join(grams) for grams in ngrams(tokens, n)]
+    joined_grams = [tokens[0]] + [' '.join(tokens[:2])] + joined_grams
     utt_length = [len(tokens)] * len(joined_grams) # need an iterable for zip
     return list(zip(joined_grams, range(len(joined_grams)), utt_length))
 
@@ -69,5 +73,8 @@ elif option == "wikipedia":
                 for gram in grams:
                     # then write each gram/surprisal to a separate row of the file
                     # writer.writerow([gram[1], surprisal(gram[0]), gram[2], utterance_id])
-                    writer.writerow([gram[1], surprisal(gram[0]), gram[2]])
+                    if gram[1] < 2:
+                        writer.writerow([gram[1] + 1, backoff_surprisal(gram[0]), gram[2]])
+                    else:
+                        writer.writerow([gram[1] + 1, trigram_surprisal(gram[0]), gram[2]])
                 # utterance_id += 1

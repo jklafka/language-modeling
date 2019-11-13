@@ -30,25 +30,28 @@ childes %>%
   geom_point() + 
   geom_line()
 
-
-childes %>%
-  # filter(language == "Eng-NA") %>%
-  filter(length == 7) %>% 
-  ggplot(aes(x = position, y = surprisal, color = speaker)) + 
-    geom_point(show.legend = F) + 
+bnc <- read_csv(here("Data/corpus_bnc.csv"), 
+                   col_names = c("position", "s", "length"))
+bnc %>% 
+  group_by(length, position) %>%
+  summarise(s = mean(s)) %>% 
+  filter(length %in% c(10, 15, 20, 25, 30, 35)) %>% 
+  ggplot(aes(x = position, y = s)) + 
+    geom_point() + 
     geom_line() + 
-    facet_wrap(~language)
+    facet_wrap(~length)
 
-# scale to percentage of distribution
-childes %>%
-  group_by(language, speaker, length) %>% 
-  mutate(percent_s = surprisal / sum(surprisal)) %>%
-  ungroup() %>%
-  filter(length == 8, speaker == "Adult") %>%
-  ggplot(aes(x = position, y = percent_s, group = language, color = language)) + 
-    geom_point(show.legend = F) + 
+childes <- read_csv(here("Data/childes_Eng-NA_child.csv"), 
+                   col_names = c("position", "s", "length"))
+childes %>% 
+  group_by(length, position) %>%
+  summarise(s = mean(s)) %>% 
+  filter(length %in% 3:9) %>% 
+  ggplot(aes(x = position, y = s)) + 
+    geom_point() + 
     geom_line() + 
-    facet_wrap(~language)
+    facet_wrap(~length)
+
 ```
 
 ```{r}
