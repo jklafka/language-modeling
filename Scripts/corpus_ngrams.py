@@ -15,7 +15,7 @@ def unigram_surprisal(s):
 
 def bigram_surprisal(s):
     return -model.score(s, eos=False) + \
-        model.score(' '.join(s.split()[0]), eos=False)
+        model.score(s.split()[0], eos=False)
 
 def trigram_surprisal(s):
     return -model.score(s, bos=False, eos=False) + \
@@ -25,11 +25,14 @@ def trigram_surprisal(s):
 # returns list of (gram, gram position and length of utterance) tuples
 def ngrams(s, n):
     tokens = s.split()
-    ngrams = lambda a, n: zip(*[a[i:] for i in range(n)])
-    joined_grams = [' '.join(grams) for grams in ngrams(tokens, n)]
-    joined_grams = [tokens[0]] + [' '.join(tokens[:2])] + joined_grams
-    utt_length = [len(tokens)] * len(joined_grams) # need an iterable for zip
-    return list(zip(joined_grams, range(len(joined_grams)), utt_length))
+    if len(tokens) == 1:
+        return [[s, 0, 1]]
+    else:
+        ngrams = lambda a, n: zip(*[a[i:] for i in range(n)])
+        joined_grams = [' '.join(grams) for grams in ngrams(tokens, n)]
+        joined_grams = [tokens[0]] + [' '.join(tokens[:2])] + joined_grams
+        utt_length = [len(tokens)] * len(joined_grams) # need an iterable for zip
+        return list(zip(joined_grams, range(len(joined_grams)), utt_length))
 
 
 # take data and turn it into ngrams

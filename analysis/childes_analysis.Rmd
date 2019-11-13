@@ -30,12 +30,14 @@ childes %>%
   geom_point() + 
   geom_line()
 
+bnc <- read_csv(here("Data/corpus_bnc.csv"), 
+                   col_names = c("position", "s", "length"))
 switchboard <- read_csv(here("Data/corpus_Switchboard.csv"), 
                    col_names = c("position", "s", "length"))
 switchboard %>% 
   group_by(length, position) %>%
   summarise(s = mean(s)) %>% 
-  filter(length %in% c(10, 15, 20, 25, 30, 35), position > 2) %>% 
+  filter(length %in% c(5, 7, 9, 11, 13)) %>% 
   ggplot(aes(x = position, y = s)) + 
     geom_point() + 
     geom_line() + 
