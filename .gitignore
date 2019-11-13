@@ -5,4 +5,6 @@
 Models/
 kenlm/
 Data/corpus/
+Data/*.csv
+Data/*.txt
 *DS_Store

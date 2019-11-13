@@ -9,4 +9,4 @@ kenlm/build/bin/build_binary Models/corpus_$1.arpa Models/corpus_$1.klm
 # split up the corpus into ngrams and evaluate surprisal on each
 python3 Scripts/corpus_ngrams.py $1
 # clean up
-rm Models/corpus_$1.arpa Models/corpus_$1.klm
+# rm Models/corpus_$1.arpa Models/corpus_$1.klm

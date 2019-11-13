@@ -30,12 +30,12 @@ childes %>%
   geom_point() + 
   geom_line()
 
-bnc <- read_csv(here("Data/corpus_bnc.csv"), 
+switchboard <- read_csv(here("Data/corpus_Switchboard.csv"), 
                    col_names = c("position", "s", "length"))
-bnc %>% 
+switchboard %>% 
   group_by(length, position) %>%
   summarise(s = mean(s)) %>% 
-  filter(length %in% c(10, 15, 20, 25, 30, 35)) %>% 
+  filter(length %in% c(10, 15, 20, 25, 30, 35), position > 2) %>% 
   ggplot(aes(x = position, y = s)) + 
     geom_point() + 
     geom_line() + 
@@ -52,6 +52,9 @@ childes %>%
     geom_line() + 
     facet_wrap(~length)
 
+lm(s ~ length * position + 0,
+                data = childes) %>%
+  tidy()
 ```
 
 ```{r}
