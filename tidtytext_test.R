@@ -6,7 +6,7 @@
 
 # then set PPL to the file you want and run!
 
-PPL <- "brown.ppl"
+PPL <- "childes_kenlm.ppl"
 
 ppl <- read_lines(PPL) %>%
   enframe(name = NULL) %>%
@@ -25,12 +25,20 @@ surprisals <- ppl %>%
 
 mean_surprisals <- surprisals %>%
   group_by(length, position) %>%
-  summarise(value = mean(-value))
+  mutate(n = n()) %>%
+  summarise(mean = mean(-value), se = sd(-value)/sqrt(mean(n)))
 
-mean__surprisals %>%
-  filter(length %in% c(5, 7, 9, 11, 13)) %>%
-  ggplot(aes(x = position, y = value, color = as.factor(length))) + 
-  geom_point() +
+surprisals <- read_csv(here("Data/corpus_brown.csv"))
+
+mean_surprisals <- surprisals %>%
+  group_by(length, position) %>%
+  mutate(n = n()) %>%
+  summarise(mean = mean(surprisal), se = sd(surprisal)/sqrt(mean(n)))
+                       
+mean_surprisals %>%
+  filter(length %in% c(1, 3, 5, 7, 9)) %>%
+  ggplot(aes(x = position, y = mean, color = as.factor(length))) + 
+  geom_pointrange(aes(ymin = mean - 1.96 * se, ymax = mean + 1.96 * se)) +
   geom_line() + 
   theme_classic()
 
