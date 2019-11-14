@@ -10,4 +10,4 @@ kenlm/build/bin/build_binary Models/childes_$1_$3.arpa Models/childes_$1_$3.klm
 # get ngrams
 python Scripts/childes_ngrams.py $1 $3
 # free up space
-# rm Data/childes_$1_$3.txt Models/childes_$1_$3.arpa Models/childes_$1_$3.klm
+rm Models/childes_$1_$3.arpa Models/childes_$1_$3.klm #Data/childes_$1_$3.txt

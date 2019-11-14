@@ -8,6 +8,7 @@ args = parser.parse_args()
 
 # get model
 model = kenlm.LanguageModel("Models/corpus_" + args.corpus + ".klm")
+
 # gets surprisal from string based on the model's stored probabilities
 def unigram_surprisal(s):
     return -model.score(s, eos=False)
@@ -38,7 +39,7 @@ def ngrams(s, n):
 corpus = [utterance.strip('["\n]') for utterance in open("Data/corpus/" + \
     args.corpus + ".txt", 'r').readlines()]
 
-corpus = [utterance for utterance in corpus if utterance.strip() ]
+corpus = [utterance for utterance in corpus if utterance.strip() != ""]
 
 if option == "childes":
     corpus_ngrams = [gram for s in corpus for gram in ngrams(s, 3)]
@@ -70,7 +71,7 @@ if option == "childes":
 elif option == "wikipedia":
     # much less memory-intensive surprisal computation process
     # utterance_id = 0
-    with open("../Data/corpus_" + "bnc" + ".csv", 'w') as f:
+    with open("Data/corpus_" + args.corpus + ".csv", 'w') as f:
         writer = csv.writer(f)
 
         writer.writerow(['position', 'surprisal', 'length'])

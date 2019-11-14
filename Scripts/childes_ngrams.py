@@ -14,28 +14,38 @@ speaker = args.speaker
 model = kenlm.LanguageModel("Models/childes_" + lang_name + '_' + speaker + ".klm")
 
 # gets surprisal from string based on the model's stored probabilities
-def backoff_surprisal(s):
-    return -model.score(s, bos=True, eos=False)
+def unigram_surprisal(s):
+    return -model.score(s, eos=False)
+
+def bigram_surprisal(s):
+    return -model.score(s, eos=False) + \
+        model.score(s.split()[0], eos=False)
 
 def trigram_surprisal(s):
-    return -model.score(s, bos=False, eos=False)
+    return -model.score(s, bos=False, eos=False) + \
+        model.score(' '.join(s.split()[:2]), bos=False, eos=False)
 
 # get ngrams from a string
 # returns list of (gram, gram position and length of utterance) tuples
 def ngrams(s, n):
     tokens = s.split()
-    ngrams = lambda a, n: zip(*[a[i:] for i in range(n)])
-    joined_grams = [' '.join(grams) for grams in ngrams(tokens, n)]
-    joined_grams = [tokens[0]] + [' '.join(tokens[:2])] + joined_grams
-    utt_length = [len(tokens)] * len(joined_grams) # need an iterable for zip
-    return list(zip(joined_grams, range(len(joined_grams)), utt_length))
+    if len(tokens) == 1:
+        return [(s, 0, 1)]
+    elif len(tokens) == 2:
+        return [(s.split()[0], 0, 2), (s, 1, 2)]
+    else:
+        ngrams = lambda a, n: zip(*[a[i:] for i in range(n)])
+        joined_grams = [' '.join(grams) for grams in ngrams(tokens, n)]
+        joined_grams = [tokens[0]] + [' '.join(tokens[:2])] + joined_grams
+        utt_length = [len(tokens)] * len(joined_grams) # need an iterable for zip
+        return list(zip(joined_grams, range(len(joined_grams)), utt_length))
 
 # take data and turn it into ngrams
 childes = [utterance.strip('["\n]') for utterance in open("Data/childes_" + lang_name + '_' + speaker + ".txt", 'r')\
     .readlines()][1:]
+childes = [utterance for utterance in childes if utterance != ""]
 
 if option == "childes":
-    childes = [utterance for utterance in childes if utterance != ""]
     childes_ngrams = [gram for s in childes for gram in ngrams(s, 3)]
 
     # get all the utterance length we're working with
@@ -64,17 +74,20 @@ if option == "childes":
 elif option == "wikipedia":
     # much less memory-intensive surprisal computation process
     # utterance_id = 0
-    with open("Data/childes_" + lang_name + '_' + speaker + ".csv", 'a') as f:
+    with open("Data/" + lang_name + '_' + speaker + "_results.csv", 'w') as f:
         writer = csv.writer(f)
+
+        writer.writerow(['position', 'surprisal', 'length'])
+
         for utterance in childes:
-            if utterance != "":
-                # convert each utterance into a list of ngrams
-                grams = ngrams(utterance, 3)
-                for gram in grams:
-                    # then write each gram/surprisal to a separate row of the file
-                    # writer.writerow([gram[1], surprisal(gram[0]), gram[2], utterance_id])
-                    if gram[1] < 2:
-                        writer.writerow([gram[1] + 1, backoff_surprisal(gram[0]), gram[2]])
-                    else:
-                        writer.writerow([gram[1] + 1, trigram_surprisal(gram[0]), gram[2]])
-                # utterance_id += 1
+            # convert each utterance into a list of ngrams
+            grams = ngrams(utterance, 3)
+            for gram in grams:
+                # then write each gram/surprisal to a separate row of the file
+                # writer.writerow([gram[1], surprisal(gram[0]), gram[2], utterance_id])
+                if gram[1] == 0:
+                    writer.writerow([gram[1] + 1, unigram_surprisal(gram[0]), gram[2]])
+                elif gram[1] == 1:
+                    writer.writerow([gram[1] + 1, bigram_surprisal(gram[0]), gram[2]])
+                else:
+                    writer.writerow([gram[1] + 1, trigram_surprisal(gram[0]), gram[2]])
