@@ -4,6 +4,7 @@
 .Ruserdata
 Models/
 kenlm/
+Data/CHILDES/trigram_results.feather
 Data/corpus/
 Data/*.csv
 Data/*.txt
