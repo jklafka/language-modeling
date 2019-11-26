@@ -40,9 +40,11 @@ relative_slopes <- function(lang_df, pos_list) {
     group_by(quantile, length) %>%
     mutate(position = scale(position)) %>%
     ungroup() %>%
-    mutate(quantile = factor(quantile), length = scale(length))
+    # mutate(quantile = factor(quantile), length = scale(length))
+    mutate(length = as.numeric(scale(length)), quantile = factor(quantile))
 
-  lm(surprisal ~ length * position : quantile + 0,
+  # lm(surprisal ~ length * position : quantile + 0,
+  lmer(surprisal ~ position : quantile + (1 | length),
                 data = quantile_groups) %>%
     tidy() %>%
     filter(str_detect(term, "position"),
@@ -55,7 +57,7 @@ relative_slopes <- function(lang_df, pos_list) {
 
 wikipedia_ngrams <- read_csv(here(paste0("Data/wikipedia_", lang_name, ".csv")),
                      col_names = c("position", "surprisal", "length")) %>%
-  mutate(position = position + 1) %>% #python is 0 but R is 1-indexed
+  mutate(position = position) %>% 
   filter(length >= 9, length <= 50)
 
 pos_list <- wikipedia_ngrams %>%

@@ -28,9 +28,12 @@ mean_surprisals <- surprisals %>%
   mutate(n = n()) %>%
   summarise(mean = mean(-value), se = sd(-value)/sqrt(mean(n)))
 
-surprisals <- read_csv(here("Data/wikipedia_Chinese.csv"))
+require(here)
+require(tidyverse)
+surprisals <- read_csv(here("Data/wikipedia_char_chinese.csv"))
 
 mean_surprisals <- surprisals %>%
+  slice(1:1000000) %>% 
   group_by(length, position) %>%
   mutate(n = n()) %>%
   summarise(mean = mean(surprisal), se = sd(surprisal)/sqrt(mean(n)))

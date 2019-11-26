@@ -10,8 +10,8 @@ require(tidyverse)
 require(here)
 require(feather)
 require(childesr)
-library(broom)
-library(janitor)
+require(broom)
+require(janitor)
 
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -60,16 +60,21 @@ lm(s ~ length * position + 0,
 ```
 
 ```{r}
-providence <- read_csv(here("Data/providence_adult_results_2start.csv"),
-                       col_names = c("position", "surprisal", "length"))
+adults <- read_csv(here("Data/Eng-NA_adult_results_3.csv")) %>%
+  mutate(speaker = "adult")
+kids <- read_csv(here("Data/Eng-NA_child_results_3.csv")) %>%
+  mutate(speaker = "child")
+german <- adults %>%
+  bind_rows(kids)
 
-
-providence %>%
-  filter(length <= 15) %>%
-  ggplot(aes(x = position, y = surprisal)) + 
-  facet_wrap(~length) + 
-  geom_point() + 
-  geom_line()
+english %>%
+  group_by(speaker, length, position) %>%
+  summarise(surprisal = mean(surprisal)) %>%
+  filter(length %in% c(3, 4, 5, 6, 7, 8)) %>%
+  ggplot(aes(x = position, y = surprisal, color = speaker)) + 
+    facet_wrap(~length) + 
+    geom_point() + 
+    geom_line()
 ```
 
 
