@@ -72,12 +72,12 @@ options(digits=2)
 
 
 ```{r load data, include = F}
-childes_results <- read_feather(here("Data/all_childes_bootstrap.feather"))
-wiki_results <- read_feather(here("../surprisal/Data/all_spaces.feather"))
-bnc_results <- read_feather(here("Data/bnc_bootstrap.feather"))
-switch_results <- read_feather(here("Data/switch_bootstrap.feather"))
-wiki_curves <- read_csv(here("../surprisal/Data/relative_ngrams.csv"))
-wiki_lr <- read_feather(here("../surprisal/Wikipedia/models.feather"))
+childes_results <- read_feather(here("Data/Paper/all_childes_bootstrap.feather"))
+bnc_results <- read_feather(here("Data/Paper/bnc_bootstrap.feather"))
+switch_results <- read_feather(here("Data/Paper/switch_bootstrap.feather"))
+wiki_results <- read_feather(here("Data/Paper/all_spaces.feather"))
+wiki_curves <- read_csv(here("Data/Paper/new_relative_slopes.csv"))
+# wiki_lr <- read_feather(here("../surprisal/Wikipedia/models.feather"))
 ```
 
 # Introduction
@@ -102,16 +102,6 @@ However, despite this literature using the predictive coding model of language, 
 
 In this paper, we expand on this body of prior work in a number of novel ways. We replicate the results from @yu2016 with a metric tied to incremental word processing. We find their same distribution of information based on word frequency in English speech, as well as in English parent-child conversations. We extend our metric to include context, and show that the addition of context for each word smoothes out language-specific distributions. We expand the study of information density to the largest set of languages considered so far, and incorporate contextual and typological information into our analysis. Speakers will tend to distribute information in a language constrained but not determined by the morphology, syntax and phonology of that language. As soon as a child starts speaking, they tend to distribute information in their utterances according to the characteristic distribution in their language. 
 
-* Coding/decoding and information transfer
-* language as prediction
-* how should the code be structured? optimization questions like this have a had * a lot power across different parts of language: zipf, kemp & regier, etc etc.  noisy channel stuff. (or does this go in discussion)
-* don't under or overutilize channel, stay near limit -- constant entropy rate
-* evidence for this at multiple levels from individiual lexical choice *(info/information theory paper), inclusion of non-obligatory aspects of language (filled pauses, that), across multiple utterances in a discourse
-* what about over the course of an individual utterance--perhaps the strongest constraints from language itself?
-* yu et al. found this puzzling effect. 
-* we replicate that in a different kind of analysis and show that it extends to trigrams etc???
-* BUT variation cross-linguistically. why? constraints from language.
-
 # Methods
 
 @shannon1948 defined information as "the reduction in uncertainty about one variable given that the value of another variable is known". We use a metric proposed for the study of information transmission more generally by Shannon and applied to words specifically by @levy2008: lexical surprisal. This measure defines the information in word based on the ratio of possible continuations of the sentence after to before the word is seen. Equivalently, we can compute surprisal with the predictability of the word, as in the formula below. The surprisal of a word is inversely proportional to the predictability of a word, such that less common and less predictable words carry more information. 
@@ -127,7 +117,7 @@ $$= -log \frac{P(w_i,w_{i-1}w_{i-2},...)}{P(w_{i-1}w_{i-2}...)}$$
 
 When we use a word or two of context in our surprisal calculations, then the set of reasonable final items in our ngrams is greatly restricted. “Flower” may contain less information than “azalea” when we consider the words independently of their context, but with context this can be reversed. Flower appears in a variety of contexts, and so the information content of a word like “flower” in a particular context may be higher than “azalea”. If you only have azaleas in your garden, then hearing someone say “in that garden, look at the flowers” may be higher surprisal for you: you expect them to say “azalea”. This prediction does not need many words before to work out, for example in “I take my coffee with cream and sugar”. When you hear “cream and”, you automatically predict “sugar” or maybe “honey”, but there are few possible continuations with even those two words. Hearing “I” restricts the next word to a verb, or possibly an adverb, and since you have just heard the speaker refer to themselves in the first person singular, your set of possible completions is significantly restricted. 
 
-Ideally, we would like to predict each word using all of the information available. For example, in an utterance of twenty words, we would be able to use the previous $19$ words of context to predict the twentieth word. However, we would need to train on a corpus of many trillion word tokens to predict with this amount of context, and we want to directly compare how predictable each word is regardless of its position in an utterance. Therefore, we use the *Markov assumption*, conditioning our language models' predictions on only a few words of preceding context at most. We train ngram language model on each corpus. 
+Ideally, we would like to predict each word using all of the information available. For example, in an utterance of twenty words, we would be able to use the previous $19$ words of context to predict the twentieth word. However, we would need to train on a corpus of many trillion word tokens to predict with this amount of context, and we want to directly compare how predictable each word is regardless of its position in an utterance. Therefore, we use a *Markov assumption*: we condition our language model's next predictions on a small window of context instead of all preceding words. We train ngram language models inedpendently on each corpus. 
 
 $$\text{surprisal}(w_i|w_{i-1}w_{i-2}...) \approx \text{surprisal}(w_i|w_{i-1}w_{i-2})$$
 
@@ -161,77 +151,11 @@ bnc_results %>%
     ylab("Mean information")
 ```
 
-However, we have only found an information distribution for written English sentences in a single British English corpus. We predict that this frequency-based distribution will also hold for sentences spoken English. To show this, we use the Switchboard corpus of spoken American English telephone conversations. As a collection of written texts, our subset of the BNC features much longer sentences with a larger vocabulary per text and overall more complex sentence structures than Switchboard. We split the conversations in Switchboard not by sentences, as in the BNC, but by conversational turns. 
+We have found a unique average distribution of information that appears to characterize the English language as a whole, utterance length. This distribution indicates that in English, the words we speak or write at the beginnings of utterances have little information, while the words we speak or write at the ends of utterances have a lot of information. The words in the middle of utterances have a middling amount of information, without the increasing trend in information from word to word that we might expect from [@genzel2002]. 
 
-For Switchboard we find the same frequency-based information distribution as the BNC, as seen in \@ref(fig:switchboard_unigrams). Notice in Figure \@ref(fig:switchboard_unigrams) that the longer the utterance length for Switchboard, the more clearly the information distribution for that utterance length characterizes 
+What about context? So far we’ve only discussed the frequency-based metric, considering words on their own without any explicit incorporation of prior context. As previously discussed, listeners decode information and process what they hear incrementally, using prior heard words to ease the comprehension process. We now include one word of context (bigrams) and then two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context across both modalities and all speaker populations. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC are in Figure \@ref(fig:bnc_trigrams).
 
-```{r switchboard_unigrams, echo=F, fig.height=4, fig.cap="Switchboard frequency-based information curves"}
-sw_plot <- switch_results %>% 
-  filter(context == 0) %>%
-  ggplot(aes(x = word_order, y = empirical_stat, ymin = ci_lower, ymax = ci_upper)) + 
-    geom_point() + 
-    geom_pointrange() + 
-    geom_line() +
-    facet_wrap(~length) + 
-    scale_x_continuous(breaks = 1:11) + 
-    xlab("Word position") + 
-    ylab("Mean information")
-
-bnc_plot <- bnc_results %>% 
-  filter(context == 0) %>%
-  ggplot(aes(x = word_order, y = empirical_stat, ymin = ci_lower, ymax = ci_upper)) + 
-    geom_point() + 
-    geom_pointrange() + 
-    geom_line() +
-    facet_wrap(~length) + 
-    scale_x_continuous(breaks = c(1, seq(5, 30, 5))) + 
-    xlab("Word position") + 
-    ylab("Mean information")
-
-grid.arrange(bnc_plot, sw_plot, nrow = 2)
-```
-
-We have found a unique average distribution of information that appears to characterize the English language as a whole, regardless of medium (spoken or written) or utterance length. This distribution indicates that in English, the words we speak or write at the beginnings of utterances have little information, while the words we speak or write at the ends of utterances have a lot of information. The words in the middle of utterances have a middling amount of information, without the increasing trend in information from word to word that we might expect from [@genzel2002]. 
-
-What about context? So far we’ve only discussed the frequency-based metric, considering words on their own without any explicit incorporation of prior context. As previously discussed, listeners decode information and process what they hear incrementally, using prior heard words to ease the comprehension process. We now include one word of context (bigrams) and then two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context across both modalities and all speaker populations. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC and Switchboard are in Figures \@ref(fig:switchboard_bigrams) and \@ref(fig:switchboard_trigrams).
-
-```{r switchboard_bigrams, echo=F,fig.height=4,fig.cap="Switchboard bigram context-based information curves"}
-sw_plot <- switch_results %>% 
-  filter(context == 1) %>%
-  ggplot(aes(x = word_order, y = empirical_stat, ymin = ci_lower, ymax = ci_upper)) + 
-    geom_point() + 
-    geom_pointrange() + 
-    geom_line() +
-    facet_wrap(~length) + 
-    scale_x_continuous(breaks = 1:11) + 
-    xlab("Word position") + 
-    ylab("Mean information")
-
-bnc_plot <- bnc_results %>% 
-  filter(context == 1) %>%
-  ggplot(aes(x = word_order, y = empirical_stat, ymin = ci_lower, ymax = ci_upper)) + 
-    geom_point() + 
-    geom_pointrange() + 
-    geom_line() +
-    facet_wrap(~length) + 
-    scale_x_continuous(breaks = c(1, seq(5, 30, 5))) + 
-    xlab("Word position") + 
-    ylab("Mean information")
-
-grid.arrange(bnc_plot, sw_plot, nrow = 2)
-```
-
-```{r switchboard_trigrams, echo=F,fig.height=4,fig.cap="Switchboard trigram context-based information curves"}
-sw_plot <- switch_results %>% 
-  filter(context == 2) %>%
-  ggplot(aes(x = word_order, y = empirical_stat, ymin = ci_lower, ymax = ci_upper)) + 
-    geom_point() + 
-    geom_pointrange() + 
-    geom_line() +
-    facet_wrap(~length) + 
-    scale_x_continuous(breaks = 1:11) + 
-    xlab("Word position") + 
-    ylab("Mean information")
+```{r bnc_trigrams, echo=F,fig.height=4,fig.cap="British National Corpus trigram context-based information curves"}
 
 bnc_plot <- bnc_results %>% 
   filter(context == 2) %>%
@@ -244,7 +168,6 @@ bnc_plot <- bnc_results %>%
     xlab("Word position") + 
     ylab("Mean information")
 
-grid.arrange(bnc_plot, sw_plot, nrow = 2)
 ```
 
 
@@ -254,11 +177,23 @@ Speakers produce information at a more or less constant rate, avoiding peaks or 
 
 We found that English speakers and writers used the same robust and distinctive distribution of information within each utterance, regardless of the number of words in their utterances. To determine if this distribution truly characterizes all speakers of the English language as a whole, we wanted to examine speech from English-speaking children who are producing their very first multi-word utterances. We hypothesize the three-step distribution of information we found for English will characterize child speech and child-directed speech. 
 
-We use the Providence corpus from CHILDES [@macwhinney2000; @evans2012], which consists of about 650000 utterances from parent-child conversations for six monolingual English-speaking children talking with the parents. We obtained the Providence corpus using the childesr frontend to the childes-db database [@sanchez2019]. The child age range was between 11 months and 4 years. Sessions recorded in the home. Parents said a majority of the utterances, but children take up an increasing share of the conversation as they grow older and are actually able to speak full utterances. The utterances in the Providence corpus are on average significantly shorter than those in the BNC and Switchboard; over 90% of the utterances in the Providence corpus are at most 10 words long, with the median at around 6 words. Similar to our treatment of the Switchboard corpus, we split the Providence corpus up by conversational turns and separate utterances. 
+```{r length distribution, include = F, eval = F}
+lengths <- eng %>% 
+  mutate(length = str_count(gloss, pattern = "[ +]+") + 1) %>% 
+  count(length)
 
-We observe the same distinctive distribution of information for parents and children in the Providence corpus as we did for adults in the BNC and Switchboard. The distribution of information we found at the level of individual words in English, therefore, characterizes the English language as a whole and not only adult utterances, not only written utterances. See \@ref(fig:providence_unigrams). 
+lengths %>% 
+  mutate(m = cumsum(n) / sum(n)) %>%
+  filter(length < 20) %>% 
+  ggplot(aes(x = length, y = m)) + 
+    geom_col()
+```
 
-```{r providence_unigrams, echo=F, fig.height =2, fig.cap="Providence frequency-based information curves. Lines around each point indicate 95% confidence intervals computed with non-parametric bootstrap"}
+We use the North American English collection from CHILDES [@macwhinney2000], which consists of about 2.6 million utterances from 522 children and their parents across 49 corpora. We obtained this collection using the childesr frontend to the childes-db database [@sanchez2019]. The utterances in the Providence corpus are on average significantly shorter than those in the BNC and Switchboard; over 95\% of the utterances in the North American English collection are 10 words or fewer. Unlike the written BNC, which we split by sentence, we split our CHILDES corpus by conversational turns and pauses using the built-in utterance breaks for each corpus. 
+
+We observe the same distinctive distribution of information for parents and children in the child speech corpus as we did for adults in the BNC. The distribution of information we found at the level of individual words in English, therefore, characterizes the English language as a whole and not only adult utterances, not only written utterances. See \@ref(fig:providence_unigrams). 
+
+```{r providence_unigrams, echo=F, fig.height =2, fig.cap="North American English frequency-based information curves. Lines around each point indicate 95% confidence intervals computed with non-parametric bootstrap"}
 childes_results %>% 
   filter(language == "English", context == 0) %>%
   ggplot(aes(x = word_order, y = empirical_stat, ymin = ci_lower, 

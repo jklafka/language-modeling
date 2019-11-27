@@ -27,6 +27,8 @@ def ngrams(s, n):
     tokens = s.split()
     if len(tokens) == 1:
         return [(s, 0, 1)]
+    elif len(tokens) == 2:
+        return [(s.split()[0], 0, 2), (s, 1, 2)]
     else:
         ngrams = lambda a, n: zip(*[a[i:] for i in range(n)])
         joined_grams = [' '.join(grams) for grams in ngrams(tokens, n)]

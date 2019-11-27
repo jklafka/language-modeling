@@ -14,6 +14,21 @@ require(feather)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r info curve plotting}
+bootstraps <- read_csv(here("Data/CHILDES/curve_bootstraps.feather"))
+
+bootstraps %>%
+  filter(length == 8) %>%
+  ggplot(aes(x = position, y = empirical_stat, color = speaker)) + 
+    geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper)) + 
+    geom_line() + 
+    facet_wrap(~language) + 
+    scale_x_continuous(breaks = 1:8) + 
+    scale_color_brewer()
+```
+
+Below is the process by which we create the bootstrapped mean information curves across ngram positions.
+
 ```{r read data and bootstrap}
 childes_results <- read_feather(here("Data/CHILDES/trigram_results.feather"))
 
@@ -30,22 +45,13 @@ bootstraps <- nest_d %>%
   select(-data) %>%
   unnest()
 
-```
-
-```{r info curve plotting}
-bootstraps %>%
-  filter(length == 8) %>%
-  ggplot(aes(x = position, y = empirical_stat, color = speaker)) + 
-    geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper)) + 
-    geom_line() + 
-    facet_wrap(~language) + 
-    scale_x_continuous(breaks = 1:8) + 
-    scale_color_brewer()
+bootstraps %>% 
+  write_csv(here("Data/CHILDES/trigram_bootstraps.feather"))
 ```
 
 ```{r get results, eval=F, include=F}
 ## pull together all results from target languages and knit into one feather
-langs <- c("Chinese", "French", "German", "Spanish", "Japanese")
+langs <- c("Chinese", "French", "German", "Spanish", "Japanese", "Eng-NA")
 output_name <- "trigram_results" # use this to name the combined file
 
 get_childes_results <- function(lang) {
