@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r info curve plotting}
-bootstraps <- read_csv(here("Data/CHILDES/curve_bootstraps.feather"))
+bootstraps <- read_csv(here("Data/CHILDES/curve_bootstraps.csv"))
 
 bootstraps %>%
   filter(length == 8) %>%
@@ -24,7 +24,9 @@ bootstraps %>%
     geom_line() + 
     facet_wrap(~language) + 
     scale_x_continuous(breaks = 1:8) + 
-    scale_color_brewer()
+    scale_color_manual(values = c("#E69F00", "#56B4E9")) + 
+    xlab("Position of predicted word") + 
+    ylab("Mean information")
 ```
 
 Below is the process by which we create the bootstrapped mean information curves across ngram positions.
