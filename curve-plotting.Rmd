@@ -31,8 +31,38 @@ bootstraps %>%
 
 Below is the process by which we create the bootstrapped mean information curves across ngram positions.
 
+
+```{r put unigrams and trigrams together}
+# put together old unigrams and new (smoothed) trigrams
+childes_trigrams <- read_csv(here("Data/CHILDES/trigram_bootstraps.csv"))
+childes_results <- read_feather(here("Data/Paper/all_childes_bootstrap.feather"))
+
+all_childes <- childes_results %>% 
+  filter(context == 0) %>% 
+  rename(position = word_order) %>%
+  mutate(gram = "Unigram", language = recode(language, "Mandarin" = "Chinese")) %>% 
+  select(-context) %>% 
+  bind_rows(
+    childes_trigrams %>% mutate(gram = "Trigram", speaker = recode(speaker, "Adult" = "Parent"))
+    )
+
+# now for BNC
+bnc_trigrams <- read_csv(here("Data/corpus/bnc_bootstraps.csv"))
+bnc_results <- read_feather(here("Data/Paper/bnc_bootstrap.feather"))
+
+all_bnc <- bnc_results %>% 
+  filter(context == 0) %>% 
+  rename(position = word_order) %>%
+  mutate(gram = "Unigram") %>% 
+  select(-context, -corpus) %>% 
+  bind_rows(
+    bnc_trigrams %>% mutate(gram = "Trigram")
+    )
+```
+
 ```{r read data and bootstrap}
 childes_results <- read_feather(here("Data/CHILDES/trigram_results.feather"))
+
 
 # nest the surprisals for serial bootstrapping
 nest_d <- childes_results %>% 

@@ -18,13 +18,13 @@ affiliation:
     institution   : "University of Chicago"
 
 authornote: |
-  Thanks to folks. JSMF.
+  Great thanks to Stephen Meylan and Adam King for comments. Thanks to the audiences of Midwest Cognitive Science conference 2019 and Cognitive Science Society conference 2019. Many thanks to the Communication and Learning Lab for comments and critiques. Funding from the JS McDonnell Foundation. 
 
 abstract: |
   What role does communicative efficiency play in how we organize our utterances? In this paper, we present a novel method of examining how much information speakers in a given language communicate in each word in their utterances, surveying numerous diverse languages. We find that speakers produce frequent and informative words at regular parts of their utterances, depending on language they use, which is predictable in part from the features and genealogy of their language. This robust information distribution characterizes both spoken and written communication, and emerges in children's earliest utterances. However, in real-time communication, in-context word predictability allows listeners to process information at a constant, optimal rate, regardless of the information distribution in the language they understand.
   
-keywords          : "keywords"
-wordcount         : "X"
+keywords          : "information theory; communication; efficiency; syntax; typology; language development; computational modeling"
+# wordcount         : "X"
 
 bibliography      : ["info-curves.bib"]
 
@@ -74,10 +74,9 @@ options(digits=2)
 ```{r load data, include = F}
 childes_results <- read_feather(here("Data/Paper/all_childes_bootstrap.feather"))
 bnc_results <- read_feather(here("Data/Paper/bnc_bootstrap.feather"))
-switch_results <- read_feather(here("Data/Paper/switch_bootstrap.feather"))
 wiki_results <- read_feather(here("Data/Paper/all_spaces.feather"))
-wiki_curves <- read_csv(here("Data/Paper/new_relative_slopes.csv"))
-# wiki_lr <- read_feather(here("../surprisal/Wikipedia/models.feather"))
+wiki_curves <- read_csv(here("Data/Paper/relative_ngrams.csv"))
+wiki_lr <- read_feather(here("Data/Paper/models.feather"))
 ```
 
 # Introduction
@@ -157,6 +156,7 @@ What about context? So far we’ve only discussed the frequency-based metric, co
 
 ```{r bnc_trigrams, echo=F,fig.height=4,fig.cap="British National Corpus trigram context-based information curves"}
 
+## old for reference
 bnc_plot <- bnc_results %>% 
   filter(context == 2) %>%
   ggplot(aes(x = word_order, y = empirical_stat, ymin = ci_lower, ymax = ci_upper)) + 
@@ -166,6 +166,19 @@ bnc_plot <- bnc_results %>%
     facet_wrap(~length) + 
     scale_x_continuous(breaks = c(1, seq(5, 30, 5))) + 
     xlab("Word position") + 
+    ylab("Mean information")
+
+## use this one
+bootstraps %>%
+  filter(length == 8) %>%
+  filter(context == 2) %>%
+  ggplot(aes(x = position, y = empirical_stat, color = speaker)) + 
+    geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper)) + 
+    geom_line() + 
+    facet_wrap(~language) + 
+    scale_x_continuous(breaks = c(1, seq(5, 30, 5))) + 
+    scale_color_manual(values = c("#E69F00", "#56B4E9")) + 
+    xlab("Position of predicted word") + 
     ylab("Mean information")
 
 ```
@@ -366,12 +379,12 @@ A sample of the contextual information curves (two words of context) are plotted
 ```{r wiki_trigrams, echo=F, fig.cap="Some trigram information curves from the Wikipedia data"}
 wiki_curves %>%
   filter(gram == "Trigram") %>% 
-  mutate(Slope0 = runif(1, 0.9, 1.1)) %>% 
-  mutate(Slope1 = Slope1 + Slope0) %>% 
-  mutate(Slope2 = Slope2 + Slope1) %>% 
-  mutate(Slope3 = Slope3 + Slope2) %>% 
-  mutate(Slope4 = Slope4 + Slope3) %>% 
-  mutate(Slope5 = Slope5 + Slope4) %>% 
+  mutate(slope0 = runif(1, 0.9, 1.1)) %>% 
+  mutate(slope1 = slope1 + slope0) %>% 
+  mutate(slope2 = slope2 + slope1) %>% 
+  mutate(slope3 = slope3 + slope2) %>% 
+  mutate(slope4 = slope4 + slope3) %>% 
+  mutate(slope5 = slope5 + slope4) %>% 
   select(-gram) %>% 
   sample_n(6) %>% 
   gather(position, information, -language) %>%

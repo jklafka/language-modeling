@@ -25,11 +25,15 @@
 \hypersetup{unicode=true,
             pdftitle={Speakers of diverse languages structure their utterances for efficient communication},
             pdfauthor={Josef Klafka~\& Daniel Yurovsky},
-            pdfkeywords={keywords},
+            pdfkeywords={information theory; communication; efficiency; syntax; typology; language development; computational modeling},
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
-\usepackage{graphicx,grffile}
+\usepackage{graphicx}
+% grffile has become a legacy package: https://ctan.org/pkg/grffile
+\IfFileExists{grffile.sty}{%
+\usepackage{grffile}
+}{}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -71,7 +75,7 @@
 \affiliation{
 \vspace{0.5cm}
 \textsuperscript{1} Carnegie Mellon University\\\textsuperscript{2} University of Chicago}
-\keywords{keywords\newline\indent Word count: X}
+\keywords{information theory; communication; efficiency; syntax; typology; language development; computational modeling}
 \usepackage{csquotes}
 \usepackage{upgreek}
 \captionsetup{font=singlespacing,justification=justified}
@@ -96,7 +100,7 @@
 
 \linenumbers
 
-\authornote{Thanks to folks. JSMF.
+\authornote{Great thanks to Stephen Meylan and Adam King for comments. Thanks to the audiences of Midwest Cognitive Science conference 2019 and Cognitive Science Society conference 2019. Many thanks to the Communication and Learning Lab for comments and critiques. Funding from the JS McDonnell Foundation.
 
 Correspondence concerning this article should be addressed to Josef Klafka, 5000 Forbes Ave. E-mail: \href{mailto:jklafka@andrew.cmu.edu}{\nolinkurl{jklafka@andrew.cmu.edu}}}
 
@@ -132,28 +136,6 @@ Yu, Cong, Liang, and Liu (2016) studied the utterance level in written English s
 
 In this paper, we expand on this body of prior work in a number of novel ways. We replicate the results from Yu et al. (2016) with a metric tied to incremental word processing. We find their same distribution of information based on word frequency in English speech, as well as in English parent-child conversations. We extend our metric to include context, and show that the addition of context for each word smoothes out language-specific distributions. We expand the study of information density to the largest set of languages considered so far, and incorporate contextual and typological information into our analysis. Speakers will tend to distribute information in a language constrained but not determined by the morphology, syntax and phonology of that language. As soon as a child starts speaking, they tend to distribute information in their utterances according to the characteristic distribution in their language.
 
-\begin{itemize}
-\tightlist
-\item
-  Coding/decoding and information transfer
-\item
-  language as prediction
-\item
-  how should the code be structured? optimization questions like this have a had * a lot power across different parts of language: zipf, kemp \& regier, etc etc. noisy channel stuff. (or does this go in discussion)
-\item
-  don't under or overutilize channel, stay near limit -- constant entropy rate
-\item
-  evidence for this at multiple levels from individiual lexical choice *(info/information theory paper), inclusion of non-obligatory aspects of language (filled pauses, that), across multiple utterances in a discourse
-\item
-  what about over the course of an individual utterance--perhaps the strongest constraints from language itself?
-\item
-  yu et al.~found this puzzling effect.
-\item
-  we replicate that in a different kind of analysis and show that it extends to trigrams etc???
-\item
-  BUT variation cross-linguistically. why? constraints from language.
-\end{itemize}
-
 \hypertarget{methods}{%
 \section{Methods}\label{methods}}
 
@@ -170,7 +152,7 @@ However, when reading or listening, people don't just consider each word as an i
 
 When we use a word or two of context in our surprisal calculations, then the set of reasonable final items in our ngrams is greatly restricted. \enquote{Flower} may contain less information than \enquote{azalea} when we consider the words independently of their context, but with context this can be reversed. Flower appears in a variety of contexts, and so the information content of a word like \enquote{flower} in a particular context may be higher than \enquote{azalea}. If you only have azaleas in your garden, then hearing someone say \enquote{in that garden, look at the flowers} may be higher surprisal for you: you expect them to say \enquote{azalea}. This prediction does not need many words before to work out, for example in \enquote{I take my coffee with cream and sugar}. When you hear \enquote{cream and}, you automatically predict \enquote{sugar} or maybe \enquote{honey}, but there are few possible continuations with even those two words. Hearing \enquote{I} restricts the next word to a verb, or possibly an adverb, and since you have just heard the speaker refer to themselves in the first person singular, your set of possible completions is significantly restricted.
 
-Ideally, we would like to predict each word using all of the information available. For example, in an utterance of twenty words, we would be able to use the previous \(19\) words of context to predict the twentieth word. However, we would need to train on a corpus of many trillion word tokens to predict with this amount of context, and we want to directly compare how predictable each word is regardless of its position in an utterance. Therefore, we use the \emph{Markov assumption}, conditioning our language models' predictions on only a few words of preceding context at most. We train ngram language model on each corpus.
+Ideally, we would like to predict each word using all of the information available. For example, in an utterance of twenty words, we would be able to use the previous \(19\) words of context to predict the twentieth word. However, we would need to train on a corpus of many trillion word tokens to predict with this amount of context, and we want to directly compare how predictable each word is regardless of its position in an utterance. Therefore, we use a \emph{Markov assumption}: we condition our language model's next predictions on a small window of context instead of all preceding words. We train ngram language models inedpendently on each corpus.
 
 \[\text{surprisal}(w_i|w_{i-1}w_{i-2}...) \approx \text{surprisal}(w_i|w_{i-1}w_{i-2})\]
 
@@ -199,31 +181,9 @@ We find the same frequency-based information trajectory as Yu et al.~with little
 \caption{(\#fig:bnc\_unigrams)BNC frequency-based information curves}
 \end{figure}
 
-However, we have only found an information distribution for written English sentences in a single British English corpus. We predict that this frequency-based distribution will also hold for sentences spoken English. To show this, we use the Switchboard corpus of spoken American English telephone conversations. As a collection of written texts, our subset of the BNC features much longer sentences with a larger vocabulary per text and overall more complex sentence structures than Switchboard. We split the conversations in Switchboard not by sentences, as in the BNC, but by conversational turns.
+We have found a unique average distribution of information that appears to characterize the English language as a whole, utterance length. This distribution indicates that in English, the words we speak or write at the beginnings of utterances have little information, while the words we speak or write at the ends of utterances have a lot of information. The words in the middle of utterances have a middling amount of information, without the increasing trend in information from word to word that we might expect from (Genzel \& Charniak, 2002).
 
-For Switchboard we find the same frequency-based information distribution as the BNC, as seen in @ref(fig:switchboard\_unigrams). Notice in Figure @ref(fig:switchboard\_unigrams) that the longer the utterance length for Switchboard, the more clearly the information distribution for that utterance length characterizes
-
-\begin{figure}
-\centering
-\includegraphics{figs/switchboard_unigrams-1.pdf}
-\caption{(\#fig:switchboard\_unigrams)Switchboard frequency-based information curves}
-\end{figure}
-
-We have found a unique average distribution of information that appears to characterize the English language as a whole, regardless of medium (spoken or written) or utterance length. This distribution indicates that in English, the words we speak or write at the beginnings of utterances have little information, while the words we speak or write at the ends of utterances have a lot of information. The words in the middle of utterances have a middling amount of information, without the increasing trend in information from word to word that we might expect from (Genzel \& Charniak, 2002).
-
-What about context? So far we've only discussed the frequency-based metric, considering words on their own without any explicit incorporation of prior context. As previously discussed, listeners decode information and process what they hear incrementally, using prior heard words to ease the comprehension process. We now include one word of context (bigrams) and then two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context across both modalities and all speaker populations. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC and Switchboard are in Figures @ref(fig:switchboard\_bigrams) and @ref(fig:switchboard\_trigrams).
-
-\begin{figure}
-\centering
-\includegraphics{figs/switchboard_bigrams-1.pdf}
-\caption{(\#fig:switchboard\_bigrams)Switchboard bigram context-based information curves}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics{figs/switchboard_trigrams-1.pdf}
-\caption{(\#fig:switchboard\_trigrams)Switchboard trigram context-based information curves}
-\end{figure}
+What about context? So far we've only discussed the frequency-based metric, considering words on their own without any explicit incorporation of prior context. As previously discussed, listeners decode information and process what they hear incrementally, using prior heard words to ease the comprehension process. We now include one word of context (bigrams) and then two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context across both modalities and all speaker populations. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC are in Figure @ref(fig:bnc\_trigrams).
 
 Speakers produce information at a more or less constant rate, avoiding peaks or troughs in their information distribution, except at the beginnings of utterances, where listeners may not have any context to predict what the speaker is going to say. Speakers of English tend towards a characteristic and uneven distribution of word information based on frequencies within their utterances. Their interlocutors, however, once they have a word or two of context, decode information at a more or less constant and optimal rate.
 
@@ -232,14 +192,14 @@ Speakers produce information at a more or less constant rate, avoiding peaks or 
 
 We found that English speakers and writers used the same robust and distinctive distribution of information within each utterance, regardless of the number of words in their utterances. To determine if this distribution truly characterizes all speakers of the English language as a whole, we wanted to examine speech from English-speaking children who are producing their very first multi-word utterances. We hypothesize the three-step distribution of information we found for English will characterize child speech and child-directed speech.
 
-We use the Providence corpus from CHILDES (Evans \& Demuth, 2012; MacWhinney, 2000), which consists of about 650000 utterances from parent-child conversations for six monolingual English-speaking children talking with the parents. We obtained the Providence corpus using the childesr frontend to the childes-db database (Sanchez et al., 2019). The child age range was between 11 months and 4 years. Sessions recorded in the home. Parents said a majority of the utterances, but children take up an increasing share of the conversation as they grow older and are actually able to speak full utterances. The utterances in the Providence corpus are on average significantly shorter than those in the BNC and Switchboard; over 90\% of the utterances in the Providence corpus are at most 10 words long, with the median at around 6 words. Similar to our treatment of the Switchboard corpus, we split the Providence corpus up by conversational turns and separate utterances.
+We use the North American English collection from CHILDES (MacWhinney, 2000), which consists of about 2.6 million utterances from 522 children and their parents across 49 corpora. We obtained this collection using the childesr frontend to the childes-db database (Sanchez et al., 2019). The utterances in the Providence corpus are on average significantly shorter than those in the BNC and Switchboard; over 95\% of the utterances in the North American English collection are 10 words or fewer. Unlike the written BNC, which we split by sentence, we split our CHILDES corpus by conversational turns and pauses using the built-in utterance breaks for each corpus.
 
-We observe the same distinctive distribution of information for parents and children in the Providence corpus as we did for adults in the BNC and Switchboard. The distribution of information we found at the level of individual words in English, therefore, characterizes the English language as a whole and not only adult utterances, not only written utterances. See @ref(fig:providence\_unigrams).
+We observe the same distinctive distribution of information for parents and children in the child speech corpus as we did for adults in the BNC. The distribution of information we found at the level of individual words in English, therefore, characterizes the English language as a whole and not only adult utterances, not only written utterances. See @ref(fig:providence\_unigrams).
 
 \begin{figure}
 \centering
 \includegraphics{figs/providence_unigrams-1.pdf}
-\caption{(\#fig:providence\_unigrams)Providence frequency-based information curves. Lines around each point indicate 95\% confidence intervals computed with non-parametric bootstrap}
+\caption{(\#fig:providence\_unigrams)North American English frequency-based information curves. Lines around each point indicate 95\% confidence intervals computed with non-parametric bootstrap}
 \end{figure}
 
 What about context in the Providence corpus? When incorporating one or two words of predictive context, we observe the same trend as in the Switchboard and BNC corpora. Beyond the first couple of words, once your interlocutor has enough context to predict with some accuracy what you will say next, then you decode information from their speech stream at a constant and optimal rate. This applies to parents and children speaking to one another, as well as adults speaking and writing to one another. See @ref(fig:providence\_bigrams) and @ref(fig:providence\_trigrams).
@@ -261,9 +221,9 @@ What about context in the Providence corpus? When incorporating one or two words
 
 So far, we have only looked at the distribution of information in words in English, both with and without context. We have examined child speech, child-directed speech and adult-directed speech, as well as writing samples selected to be representative of British English as a whole. But this only captures the picture for English.
 
-We now turn to a small number of typologically diverse languages, and conduct the same analysis, using a monolingual adult-child speech corpora from CHILDES (MacWhinney, 2000) to compare the results from these languages directly to our results from the English Providence corpus. We use corpora for Spanish, German, French, Mandarin and Japanese. Similarly to the English Providence corpus, all of the following corpora consist mainly of shorter utterances: most utterances in the corpora are under 10 words long. For Spanish, we use the corpus of conversations between primary school-aged children between 6 and 9 years old and the researchers, in which the children were asked to recite stories in their native Spanish (Shiro, 1996). The students came from working class public schools and upper class private schools. For German, we use the Wagner corpus (Wagner, 1985). This corpus consists of a collection of mini-corpora collected from socio-economically diverse families, with children aged from 1;0 to 14;0, mainly on the younger end of that range. The corpus mainly consists of parent-child conversations between the children and their primary caregivers. For French, we use the Palasis corpus (Palasis, 2009), a longitudinal study of children between the ages of 2;5 and 4;0 from the same kindergarten class. The conversations in this corpus take place between the children and other children in the same class, and between the children and the investigator. For Mandarin Chinese, we use the Zhou corpus of dinner conversations from the Shanghai area (Li \& Zhou, 2015). The children in this corpus are 5 or 6 years old, and half come from working class families (the other half from upper class families). For Japanese, we use the Okayama corpus (Shirai, 2001). This corpus consists of conversations between children between the ages of 2;2 and 4;2 and their mothers.
+We now turn to a small number of typologically diverse languages, and conduct the same analysis, using a monolingual adult-child speech corpora from CHILDES (MacWhinney, 2000) to compare the results from these languages directly to our results from the English Providence corpus. We use corpora for Spanish, German, French, Mandarin and Japanese. All of the language collections consist mainly of shorter utterances: most utterances in the corpora are under 10 words long. Mandarin and Japanese are not natively written using the Latin alphabet, and moreover words are not segmented in their native scripts. Instead of the native scripts, we use transliterations from the corpus for each of the Mandarin and Japanese utterances into pinyin for Mandarin and romanji for Japanese where words are segmented.
 
-We observe a distinct and characteristic frequency-based information trajectory emerge for each language, robust across each utterance length within each language. We see the same distribution of information for both parents and children in each language, with the child's curve normally below the parent's curve, likely due to the parent speaking a larger share of the utterances in the corpus and using a larger vocabulary than the child. We see the opposite amplitude trend in the Shiro corpus, where the children speak more than the adult investigators as the children are the ones telling the stories. We include the frequency-based information curve from the Providence corpus for comparison.
+We observe a distinct and characteristic frequency-based information trajectory for each language, robust across each utterance length. We see the same distribution of information for both parents and children. The parent on average has more information in their utterances. This is an effect of the surprisal metric: parents speak more utterances than their children in most of the corpora, which inflates the number of tokens they use and increases the surprisal of hearing a rare word. We include the frequency-based information curve from the North American English CHILDES collection for comparison.
 
 \begin{figure}
 \centering
@@ -389,9 +349,6 @@ Chen, S. F., \& Goodman, J. (1999). An empirical study of smoothing techniques f
 \leavevmode\hypertarget{ref-wals}{}%
 Dryer, M. S., \& Haspelmath, M. (Eds.). (2013). \emph{WALS online}. Leipzig: Max Planck Institute for Evolutionary Anthropology. Retrieved from \url{https://wals.info/}
 
-\leavevmode\hypertarget{ref-evans2012}{}%
-Evans, K. E., \& Demuth, K. (2012). Individual differences in pronoun reversal: Evidence from two longitudinal case studies. \emph{Journal of Child Language}, \emph{39}(1), 162--191.
-
 \leavevmode\hypertarget{ref-frank2008}{}%
 Frank, A. F., \& Jaeger, T. F. (2008). Speaking rationally: Uniform information density as an optimal strategy for language production. In \emph{Proceedings of the annual meeting of the cognitive science society} (Vol. 30).
 
@@ -425,17 +382,11 @@ Leech, G. N. (1992). 100 million words of english: The british national corpus (
 \leavevmode\hypertarget{ref-levy2008}{}%
 Levy, R. (2008). Expectation-based syntactic comprehension. \emph{Cognition}, \emph{106}(3), 1126--1177.
 
-\leavevmode\hypertarget{ref-li2015}{}%
-Li, H., \& Zhou, J. (2015). \emph{Study on dinner table talk of preschool children family in shanghai} (Master's thesis). East China Normal University, Shanghai, China.
-
 \leavevmode\hypertarget{ref-macwhinney2000}{}%
 MacWhinney, B. (2000). \emph{The childes project: The database} (Vol. 2). Psychology Press.
 
 \leavevmode\hypertarget{ref-mahowald2013}{}%
 Mahowald, K., Fedorenko, E., Piantadosi, S. T., \& Gibson, E. (2013). Info/information theory: Speakers choose shorter words in predictive contexts. \emph{Cognition}, \emph{126}(2), 313--318.
-
-\leavevmode\hypertarget{ref-palasis2009}{}%
-Palasis, K. (2009). \emph{Syntaxe générative et acquisition: Le sujet dans le développement du système linguistique du jeune enfant} (PhD thesis). Nice.
 
 \leavevmode\hypertarget{ref-perfors2014language}{}%
 Perfors, A., \& Navarro, D. J. (2014). Language evolution can be shaped by the structure of the world. \emph{Cognitive Science}, \emph{38}(4), 775--793.
@@ -452,12 +403,6 @@ Sanchez, A., Meylan, S. C., Braginsky, M., MacDonald, K. E., Yurovsky, D., \& Fr
 \leavevmode\hypertarget{ref-shannon1948}{}%
 Shannon, C. E. (1948). A mathematical theory of communication. \emph{Bell System Technical Journal}, \emph{27}(3), 379--423.
 
-\leavevmode\hypertarget{ref-shirai2001}{}%
-Shirai, Y. (2001). The acquisition of causative morphology in japanese: A prototype account. \emph{East Asian Language Acquisition}.
-
-\leavevmode\hypertarget{ref-shiro1996}{}%
-Shiro, M. L. de. (1996). Un estudio de las expresiones de modalidad en hablantes de dos culturas. \emph{Boletı'n de Lingüı'stica}, (10), 43--60.
-
 \leavevmode\hypertarget{ref-smith2013}{}%
 Smith, N. J., \& Levy, R. (2013). The effect of word predictability on reading time is logarithmic. \emph{Cognition}, \emph{128}(3), 302--319.
 
@@ -469,9 +414,6 @@ Tanenhaus, M. K., Spivey-Knowlton, M. J., Eberhard, K. M., \& Sedivy, J. C. (199
 
 \leavevmode\hypertarget{ref-team2013}{}%
 Team, R. C., \& others. (2013). R: A language and environment for statistical computing.
-
-\leavevmode\hypertarget{ref-wagner1985}{}%
-Wagner, K. R. (1985). How much do children say in a day? \emph{Journal of Child Language}, \emph{12}(2), 475--487.
 
 \leavevmode\hypertarget{ref-wichmann2016}{}%
 Wichmann, S., Müller, A., Wett, A., Velupillai, V., Bischoffberger, J., Brown, C. H., \ldots{} others. (2016). The asjp database. \emph{Max Planck Institute for the Science of Human History, Jena}.

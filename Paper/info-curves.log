@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  20 NOV 2019 10:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  29 NOV 2019 13:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -676,30 +676,30 @@ Package csquotes Info: ... none found.
 (./info-curves.aux)
 \openout1 = `info-curves.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 109.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 109.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 113.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 113.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 109.
-LaTeX Font Info:    ... okay on input line 109.
-LaTeX Font Info:    Try loading font information for T1+lmr on input line 109.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 113.
+LaTeX Font Info:    ... okay on input line 113.
+LaTeX Font Info:    Try loading font information for T1+lmr on input line 113.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/t1lmr.fd
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
@@ -775,7 +775,7 @@ Package caption Info: longtable package is loaded.
 Package: ltcaption 2018/08/26 v1.4-95 longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
-LaTeX Info: Redefining \microtypecontext on input line 109.
+LaTeX Info: Redefining \microtypecontext on input line 113.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
@@ -790,7 +790,7 @@ File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman
 (RS)
 )
 \AtBeginShipoutBox=\box41
-Package hyperref Info: Link coloring OFF on input line 109.
+Package hyperref Info: Link coloring OFF on input line 113.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 (/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
@@ -798,51 +798,51 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count155
 )
-LaTeX Info: Redefining \ref on input line 109.
-LaTeX Info: Redefining \pageref on input line 109.
-LaTeX Info: Redefining \nameref on input line 109.
+LaTeX Info: Redefining \ref on input line 113.
+LaTeX Info: Redefining \pageref on input line 113.
+LaTeX Info: Redefining \nameref on input line 113.
 (./info-curves.out) (./info-curves.out)
 \@outlinefile=\write5
 \openout5 = `info-curves.out'.
 
-LaTeX Font Info:    Try loading font information for T1+lmss on input line 111.
+LaTeX Font Info:    Try loading font information for T1+lmss on input line 115.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OT1+lmr on input line 111.
+LaTeX Font Info:    Try loading font information for OT1+lmr on input line 115.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OML+lmm on input line 111.
+LaTeX Font Info:    Try loading font information for OML+lmm on input line 115.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 111
+LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 115
 .
 (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
-LaTeX Font Info:    Try loading font information for OMX+lmex on input line 111
+LaTeX Font Info:    Try loading font information for OMX+lmex on input line 115
 .
 (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 111.
+(Font)              <12> on input line 115.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 111.
+(Font)              <8> on input line 115.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 111.
-LaTeX Font Info:    Try loading font information for U+msa on input line 111.
+(Font)              <6> on input line 115.
+LaTeX Font Info:    Try loading font information for U+msa on input line 115.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 111.
+LaTeX Font Info:    Try loading font information for U+msb on input line 115.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-msb.cfg
@@ -851,177 +851,146 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 File: mt-eur.cfg 2006/07/31 v1.1 microtype config. file: AMS Euler Roman (RS)
 ) [1{/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
-] [2] [3] [4] [5]
-LaTeX Font Info:    Try loading font information for TS1+lmr on input line 138.
-
-(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
-) [6] [7] [8]
-Underfull \vbox (badness 4752) has occurred while \output is active []
-
-[9] [10]
-<figs/bnc_unigrams-1.pdf, id=106, 204.765pt x 135.50626pt>
+] [2] [3] [4] [5] [6] [7] [8] [9]
+<figs/bnc_unigrams-1.pdf, id=101, 204.765pt x 135.50626pt>
 File: figs/bnc_unigrams-1.pdf Graphic file (type pdf)
 <use figs/bnc_unigrams-1.pdf>
-Package pdftex.def Info: figs/bnc_unigrams-1.pdf  used on input line 198.
+Package pdftex.def Info: figs/bnc_unigrams-1.pdf  used on input line 180.
 (pdftex.def)             Requested size: 204.77072pt x 135.51004pt.
-[11 <./figs/bnc_unigrams-1.pdf>]
-<figs/switchboard_unigrams-1.pdf, id=119, 207.77625pt x 276.03125pt>
-File: figs/switchboard_unigrams-1.pdf Graphic file (type pdf)
-<use figs/switchboard_unigrams-1.pdf>
-Package pdftex.def Info: figs/switchboard_unigrams-1.pdf  used on input line 20
-8.
-(pdftex.def)             Requested size: 207.78523pt x 276.0432pt.
-[12 <./figs/switchboard_unigrams-1.pdf>]
-<figs/switchboard_bigrams-1.pdf, id=132, 207.77625pt x 276.03125pt>
-File: figs/switchboard_bigrams-1.pdf Graphic file (type pdf)
-<use figs/switchboard_bigrams-1.pdf>
-Package pdftex.def Info: figs/switchboard_bigrams-1.pdf  used on input line 218
-.
-(pdftex.def)             Requested size: 207.78523pt x 276.0432pt.
-<figs/switchboard_trigrams-1.pdf, id=133, 207.77625pt x 276.03125pt>
-File: figs/switchboard_trigrams-1.pdf Graphic file (type pdf)
-<use figs/switchboard_trigrams-1.pdf>
-Package pdftex.def Info: figs/switchboard_trigrams-1.pdf  used on input line 22
-4.
-(pdftex.def)             Requested size: 207.78523pt x 276.0432pt.
-
+[10]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[13 <./figs/switchboard_bigrams-1.pdf>] [14 <./figs/switchboard_trigrams-1.pdf>
-]
-<figs/providence_unigrams-1.pdf, id=161, 204.765pt x 131.49126pt>
+[11 <./figs/bnc_unigrams-1.pdf>]
+<figs/providence_unigrams-1.pdf, id=119, 204.765pt x 131.49126pt>
 File: figs/providence_unigrams-1.pdf Graphic file (type pdf)
 <use figs/providence_unigrams-1.pdf>
-Package pdftex.def Info: figs/providence_unigrams-1.pdf  used on input line 241
+Package pdftex.def Info: figs/providence_unigrams-1.pdf  used on input line 201
 .
 (pdftex.def)             Requested size: 204.77385pt x 131.49693pt.
-<figs/providence_bigrams-1.pdf, id=162, 204.765pt x 131.49126pt>
+[12]
+<figs/providence_bigrams-1.pdf, id=124, 204.765pt x 131.49126pt>
 File: figs/providence_bigrams-1.pdf Graphic file (type pdf)
 <use figs/providence_bigrams-1.pdf>
-Package pdftex.def Info: figs/providence_bigrams-1.pdf  used on input line 249.
+Package pdftex.def Info: figs/providence_bigrams-1.pdf  used on input line 209.
 
 (pdftex.def)             Requested size: 204.77385pt x 131.49693pt.
-<figs/providence_trigrams-1.pdf, id=163, 204.765pt x 131.49126pt>
+<figs/providence_trigrams-1.pdf, id=125, 204.765pt x 131.49126pt>
 File: figs/providence_trigrams-1.pdf Graphic file (type pdf)
 <use figs/providence_trigrams-1.pdf>
-Package pdftex.def Info: figs/providence_trigrams-1.pdf  used on input line 255
+Package pdftex.def Info: figs/providence_trigrams-1.pdf  used on input line 215
 .
 (pdftex.def)             Requested size: 204.77385pt x 131.49693pt.
-
-Underfull \vbox (badness 1552) has occurred while \output is active []
-
-[15 <./figs/providence_unigrams-1.pdf>] [16 <./figs/providence_bigrams-1.pdf>]
-<figs/unnamed-chunk-1-1.pdf, id=189, 204.765pt x 203.76125pt>
+[13 <./figs/providence_unigrams-1.pdf>]
+<figs/unnamed-chunk-1-1.pdf, id=140, 204.765pt x 203.76125pt>
 File: figs/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use figs/unnamed-chunk-1-1.pdf>
-Package pdftex.def Info: figs/unnamed-chunk-1-1.pdf  used on input line 270.
+Package pdftex.def Info: figs/unnamed-chunk-1-1.pdf  used on input line 230.
 (pdftex.def)             Requested size: 204.77385pt x 203.77007pt.
 
-Underfull \vbox (badness 4266) has occurred while \output is active []
+Underfull \vbox (badness 1127) has occurred while \output is active []
 
-[17 <./figs/providence_trigrams-1.pdf>]
-Underfull \vbox (badness 1028) has occurred while \output is active []
-
-[18 <./figs/unnamed-chunk-1-1.pdf>]
-<figs/unnamed-chunk-2-1.pdf, id=214, 204.765pt x 203.76125pt>
+[14 <./figs/providence_bigrams-1.pdf>]
+<figs/unnamed-chunk-2-1.pdf, id=153, 204.765pt x 203.76125pt>
 File: figs/unnamed-chunk-2-1.pdf Graphic file (type pdf)
 <use figs/unnamed-chunk-2-1.pdf>
-Package pdftex.def Info: figs/unnamed-chunk-2-1.pdf  used on input line 280.
+Package pdftex.def Info: figs/unnamed-chunk-2-1.pdf  used on input line 240.
 (pdftex.def)             Requested size: 204.77385pt x 203.77007pt.
-<figs/unnamed-chunk-3-1.pdf, id=215, 204.765pt x 203.76125pt>
+<figs/unnamed-chunk-3-1.pdf, id=154, 204.765pt x 203.76125pt>
 File: figs/unnamed-chunk-3-1.pdf Graphic file (type pdf)
 <use figs/unnamed-chunk-3-1.pdf>
-Package pdftex.def Info: figs/unnamed-chunk-3-1.pdf  used on input line 286.
+Package pdftex.def Info: figs/unnamed-chunk-3-1.pdf  used on input line 246.
 (pdftex.def)             Requested size: 204.77385pt x 203.77007pt.
-[19 <./figs/unnamed-chunk-2-1.pdf>]
-<figs/treatments-1.pdf, id=231, 205.76875pt x 203.76125pt>
+
+Underfull \vbox (badness 1325) has occurred while \output is active []
+
+[15 <./figs/providence_trigrams-1.pdf>]
+<figs/treatments-1.pdf, id=170, 205.76875pt x 203.76125pt>
 File: figs/treatments-1.pdf Graphic file (type pdf)
 <use figs/treatments-1.pdf>
-Package pdftex.def Info: figs/treatments-1.pdf  used on input line 299.
+Package pdftex.def Info: figs/treatments-1.pdf  used on input line 259.
 (pdftex.def)             Requested size: 205.76823pt x 203.76074pt.
 
+Underfull \vbox (badness 1028) has occurred while \output is active []
+
+[16 <./figs/unnamed-chunk-1-1.pdf>]
 Underfull \vbox (badness 4096) has occurred while \output is active []
 
-[20 <./figs/unnamed-chunk-3-1.pdf>]
-Underfull \vbox (badness 4108) has occurred while \output is active []
+[17 <./figs/unnamed-chunk-2-1.pdf>]
 
-[21 <./figs/treatments-1.pdf>]
+LaTeX Warning: Reference `fig:dendro' on page 18 undefined on input line 274.
 
-LaTeX Warning: Reference `fig:dendro' on page 22 undefined on input line 314.
-
-<figs/dendro-1.pdf, id=256, 197.73875pt x 182.6825pt>
+[18 <./figs/unnamed-chunk-3-1.pdf>]
+<figs/dendro-1.pdf, id=209, 197.73875pt x 182.6825pt>
 File: figs/dendro-1.pdf Graphic file (type pdf)
 <use figs/dendro-1.pdf>
-Package pdftex.def Info: figs/dendro-1.pdf  used on input line 316.
+Package pdftex.def Info: figs/dendro-1.pdf  used on input line 276.
 (pdftex.def)             Requested size: 197.74127pt x 182.68481pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-[22]
-<figs/wiki_trigrams-1.pdf, id=262, 204.765pt x 203.76125pt>
+[19 <./figs/treatments-1.pdf>]
+<figs/wiki_trigrams-1.pdf, id=222, 204.765pt x 203.76125pt>
 File: figs/wiki_trigrams-1.pdf Graphic file (type pdf)
 <use figs/wiki_trigrams-1.pdf>
-Package pdftex.def Info: figs/wiki_trigrams-1.pdf  used on input line 322.
+Package pdftex.def Info: figs/wiki_trigrams-1.pdf  used on input line 282.
 (pdftex.def)             Requested size: 204.77385pt x 203.77007pt.
-[23 <./figs/dendro-1.pdf> <./figs/wiki_trigrams-1.pdf>]
-<figs/linear_models-1.pdf, id=282, 216.81pt x 140.525pt>
+[20 <./figs/dendro-1.pdf> <./figs/wiki_trigrams-1.pdf>]
+<figs/linear_models-1.pdf, id=242, 216.81pt x 140.525pt>
 File: figs/linear_models-1.pdf Graphic file (type pdf)
 <use figs/linear_models-1.pdf>
-Package pdftex.def Info: figs/linear_models-1.pdf  used on input line 330.
+Package pdftex.def Info: figs/linear_models-1.pdf  used on input line 290.
 (pdftex.def)             Requested size: 216.81938pt x 140.53107pt.
-<figs/cosine_wals-1.pdf, id=283, 210.7875pt x 201.75375pt>
+<figs/cosine_wals-1.pdf, id=243, 210.7875pt x 201.75375pt>
 File: figs/cosine_wals-1.pdf Graphic file (type pdf)
 <use figs/cosine_wals-1.pdf>
-Package pdftex.def Info: figs/cosine_wals-1.pdf  used on input line 338.
+Package pdftex.def Info: figs/cosine_wals-1.pdf  used on input line 298.
 (pdftex.def)             Requested size: 210.79019pt x 201.75632pt.
-[24 <./figs/linear_models-1.pdf>]
-<figs/cosine_ldn-1.pdf, id=297, 209.78375pt x 201.75375pt>
+[21 <./figs/linear_models-1.pdf>]
+<figs/cosine_ldn-1.pdf, id=257, 209.78375pt x 201.75375pt>
 File: figs/cosine_ldn-1.pdf Graphic file (type pdf)
 <use figs/cosine_ldn-1.pdf>
-Package pdftex.def Info: figs/cosine_ldn-1.pdf  used on input line 346.
+Package pdftex.def Info: figs/cosine_ldn-1.pdf  used on input line 306.
 (pdftex.def)             Requested size: 209.78322pt x 201.75325pt.
-[25 <./figs/cosine_wals-1.pdf>]
+[22 <./figs/cosine_wals-1.pdf>]
 Underfull \vbox (badness 5417) has occurred while \output is active []
 
-[26 <./figs/cosine_ldn-1.pdf>] [27] [28] [29] [30] AED endfloat: Processing end
- Figures and Tables [31]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 485.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 485.
+[23 <./figs/cosine_ldn-1.pdf>] [24] [25] [26] [27] AED endfloat: Processing end
+ Figures and Tables [28]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 427.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 427.
 (./info-curves.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 485.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 485.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 427.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 427.
 Package rerunfilecheck Info: File `info-curves.out' has not changed.
-(rerunfilecheck)             Checksum: F2103914C7D629D6EC62A1668652E277;2582.
+(rerunfilecheck)             Checksum: F376323EE780C6AFF21137704348C78D;2581.
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 15598 strings out of 492616
- 233673 string characters out of 6129482
- 348401 words of memory out of 5000000
- 19099 multiletter control sequences out of 15000+600000
- 50989 words of font info for 82 fonts, out of 8000000 for 9000
+ 15544 strings out of 492616
+ 232177 string characters out of 6129482
+ 350288 words of memory out of 5000000
+ 19059 multiletter control sequences out of 15000+600000
+ 50743 words of font info for 82 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 43i,10n,47p,1896b,460s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 43i,10n,47p,1378b,460s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/
 texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/20
 19/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2019/texmf-d
-ist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2019/texmf-dist/fonts/enc
-/dvips/lm/lm-ec.enc}</usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/l
-mbx12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmmi12.pfb>
-</usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local
-/texlive/2019/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/local/texlive/20
-19/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2019/texmf-dis
-t/fonts/type1/public/lm/lmri12.pfb></usr/local/texlive/2019/texmf-dist/fonts/ty
-pe1/public/lm/lmss8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/
-lm/lmsy10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmsy8.p
-fb>
-Output written on info-curves.pdf (31 pages, 2253624 bytes).
+ist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2019/texmf-dist/fonts/type
+1/public/lm/lmbx12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/l
+m/lmmi12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmmi8.pf
+b></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmr12.pfb></usr/loc
+al/texlive/2019/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/local/texlive/2
+019/texmf-dist/fonts/type1/public/lm/lmri12.pfb></usr/local/texlive/2019/texmf-
+dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2019/texmf-dist/fonts/
+type1/public/lm/lmsy10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/publ
+ic/lm/lmsy8.pfb>
+Output written on info-curves.pdf (28 pages, 2196199 bytes).
 PDF statistics:
- 457 PDF objects out of 1000 (max. 8388607)
- 363 compressed objects within 4 object streams
- 105 named destinations out of 1000 (max. 500000)
- 6313 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 406 PDF objects out of 1000 (max. 8388607)
+ 324 compressed objects within 4 object streams
+ 93 named destinations out of 1000 (max. 500000)
+ 6298 words of extra memory for PDF output out of 10000 (max. 10000000)
 
