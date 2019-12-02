@@ -1,0 +1,38 @@
+---
+title: "linguistic_distance"
+author: "Josef Klafka and Daniel Yurovsky"
+date: "12/2/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(tidyverse)
+require(here)
+require(janitor)
+require(missMDA)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Download and unzip the WALS data file from "https://wals.info/download" (the file is called wals_language.csv.zip) to get the originals for this data processing pipeline. Codes are created from the language_dict.json file in the top-level directory of the repository, filled out manually from here: "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Languages/List_of_ISO_639-3_language_codes_(2019)"
+```{r get WALS features, echo = F, include = F}
+# get all of the features for each language
+langs <- read_csv(here("Data/Wikipedia/wals_dataset/languages.csv")) %>% 
+  select(ID, ISO639P3code)
+
+values <- read_csv(here("Data/Wikipedia/wals_dataset/values.csv")) %>%
+  select(Language_ID, Parameter_ID, Value) %>% 
+  pivot_wider(names_from = Parameter_ID, values_from = Value) %>% 
+  left_join(langs, by = c("Language_ID" = "ID")) %>%
+  clean_names()
+
+imputed_wals <- values %>%
+  column_to_rownames("language_id") %>%
+  MIMCA(ncp = 2)
+
+wiki <- read_csv(here("Data/Wikipedia/codes.csv"))
+# curves <- read_csv(here("Data/Paper/relative_curves.csv"))
+
+features <- imputed_wals %>% 
+  left_join(wiki, by = c("ISO639P3code" = "iso")) 
+```

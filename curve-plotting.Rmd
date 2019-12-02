@@ -63,7 +63,6 @@ all_bnc <- bnc_results %>%
 ```{r read data and bootstrap}
 childes_results <- read_feather(here("Data/CHILDES/trigram_results.feather"))
 
-
 # nest the surprisals for serial bootstrapping
 nest_d <- childes_results %>% 
   group_by(language, speaker, length, position) %>% 
@@ -83,7 +82,7 @@ bootstraps %>%
 
 ```{r get results, eval=F, include=F}
 ## pull together all results from target languages and knit into one feather
-langs <- c("Chinese", "French", "German", "Spanish", "Japanese", "Eng-NA")
+langs <- "Eng-NA" # c("Chinese", "French", "German", "Spanish", "Japanese", "Eng-NA")
 output_name <- "trigram_results" # use this to name the combined file
 
 get_childes_results <- function(lang) {
