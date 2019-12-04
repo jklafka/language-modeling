@@ -29,8 +29,28 @@ bootstraps %>%
     ylab("Mean information")
 ```
 
-Below is the process by which we create the bootstrapped mean information curves across ngram positions.
+```{r wikipedia curves plotting}
+slopes <- read_csv(here("Data/Wikipedia/new_relative_slopes.csv"))
 
+slopes %>% 
+  filter(language %in% c("English", "German", "Dutch", "Chinese", "Japanese", "French")) %>%
+  mutate(slope0 = runif(1, 0.9, 1.1)) %>% 
+  mutate(slope1 = slope1 + slope0) %>% 
+  mutate(slope2 = slope2 + slope1) %>% 
+  mutate(slope3 = slope3 + slope2) %>% 
+  mutate(slope4 = slope4 + slope3) %>% 
+  mutate(slope5 = slope5 + slope4) %>% 
+  sample_n(6) %>% 
+  gather(position, information, -language) %>%
+  ggplot(aes(x = position, y = information, group = language, color = language)) + 
+    geom_point() + 
+    geom_line() + 
+    xlab("Word position") + 
+    ylab("Average Information") + 
+    theme(axis.text.x = element_blank())
+```
+
+Below is the process by which we create the bootstrapped mean information curves across ngram positions.
 
 ```{r put unigrams and trigrams together}
 # put together old unigrams and new (smoothed) trigrams

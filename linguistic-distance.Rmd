@@ -18,7 +18,8 @@ Download and unzip the WALS data file from "https://wals.info/download" (the fil
 ```{r get WALS features, echo = F, include = F}
 # get all of the features for each language
 langs <- read_csv(here("Data/Wikipedia/wals_dataset/languages.csv")) %>% 
-  select(ID, ISO639P3code)
+  select(ID, ISO639P3code) %>%
+  rename(iso = ISO639P3code)
 
 values <- read_csv(here("Data/Wikipedia/wals_dataset/values.csv")) %>%
   select(Language_ID, Parameter_ID, Value) %>% 
@@ -26,13 +27,21 @@ values <- read_csv(here("Data/Wikipedia/wals_dataset/values.csv")) %>%
   left_join(langs, by = c("Language_ID" = "ID")) %>%
   clean_names()
 
+## imputation
 imputed_wals <- values %>%
   column_to_rownames("language_id") %>%
-  MIMCA(ncp = 2)
+  filter_all(any_vars(!is.na(.))) %>% # each language and each feature has at least one value
+  MIMCA(ncp = 50, threshold = 1e-2, maxiter = 500)
 
 wiki <- read_csv(here("Data/Wikipedia/codes.csv"))
-# curves <- read_csv(here("Data/Paper/relative_curves.csv"))
+slopes <- read_csv(here("Data/Wikipedia/new_relative_slopes.csv"))
 
-features <- imputed_wals %>% 
-  left_join(wiki, by = c("ISO639P3code" = "iso")) 
+features <- values %>% 
+  left_join(wiki, by = "iso") %>%
+  filter(!is.na(language))
+
+features %>% 
+  column_to_rownames("language_id") %>%
+  filter_all(any_vars(!is.na(.))) %>% # each language and each feature has at least one value
+  MIMCA(ncp = 20, threshold = 1e-2, maxiter = 1000)
 ```
