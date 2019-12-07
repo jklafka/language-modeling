@@ -10,6 +10,8 @@ require(tidyverse)
 require(here)
 require(janitor)
 require(missMDA)
+require(tidyboot)
+require(viridis)
 
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -27,21 +29,99 @@ values <- read_csv(here("Data/Wikipedia/wals_dataset/values.csv")) %>%
   left_join(langs, by = c("Language_ID" = "ID")) %>%
   clean_names()
 
-## imputation
-imputed_wals <- values %>%
-  column_to_rownames("language_id") %>%
-  filter_all(any_vars(!is.na(.))) %>% # each language and each feature has at least one value
-  MIMCA(ncp = 50, threshold = 1e-2, maxiter = 500)
+# ## imputation
+# imputed_wals <- values %>%
+#   column_to_rownames("language_id") %>%
+#   filter_all(any_vars(!is.na(.))) %>% # each language and each feature has at least one value
+#   MIMCA(ncp = 50, threshold = 1e-2, maxiter = 500)
 
 wiki <- read_csv(here("Data/Wikipedia/codes.csv"))
-slopes <- read_csv(here("Data/Wikipedia/new_relative_slopes.csv"))
+slopes <- read_csv(here("Data/Paper/relative_ngrams.csv"))
 
 features <- values %>% 
   left_join(wiki, by = "iso") %>%
   filter(!is.na(language))
 
-features %>% 
-  column_to_rownames("language_id") %>%
-  filter_all(any_vars(!is.na(.))) %>% # each language and each feature has at least one value
-  MIMCA(ncp = 20, threshold = 1e-2, maxiter = 1000)
+# features %>% 
+#   column_to_rownames("language_id") %>%
+#   filter_all(any_vars(!is.na(.))) %>% # each language and each feature has at least one value
+#   MIMCA(ncp = 20, threshold = 1e-2, maxiter = 1000)
+```
+
+Does word order covary with trigram information curve shape? It seems like yes, although the aggregated curves you get for each language family are difficult to understand. 
+```{r shape-feature covariance}
+boot_slopes <- features %>% 
+  inner_join(slopes %>% filter(gram == "Unigram"), by = "language") %>% 
+  filter(!is.na(x81a)) %>% 
+  select(language, x81a, slope1:slope5) %>% 
+  mutate(slope0 = runif(1, 0.9, 1.1)) %>% 
+  mutate(slope1 = slope1 + slope0) %>% 
+  mutate(slope2 = slope2 + slope1) %>% 
+  mutate(slope3 = slope3 + slope2) %>% 
+  mutate(slope4 = slope4 + slope3) %>% 
+  mutate(slope5 = slope5 + slope4) %>% 
+  pivot_longer(cols = slope1:slope0, names_to = "slope", values_to = "value") %>%
+  group_by(x81a, slope) %>%
+  tidyboot_mean(column = value) %>%
+  ungroup()
+
+boot_slopes %>% 
+  mutate(slope = str_extract(slope, "\\d"), # turn slope into integer
+         slope = as.integer(slope) + 1) %>%
+    ggplot(aes(x = slope, y = empirical_stat, group = x81a, color = x81a)) + 
+    geom_point() + 
+    # geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.25) + 
+    geom_line() + 
+    xlab("Word position") + 
+    ylab("Average Information") + 
+    theme(axis.text.x = element_blank()) + 
+    scale_color_viridis(discrete = T, option = "C")
+```
+
+Are information curve shapes consistent within language families? 
+language.csv is from "https://wals.info/download", in wals_language.csv.zip. It's the only file in the zip. 
+```{r language family}
+slopes <- read_csv(here("Data/Paper/relative_ngrams.csv"))
+families <- read_csv(here("Data/Wikipedia/wals_dataset/language.csv"))
+
+## match up language curves with their language families
+family_slopes <- features %>% 
+  select(language, iso) %>% 
+  inner_join(slopes) %>% 
+  inner_join(families %>% select(iso_code, family), by = c("iso" = "iso_code")) %>% 
+  distinct() ## deduplicate--WALS has some duplicate entries but doesn't affect families
+
+## construct sample curves and bootstrap
+family_bootstraps <- family_slopes %>% 
+  select(-iso) %>% 
+  mutate(slope0 = 5) %>% 
+  mutate(slope1 = slope1 + slope0) %>% 
+  mutate(slope2 = slope2 + slope1) %>% 
+  mutate(slope3 = slope3 + slope2) %>% 
+  mutate(slope4 = slope4 + slope3) %>% 
+  mutate(slope5 = slope5 + slope4) %>% 
+  pivot_longer(cols = c(slope1:slope5, slope0), names_to = "slope", values_to = "value") %>%
+  group_by(family, gram, slope) %>%
+  tidyboot_mean(column = value) %>%
+  ungroup()
+
+## plotting the sample curves
+family_bootstraps %>% 
+  mutate(slope = str_extract(slope, "\\d"), # turn slope into integer
+         slope = as.integer(slope) + 1) %>%
+  filter(gram == "Trigram") %>% 
+  ggplot(aes(x = slope, y = empirical_stat, group = gram, color = gram)) + 
+    geom_point() + 
+    geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.25) +
+    geom_line() + 
+    facet_wrap(~family) + 
+    xlab("Word position") + 
+    ylab("Average Information") + 
+    theme(axis.text.x = element_blank()) + 
+    scale_color_manual(values = c("#8b0000"))
+
+# ## why do the unigram curves look so flat in comparison?
+# family_slopes %>% 
+#   filter(gram == "Unigram") %>% 
+#   group_by(family)
 ```
