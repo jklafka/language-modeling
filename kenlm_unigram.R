@@ -8,7 +8,7 @@ require(here)
 
 corpus_name = commandArgs(trailingOnly=TRUE)[1]
 model_file <- here(glue("Models/{corpus_name}.lm"))
-corpus_file <- here(glue("Data/corpus/{corpus_name}.txt"))
+corpus_file <- here(glue("{corpus_name}.txt"))
 
 
 read_unigram_model <- function(file) {
@@ -24,7 +24,7 @@ read_corpus <- function(file) {
     enframe(name = NULL, value = "text") %>%
     mutate(length = str_count(text, pattern = "[ +]+") + 1) %>%
     mutate(utterance_id = 1:n()) %>%
-    unnest_tokens(word, text, token = stringr::str_split, pattern = "[ +]+", 
+    unnest_tokens(word, text, token = stringr::str_split, pattern = "[ +]+",
                   to_lower = FALSE) %>%
     group_by(utterance_id) %>%
     mutate(position = 1:n()) %>%
@@ -39,4 +39,4 @@ surprisals <- corpus %>%
   left_join(model, by = c("word")) %>%
   select(-word)
 
-write_csv(surprisals, here(glue("Data/surprisals/unigram/{corpus_name}.csv")))
+write_csv(surprisals, here(glue("Data/{corpus_name}_unigrams.csv")))

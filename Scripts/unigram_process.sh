@@ -14,14 +14,9 @@ rm -r text
 rm datafile
 
 # build the ngram language model using KenLM
-head -n 1000000 $1.txt | python3 Scripts/process_corpus.py | kenlm/build/bin/lmplz -o $2 --discount_fallback > Models/$1.arpa
-# convert the language model to binary
-kenlm/build/bin/build_binary Models/$1.arpa Models/$1.klm
+head -n 1000000 $1.txt | python3 Scripts/process_corpus.py | kenlm/build/bin/lmplz -o 1 > Models/$1.lm
 
-# split up the corpus into ngrams and evaluate surprisal on each
-python3 Scripts/wikipedia_ngrams.py $1
-# compute the slopes
-# Rscript Scripts/wikipedia_surprisal.R $1
+Rscript kenlm_unigram.R $1
 
 # clean up
-rm $1.txt Models/$1.arpa Models/$1.klm #Data/wikipedia_$1.csv
+rm $1.txt Models/$1.lm #Data/wikipedia_$1.csv
