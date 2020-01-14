@@ -39,7 +39,7 @@ def main(lang_name):
         for sentence in sentences:
             all_sentences.append(sentence)
 
-    with open(lang_name + ".txt", 'w') as f:
+    with open("Data/wiki/" + lang_name + ".txt", 'w') as f:
         for sentence in all_sentences:
             f.write("%s\n" % sentence)
 
