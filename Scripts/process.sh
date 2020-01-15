@@ -16,7 +16,8 @@ else
     # get the language's Wikipedia prefix (e.g. "en" for English)
     PREFIX=$(cat language_dict.json | jq --arg lang "$2" '.[$lang]' | tr -d \")
     # get most recent full wikipedia dump
-    timeout 15m curl -o datafile "https://dumps.wikimedia.org/other/cirrussearch/current/${PREFIX}wiki--cirrussearch-content.json.gz"
+    DUMPSDATE=$(python3 Scripts/get_dumpsdate.py)
+    timeout 15m curl -o datafile "https://dumps.wikimedia.org/other/cirrussearch/current/${PREFIX}wiki-${DUMPSDATE}-cirrussearch-content.json.gz"
     # extract the text into a single txt file with one sentence per line
     python3 Scripts/cirrus-extract.py datafile
     python3 Scripts/get_wikipedia.py $2
