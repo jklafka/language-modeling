@@ -17,7 +17,7 @@ else
     PREFIX=$(cat language_dict.json | jq --arg lang "$2" '.[$lang]' | tr -d \")
     # get most recent full wikipedia dump
     DUMPSDATE=$(python3 Scripts/get_dumpsdate.py)
-    timeout 15m curl -o datafile "https://dumps.wikimedia.org/other/cirrussearch/current/${PREFIX}wiki-${DUMPSDATE}-cirrussearch-content.json.gz"
+    timeout 10m curl -o datafile "https://dumps.wikimedia.org/other/cirrussearch/current/${PREFIX}wiki-${DUMPSDATE}-cirrussearch-content.json.gz"
     # extract the text into a single txt file with one sentence per line
     python3 Scripts/cirrus-extract.py datafile
     python3 Scripts/get_wikipedia.py $2
@@ -32,8 +32,8 @@ else
   cat Data/$1/$2.txt file |
     python3 Scripts/process_corpus.py |
     kenlm/build/bin/lmplz -o 1 > Models/$1/unigram/$2.lm
-  # extract unigram model from kenlm file
-  ####### REMAINS TO BE DONE
+  Rscript kenlm_unigram.R $1 $2
+
 
   # build the trigram model
   cat Data/$1/$2.txt file |
