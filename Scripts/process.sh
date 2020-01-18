@@ -47,7 +47,5 @@ else
   # get surprisals
   python Scripts/surprisal_ngrams.py $2 1
   python Scripts/surprisal_ngrams.py $2 3
-  # free up space
-  rm Models/childes_$1_$3.arpa Models/childes_$1_$3.klm Data/childes_$1_$3.txt
 
 fi
