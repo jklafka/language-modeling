@@ -3,11 +3,11 @@
 # takes source (childes or wikipedia or corpus); name of language/corpus;
 # sh Scripts/process.sh childes Eng-NA
 '''
-get data and put it into specific location in folder
+get data and put it into specific location in folder:
+  childes
+  wikipedia
+  other corpora
 build unigram model
-build trigram model
-run surprisal computation
-compute barycenters
 '''
 
 ## get corpus into .txt file
@@ -33,26 +33,25 @@ else
 
   fi
 
-  ## Build unigram and trigram models
+  # preprocess the corpus
+  cat Data/$1/$2.txt | python3 Scripts/process_corpus.py > Data/$1/$2_temp.txt
 
+  ## Build unigram and trigram models
   # build the unigram model
-  cat Data/$1/$2.txt file |
-    python3 Scripts/process_corpus.py |
-    kenlm/build/bin/lmplz -o 1 > Models/$1/unigram/$2.lm
-  Rscript kenlm_unigram.R $1 $2
+  kenlm/build/bin/lmplz -o 1 < cat Data/$1/$2_temp.txt > Models/$1/unigram/$2.lm
+  Rscript Scripts/unigram_surprisal.R $1 $2
+  python3 Scripts/dba.py $1 $2 unigram
 
 
   # build the trigram model
-  cat Data/$1/$2.txt file |
-    python3 Scripts/process_corpus.py |
-    kenlm/build/bin/lmplz -o 3 > Models/$1/trigram/$2.arpa
-
-  # convert model to binary for faster reading and lower storage
+  cat Data/$1/$2_temp.txt | kenlm/build/bin/lmplz -o 3 > Models/$1/trigram/$2.arpa
+  # convert trigram model to binary for faster reading and lower storage
   kenlm/build/bin/build_binary Models/$1/trigram/$2.arpa Models/$1/trigram/$2.klm
   rm Models/$1/trigram/$2.arpa
-
   # get surprisals
-  Rscript unigram_surprisals.R $2
-  python Scripts/surprisal_ngrams.py $2 3
+  python3 Scripts/surprisal_ngrams.py $2
+  python3 Scripts/dba.py $1 $2 trigram
+
+  rm Data/$1/$2_temp.txt
 
 fi

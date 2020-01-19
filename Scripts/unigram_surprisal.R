@@ -1,14 +1,17 @@
 options(warn=-1)
 options(message())
 
-require(tidyverse)
+require(dplyr)
+require(readr)
+require(tibble)
 require(tidytext)
 require(glue)
 require(here)
 
 corpus_name = commandArgs(trailingOnly=TRUE)[1]
-model_file <- here(glue("Models/{corpus_name}.lm"))
-corpus_file <- here(glue("{corpus_name}.txt"))
+language_name = commandArgs(trainingOnly=TRUE)[2]
+model_file <- here(glue("Models/{corpus_name}/unigram/{language_name}.lm"))
+corpus_file <- here(glue("Data/{corpus_name}/{language_name}.txt"))
 
 
 read_unigram_model <- function(file) {
