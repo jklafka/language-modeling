@@ -2,6 +2,13 @@
 
 # takes source (childes or wikipedia or corpus); name of language/corpus;
 # sh Scripts/process.sh childes Eng-NA
+'''
+get data and put it into specific location in folder
+build unigram model
+build trigram model
+run surprisal computation
+compute barycenters
+'''
 
 ## get corpus into .txt file
 if [[ $1 == "childes" ]]
@@ -45,7 +52,7 @@ else
   rm Models/$1/trigram/$2.arpa
 
   # get surprisals
-  python Scripts/surprisal_ngrams.py $2 1
+  Rscript unigram_surprisals.R $2
   python Scripts/surprisal_ngrams.py $2 3
   # free up space
   rm Models/childes_$1_$3.arpa Models/childes_$1_$3.klm Data/childes_$1_$3.txt
