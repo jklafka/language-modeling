@@ -1,4 +1,5 @@
-import requests, re
+import requests
+import regex as re
 from bs4 import BeautifulSoup
 
 # grab the html from the dumps page and parse it

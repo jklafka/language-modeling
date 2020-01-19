@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # the largest language corpora (over 1.5gb) are on the last two lines
-declare -a fullarr=("Basque" "Alemannic" "Wolof" "Bosnian"
+declare -a all_languages=("Basque" "Alemannic" "Wolof" "Bosnian"
 	"Urdu" "Afrikaans" "Anglo-Saxon" "Slovak" "Silesian" "Acehnese" "Banyumasan"
 	"Wu" "Bashkir" "Chuvash" "Gagauz" "Karachay-Balkar" "Sakha" "Tamil" "Telugu"
 	"Georgian" "Tatar" "Uyghur" "Icelandic" "Belarusian" "Gujarati" "Marathi"
@@ -27,8 +27,8 @@ declare -a fullarr=("Basque" "Alemannic" "Wolof" "Bosnian"
 	"Swedish" "Japanese" "Arabic" "Polish" "French" "Spanish"
 	"English" "Chinese" )
 
-for i in "${fullarr[@]}"
+for i in "${all_languages[@]}"
   do
     echo "$i"
-    sh Scripts/wikipedia_process.sh "$i" $1
+    sh Scripts/process.sh wikipedia "$i"
   done
