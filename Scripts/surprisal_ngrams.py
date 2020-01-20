@@ -6,14 +6,6 @@ parser.add_argument("language", help="Name of the language you're using")
 # parser.add_argument("order", help="Order of ngram you're working with")
 args = parser.parse_args()
 
-# assert args.order in ["unigram", "trigram"], "enter unigram or trigram order"
-
-# # get model
-# if args.order == "unigram":
-#     model = kenlm.LanguageModel("Models/" + args.corpus + '/' + args.order + \
-#         '/' + args.language + ".klm")
-
-# elif args.order == "trigram":
 model = kenlm.LanguageModel("Models/" + args.corpus + "/trigram/" + \
     args.language + ".klm")
 
@@ -37,34 +29,36 @@ def ngrams(sentence, n):
     if len(tokens) == 1:
         return [(sentence, 0, 1)]
     elif len(tokens) == 2:
-        return [(tokens[0], 0, 2), (s, 1, 2)]
+        return [(tokens[0], 0, 2), (sentence, 1, 2)]
     else:
         ngrams = lambda a, n: zip(*[a[i:] for i in range(n)])
         joined_grams = [' '.join(grams) for grams in ngrams(tokens, n)]
         joined_grams = [tokens[0]] + [' '.join(tokens[:2])] + joined_grams
-        return list(zip(joined_grams, range(len(joined_grams))))
+        utt_length = [len(tokens)] * len(joined_grams) # need an iterable for zip
+        return list(zip(joined_grams, range(len(joined_grams)), utt_length))
 
 # take data and turn it into ngrams
-corpus = [utterance.strip('["\n]') for utterance in open("Data/corpus/" + \
-    args.corpus + ".txt", 'r').readlines()]
+corpus = [utterance.strip('["\n]') for utterance in open("Data/" + \
+    args.corpus + '/' + args.language + "_temp.txt", 'r').readlines()]
 
 corpus = [utterance for utterance in corpus if utterance.strip() != ""]
 
     # much less memory-intensive surprisal computation process
     # utterance_id = 0
-    with open("Surprisals/" + args.corpus + "/trigram/" + \
-                args.language + ".csv", 'r') as f:
-        writer = csv.writer(f)
-        for utterance in corpus:
-            # convert each utterance into a list of ngrams
-            grams = ngrams(utterance, 3)
-            for gram in grams:
-                # write each sentence as a row of surprisals
-                sups = []
-                if gram[1] == 0:
-                    sups.append(unigram_surprisal(gram[0]))
-                elif gram[1] == 1:
-                    sups.append(bigram_surprisal(gram[0]))
-                else:
-                    sups.append(trigram_surprisal(gram[0]))
-                writer.writerow([sups])
+with open("Surprisals/" + args.corpus + "/trigram/" + \
+            args.language + ".csv", 'w') as f:
+    writer = csv.writer(f)
+    writer.writerow(['position', 'surprisal', 'length'])
+
+    for utterance in corpus:
+     # convert each utterance into a list of ngrams
+        grams = ngrams(utterance, 3)
+        for gram in grams:
+         # then write each gram/surprisal to a separate row of the file
+         # writer.writerow([gram[1], surprisal(gram[0]), gram[2], utterance_id])
+            if gram[1] == 0:
+                writer.writerow([gram[1] + 1, unigram_surprisal(gram[0]), gram[2]])
+            elif gram[1] == 1:
+                writer.writerow([gram[1] + 1, bigram_surprisal(gram[0]), gram[2]])
+            else:
+                writer.writerow([gram[1] + 1, trigram_surprisal(gram[0]), gram[2]])

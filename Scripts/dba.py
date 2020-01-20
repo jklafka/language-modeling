@@ -1,6 +1,6 @@
-from tslearn.barycenters import dtw_barycenter_averaging
 import csv, argparse
 import numpy as np
+from tslearn.barycenters import dtw_barycenter_averaging
 
 BARYCENTER_SIZE = 10
 
@@ -15,13 +15,10 @@ assert args.gram in ["unigram", "trigram"], "Only accepts 'unigram' or 'trigram'
 ## read in surprisals data
 X = []
 with open("Surprisals/" + args.corpus + '/' + args.gram + '/' + \
-            args.language + ".csv", 'r') as f:
+            args.language + "_compressed.csv", 'r') as f:
      reader = csv.reader(f)
      for row in reader:
          X.append(row)
-
-## delete column names
-del X[0]
 
 ## get barycenter of info-curves as list
 X = [[float(item) for item in series if item != "NA"] for series in X]
@@ -32,4 +29,4 @@ barycenter += [args.language, args.corpus, args.gram]
 # output barycenter to
 with open("Data/barycenters.csv", 'a') as f:
     writer = csv.writer(f)
-    writer.writerow([barycenter])
+    writer.writerow(barycenter)

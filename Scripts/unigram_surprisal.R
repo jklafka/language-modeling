@@ -1,15 +1,13 @@
 options(warn=-1)
 options(message())
 
-require(dplyr)
-require(readr)
-require(tibble)
+require(tidyverse)
 require(tidytext)
 require(glue)
 require(here)
 
 corpus_name = commandArgs(trailingOnly=TRUE)[1]
-language_name = commandArgs(trainingOnly=TRUE)[2]
+language_name = commandArgs(trailingOnly=TRUE)[2]
 model_file <- here(glue("Models/{corpus_name}/unigram/{language_name}.lm"))
 corpus_file <- here(glue("Data/{corpus_name}/{language_name}.txt"))
 
@@ -42,4 +40,4 @@ surprisals <- corpus %>%
   left_join(model, by = c("word")) %>%
   select(-word)
 
-write_csv(surprisals, here(glue("Data/{corpus_name}_unigrams.csv")))
+write_csv(surprisals, here(glue("Surprisals/{corpus_name}/unigram/{language_name}.csv")))
