@@ -91,7 +91,8 @@ We replicate the @yu2016 result using the surprisal metric in place of the entro
 b <- read_csv(here("Data/barycenters.csv"))
 
 sups <- b %>% 
-    filter(language == "Eng-NA") %>% 
+    tail() %>% 
+    filter(language == "German") %>%
     pivot_longer(-c(language, source, gram), 
                  names_to = "position", values_to = "surprisal") %>% 
     mutate(position = as.numeric(position))

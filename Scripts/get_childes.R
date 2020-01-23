@@ -1,8 +1,9 @@
 require(childesr)
 require(dplyr)
 require(here)
+require(data.table)
 
-language = commandArgs(trailingOnly=TRUE)[1]
+language <- commandArgs(trailingOnly=TRUE)[1]
 # column_to_use = commandArgs(trailingOnly=TRUE)[2]
 # speaker = commandArgs(trailingOnly=TRUE)[3]
 
@@ -16,15 +17,17 @@ corpora <- get_utterances(collection = language)
 
 corpora %>%
   filter(speaker_role %in% c("Target_Child", "Child")) %>%
-  select(stem) %>%
-  write.table(here(paste0("Data/child/", language, ".txt")),
+  select(gloss) %>%
+  filter(gloss != "") %>%
+  fwrite(here(paste0("Data/child/", language, ".txt")),
               sep="\n", row.names=FALSE, col.names=FALSE)
 
 corpora %>%
   filter(speaker_role %in% c("Mother", "Father", "Adult")) %>%
-  select(stem) %>%
-  write.table(here(paste0("Data/adult/", language, ".txt")),
-              sep="\n", row.names=FALSE, col.names=FALSE)
+  select(gloss) %>%
+  filter(gloss != "") %>%
+  fwrite(here(paste0("Data/adult/", language, ".txt")),
+         sep="\n", row.names=FALSE, col.names=FALSE)
 
 # corpora %>%
 #   filter(speaker_role %in% speaker_roles) %>%

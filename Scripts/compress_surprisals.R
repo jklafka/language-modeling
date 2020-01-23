@@ -2,6 +2,9 @@ require(tidyverse)
 require(glue)
 require(here)
 
+## center but don't scale
+# scale(center = TRUE, scale = FALSE)
+
 corpus_name <- commandArgs(trailingOnly=TRUE)[1]
 language_name <- commandArgs(trailingOnly=TRUE)[2]
 gram <- commandArgs(trailingOnly=TRUE)[3]
