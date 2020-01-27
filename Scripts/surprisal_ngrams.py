@@ -12,6 +12,7 @@ model = kenlm.LanguageModel("Models/" + args.corpus + "/trigram/" + \
 
 # gets surprisal from string based on the model's stored probabilities
 def unigram_surprisal(s):
+    print(s)
     return -model.score(s, eos=False)
 
 def bigram_surprisal(s):
@@ -43,22 +44,20 @@ corpus = [utterance.strip('["\n]') for utterance in open("Data/" + \
 
 corpus = [utterance for utterance in corpus if utterance.strip() != ""]
 
-    # much less memory-intensive surprisal computation process
-    # utterance_id = 0
-with open("Surprisals/" + args.corpus + "/trigram/" + \
-            args.language + ".csv", 'w') as f:
-    writer = csv.writer(f)
-    writer.writerow(['position', 'surprisal', 'length'])
-
-    for utterance in corpus:
-     # convert each utterance into a list of ngrams
-        grams = ngrams(utterance, 3)
-        for gram in grams:
-         # then write each gram/surprisal to a separate row of the file
-         # writer.writerow([gram[1], surprisal(gram[0]), gram[2], utterance_id])
-            if gram[1] == 0:
-                writer.writerow([gram[1] + 1, unigram_surprisal(gram[0]), gram[2]])
-            elif gram[1] == 1:
-                writer.writerow([gram[1] + 1, bigram_surprisal(gram[0]), gram[2]])
-            else:
-                writer.writerow([gram[1] + 1, trigram_surprisal(gram[0]), gram[2]])
+# with open("Surprisals/" + args.corpus + "/trigram/" + \
+#             args.language + ".csv", 'w') as f:
+#     writer = csv.writer(f)
+#     writer.writerow(['position', 'surprisal', 'length'])
+#
+#     for utterance in corpus:
+#      # convert each utterance into a list of ngrams
+#         grams = ngrams(utterance, 3)
+#         for gram in grams:
+#          # then write each gram/surprisal to a separate row of the file
+#          # writer.writerow([gram[1], surprisal(gram[0]), gram[2], utterance_id])
+#             if gram[1] == 0:
+#                 writer.writerow([gram[1] + 1, unigram_surprisal(gram[0]), gram[2]])
+#             elif gram[1] == 1:
+#                 writer.writerow([gram[1] + 1, bigram_surprisal(gram[0]), gram[2]])
+#             else:
+#                 writer.writerow([gram[1] + 1, trigram_surprisal(gram[0]), gram[2]])
