@@ -36,7 +36,8 @@ require(jcolors)
 ```
 
 ```{r preprocess data, include=FALSE}
-b <- read_csv(here("Data/barycenters.csv")) %>%
+b <- read_csv(here("Data/final_barycenters.csv")) 
+tidy_b <- b %>%
      pivot_longer(-c(language, source, gram), 
                   names_to = "position", values_to = "surprisal") %>%
      mutate(position = as.numeric(position))
@@ -54,11 +55,11 @@ Previous research has shown evidence for optimal coding at the word [@piantadosi
 
 Previous work [@yu2016] studied this within-sentence level only in written English, finding an unexpected three-step distribution regardless of sentence length: little information in the first words of sentences and the most information in the final word. The the distribution found was robustly different from the linearly increasing trend in sentences from @genzel2002, and also did not resemble the uniform distribution of information that one might expect from a communicative efficiency account, in which each word has approximately equal information close to the channel capacity. 
 
-In this paper, we propose a novel method for modeling prototypical information structure in a language. We compute a unique information distributions for each language arising from word frequency. We find that this information distribution characterizes all data within a given language, both spoken and written, from the time child speakers pronounce their first utterances. We link the information curves within language families to their structures such as morphology and syntax, such that the information curve can be partially predicted by the features of the language. When considering communication and predictive processing, listeners decode language at the same constant and optimal rate regardless of language. 
+In this paper, we propose a novel method for modeling prototypical information structure in a language. We compute a unique information distributions for each language arising from word frequency. We find that this information distribution characterizes all data within a given language, both spoken and written, from the time child speakers pronounce their first utterances. We link the information curves within language families to their structures such as morphology and syntax, such that the information curve can be partially predicted by the features of the language. When considering communication and predictive processing, listeners decode language at the same constant and optimal rate regardless of language. Previous uniform information density work has focused on English, but we analyze well over a hundred diverse languages from across the world and from a variety of language families. 
 
 # Methods
 
-We build a statistical cognitive model of a fluent listener: how much information do you tend to decode at each part of an utterance in a language? We begin by approximate language experience and linguistic knowledge by training on a corpus. We test on the same corpus to approximate the listener's real-time experience, avoiding overfitting by smoothing. We compute the prototypical information distribution over all sentences in the corpus.
+We build a statistical model of a fluent listener: how much information do you tend to decode at each part of an utterance in a language? We begin by approximate language experience and linguistic knowledge by training on a corpus. We test on the same corpus to approximate the listener's real-time experience, avoiding overfitting by smoothing. We compute the prototypical information distribution over all sentences in the corpus.
 
 ### Surprisal 
 
@@ -98,6 +99,8 @@ We first turn to working with written English in the British National Corpus [BN
 
 We replicate the @yu2016 result using the surprisal metric in place of the entropy metric. We use the frequency-based or “contextless” surprisal metric, which determines the average distribution of information based on word frequencies in a corpus. A priori we expect that the frequency-based metric will produce a flat distribution of information across word positions in the BNC. We find the same frequency-based information trajectory as Yu et al. with little information in the first words of utterances and the most information in the final word, see Figure\ \@ref(fig:bncunigrams). 
 
+We compare this result with spoken English conversations from the Switchboard telephone conversation corpus [@switchboard]. The spoken and written English corpora have the same information trajectory. 
+
 ```{r bncunigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="BNC and Switchboard frequency-based trigram curves"}
 b %>% 
     filter(gram == "unigram", language %in% c("bnc", "switchboard")) %>% 
@@ -110,7 +113,7 @@ b %>%
         scale_color_manual(values = c("red", "blue"))
 ```
 
-What about context? So far we’ve only discussed the frequency-based metric, considering words on their own without any explicit incorporation of prior context. As previously discussed, listeners decode information and process what they hear incrementally, using prior heard words to ease the comprehension process. We now include two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context across both modalities and all speaker populations. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC are in Figure \@ref(fig:bnctrigrams). We also computed bigram curves with one word of context for each prediction: these bigram curves resemble the trigram curves. 
+We now include two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context for both spoken and written English. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC are in Figure \@ref(fig:bnctrigrams). We also computed bigram curves with one word of context for each prediction: these bigram curves resemble the trigram curves. 
 
 ```{r bnctrigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="BNC and Switchboard context-based trigram curves"}
 b %>% 
@@ -124,7 +127,7 @@ b %>%
         scale_color_manual(values = c("red", "blue")) 
 ```
 
-So far, we have only looked at the distribution of information in words in English, both with and without context. We've looked at conversational speech. 
+We now turn to developmental data, and show that frequency-based information curves characterize child speech from the time a child first begins speaking as well as adult speech, regardless of utterance length. 
 
 # Experiment 2: Child and child-directed speech
 
@@ -172,7 +175,16 @@ We pulled corpora for $159$ diverse languages from Wikipedia, each of which had 
 
 As our surprisal metric is a lexical measure, we expect the Levenshtein distance to be high. To describe more structural relationships, we used the World Atlas of Language Structures [WALS; @wals] to describe the morphology, syntax, phonology, etymology and semantics--in short the structures in each language. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. We used a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis [MIMCA; @audigier2017] to fill in the missing features. 
 
-Dendro goes here
+```{r dendro}
+b %>% 
+    filter(source == "wikipedia", gram == "unigram") %>%
+    select(-source, -gram) %>%
+    slice(1:50) %>%
+    column_to_rownames("language") %>% 
+    dist() %>% 
+    hclust() %>%
+    plot()
+```
 
 WALS plot goes here
 
@@ -182,7 +194,7 @@ What did we learn from this? Unigrams vary kind of with features across language
 
 # Conclusion
 
-In this paper we did model and it showed unique distributions for unigrams and diff distributions for trigrams. Developmental angle. 
+In this paper we did model and it showed unique distributions for unigrams and same distribution for trigrams. Developmental angle. 
 
 Follow-up. Possible questions one might have. 
 
