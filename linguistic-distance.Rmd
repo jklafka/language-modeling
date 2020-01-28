@@ -12,18 +12,63 @@ require(janitor)
 require(missMDA)
 require(tidyboot)
 require(viridis)
+require(stringdist)
+require(lsa)
 
 knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r read in data}
+iso_to_language <- read_csv(here("Data/wiki/codes.csv")) %>%
+  select(language, iso) %>%
+  group_by(language) %>%
+  slice(1) %>% 
+  ungroup()
+
+asjp_forms <- read_csv(here("Data/asjp_dataset/forms.csv"))
+asjp_langs <- read_csv(here("Data/asjp_dataset/languages.csv"))
+lang_forms <- asjp_forms %>% 
+  select(Language_ID, Parameter_ID, Form) %>% 
+  left_join(asjp_langs %>% select(ID, ISO639P3code), by = c("Language_ID" = "ID")) %>%
+  left_join(iso_to_language, by = c("ISO639P3code" = "iso")) %>%
+  filter(complete.cases(.)) %>% 
+  select(language, Parameter_ID, Form) %>%
+  group_by(language, Parameter_ID) %>% ## taking off one at random for each language - fix
+  slice(1) %>%
+  ungroup() 
+
+langs <- iso_to_language %>% pull(language) ## change this
+```
+
+```{r make swadesh space}
+langs_pairwise <- expand.grid(language1 = langs,
+                           language2 = langs) %>%
+  filter(language1 != language2)
+
+asjp_distance <- function(language1, language2) {
+  lang_forms %>% 
+    filter(language == language1) %>%
+    left_join(lang_forms %>% filter(language == language2), by = "Parameter_ID") %>% 
+    filter(complete.cases(.)) %>% 
+    mutate(ldn = stringdist(Form.x, Form.y) / max(str_length(c(Form.x, Form.y)))) %>%
+    group_by(language.x, language.y) %>% 
+    summarise(ldn = mean(ldn)) %>% 
+    rename(language1 = language.x, language2 = language.y) %>% 
+    ungroup()
+}
+
+swadesh_space <- map_dfr(1:nrow(langs_pairwise), ~asjp_distance(langs_pairwise[.x,"language1"],
+                                          langs_pairwise[.x,"language2"])) 
 ```
 
 Download and unzip the WALS data file from "https://wals.info/download" (the file is called wals_language.csv.zip) to get the originals for this data processing pipeline. Codes are created from the language_dict.json file in the top-level directory of the repository, filled out manually from here: "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Languages/List_of_ISO_639-3_language_codes_(2019)"
 ```{r get WALS features, echo = F, include = F}
 # get all of the features for each language
-langs <- read_csv(here("Data/Wikipedia/wals_dataset/languages.csv")) %>% 
+langs <- read_csv(here("Data/wiki/wals_dataset/languages.csv")) %>% 
   select(ID, ISO639P3code) %>%
   rename(iso = ISO639P3code)
 
-values <- read_csv(here("Data/Wikipedia/wals_dataset/values.csv")) %>%
+values <- read_csv(here("Data/wiki/wals_dataset/values.csv")) %>%
   select(Language_ID, Parameter_ID, Value) %>% 
   pivot_wider(names_from = Parameter_ID, values_from = Value) %>% 
   left_join(langs, by = c("Language_ID" = "ID")) %>%
