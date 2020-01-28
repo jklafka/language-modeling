@@ -4,6 +4,8 @@
 .Ruserdata
 Models/
 kenlm/
-Data/
+Data/adult/
+Data/child/
+Data/wikipedia/
 Surprisals/
 *DS_Store
