@@ -102,7 +102,7 @@ We replicate the @yu2016 result using the surprisal metric in place of the entro
 We compare this result with spoken English conversations from the Switchboard telephone conversation corpus [@switchboard]. The spoken and written English corpora have the same information trajectory. 
 
 ```{r bncunigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="BNC and Switchboard frequency-based trigram curves"}
-b %>% 
+tidy_b %>% 
     filter(gram == "unigram", language %in% c("bnc", "switchboard")) %>% 
     ggplot(aes(x = position, y = surprisal, color = language)) + 
         geom_point(size = .75) + 
@@ -116,7 +116,7 @@ b %>%
 We now include two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context for both spoken and written English. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC are in Figure \@ref(fig:bnctrigrams). We also computed bigram curves with one word of context for each prediction: these bigram curves resemble the trigram curves. 
 
 ```{r bnctrigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="BNC and Switchboard context-based trigram curves"}
-b %>% 
+tidy_b %>% 
     filter(gram == "trigram", language %in% c("bnc", "switchboard")) %>% 
     ggplot(aes(x = position, y = surprisal, color = language)) + 
         geom_point(size = .75) + 
@@ -136,8 +136,8 @@ We're going to examine child and child-directed speech from CHILDES [@macwhinney
 We observe a distinct and characteristic frequency-based information trajectory for each language, robust across each utterance length. We see the same distribution of information for both parents and children. The parent often has more information on average at each word position in their utterances. This is an effect of the surprisal metric: parents speak more utterances than their children in most of the corpora, which inflates the number of tokens they use and increases the surprisal of hearing a rare word. We include the frequency-based information curve from the North American English CHILDES collection for comparison. See Figure\ \@ref(fig:childesunigrams)
 
 ```{r childesunigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES frequency-based trigram curves"}
-b %>% 
-    filter(gram == "unigram", 
+tidy_b %>% 
+    filter(gram == "unigram", source %in% c("adult", "child"),
            language %in% c("Eng-NA", "Chinese", "French", "Spanish", "German", "Japanese")) %>% 
     ggplot(aes(x = position, y = surprisal, color = source)) + 
         geom_point(size = .75) + 
@@ -154,8 +154,8 @@ English, Spanish, French and German feature similar information curve shapes, wi
 For the trigram information curves, we see the same contextual smoothing effect as in English. While the frequency-based information curves may depend based on the language, the contextual information curves show the same trajectory cross-linguistically. Using more than two words of context is difficult for parent-child speech corpora because the utterances are so short on average (less than $10$ words). Based on our results from the CHILDES collections, we hypothesize that the frequency-based information curves may vary based on the genealogy and typology of the languages in question. However, this does not extend to the information curves with two words of context in particular, where all languages we have seen so far are characterized by the same information distribution. See Figure\ \@ref(fig:childestrigrams).  
 
 ```{r childestrigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves"}
-b %>% 
-    filter(gram == "trigram",  
+tidy_b %>% 
+    filter(gram == "trigram", source %in% c("adult", "child"),
            language %in% c("Eng-NA", "Chinese", "French", "Spanish", "German", "Japanese")) %>% 
     ggplot(aes(x = position, y = surprisal, color = source)) + 
         geom_point(size = .75) + 

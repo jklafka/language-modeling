@@ -129,31 +129,51 @@ Previous research has shown evidence for optimal coding at the word
 levels, among others. Genzel \& Charniak (2002) found a specific
 information trajectory at the level of sentences in paragraphs: a
 constantly increasing and nearly linear rate of information
-transmission.
-
-Speakers have cognitive control over the speed at which they say a word
-and whether or not they insert complementizers. But speakers do not have
-control over the broad properties of their language such as canonical
-word order and The sentence level may show strong effects of variation
+transmission. Speakers have cognitive control over the speed at which
+they say a word and whether or not they insert complementizers. But
+speakers do not have control over the broad properties of their language
+such as canonical word order that affect the organization of utterances
+top-down. Does this whole-utterance level follow the predictions of
+optimal coding? The utterance level may show strong effects of variation
 between languages, as specific languages have properties that constrain
 how speakers may form utterances in those languages, such as canonical
 word order. These properties vary widely from language to language.
 
 Previous work (Yu, Cong, Liang, \& Liu, 2016) studied this
-within-sentence level in written English sentences. They found a
-distinctive three-step distribution regardless of sentence length, with
-little information in the first words of sentences and the most
-information in the final word. This was surprising, as the distribution
-they found was robustly different from the linearly increasing trend in
-sentences from Genzel \& Charniak (2002), and also did not resemble the
-uniform distribution of information that one might expect from a
-communicative efficiency account, in which each word has approximately
-equal information close to the channel capacity.
+within-sentence level only in written English, finding an unexpected
+three-step distribution regardless of sentence length: little
+information in the first words of sentences and the most information in
+the final word. The the distribution found was robustly different from
+the linearly increasing trend in sentences from Genzel \& Charniak
+(2002), and also did not resemble the uniform distribution of
+information that one might expect from a communicative efficiency
+account, in which each word has approximately equal information close to
+the channel capacity.
 
-WHAT ARE WE GOING TO DO IN THIS PAPER?
+In this paper, we propose a novel method for modeling prototypical
+information structure in a language. We compute a unique information
+distributions for each language arising from word frequency. We find
+that this information distribution characterizes all data within a given
+language, both spoken and written, from the time child speakers
+pronounce their first utterances. We link the information curves within
+language families to their structures such as morphology and syntax,
+such that the information curve can be partially predicted by the
+features of the language. When considering communication and predictive
+processing, listeners decode language at the same constant and optimal
+rate regardless of language. Previous uniform information density work
+has focused on English, but we analyze well over a hundred diverse
+languages from across the world and from a variety of language families.
 
 \hypertarget{methods}{%
 \section{Methods}\label{methods}}
+
+We build a statistical model of a fluent listener: how much information
+do you tend to decode at each part of an utterance in a language? We
+begin by approximate language experience and linguistic knowledge by
+training on a corpus. We test on the same corpus to approximate the
+listener's real-time experience, avoiding overfitting by smoothing. We
+compute the prototypical information distribution over all sentences in
+the corpus.
 
 \hypertarget{surprisal}{%
 \subsubsection{Surprisal}\label{surprisal}}
@@ -166,14 +186,14 @@ in a word as the predictability of the word based on previously heard or
 seen words in its context, as in the formula below. The surprisal of a
 word is inversely proportional to the predictability of that word, such
 that less common and less predictable words carry more information.
-Frequency is intimately tied information content in words, with much of
-the differences between words frequencies being explained by information
-content cross-linguistically (Piantadosi et al., 2011).
+Frequency is intimately tied rto information content in words, with much
+of the differences between word frequencies being explained by
+information content cross-linguistically (Piantadosi et al., 2011).
 
 \[\text{surprisal}(\text{word}) = -\log P(\text{word})\]
 
-\hypertarget{context}{%
-\subsubsection{Context}\label{context}}
+\hypertarget{incorporating-context}{%
+\subsubsection{Incorporating context}\label{incorporating-context}}
 
 However, when reading or listening, people don't just consider each word
 as an isolated linguistic signal. Instead, listeners use the words they
@@ -191,7 +211,8 @@ the set of reasonable final items in our ngrams is greatly restricted.
 For example, in the sentence ``I take my coffee with cream and sugar'',
 when hearing ``cream and'', a listener might automatically predict
 ``sugar'', but there are few possible continuations with even the two
-words ``cream and''.
+words ``cream and''. This is linked to the N400 component in
+neurological processing (Kutas \& Federmeier, 2011).
 
 Ideally, we would like to measure the predictability of each word in an
 utterance using all of the information available to that word. For
@@ -218,8 +239,17 @@ deal of improvement over unigram models across tasks (Chen \& Goodman,
 issues with overfitting to the corpus and only predicting observed
 sequences, often generalizing poorly.
 
-\hypertarget{smoothing}{%
-\subsubsection{Smoothing}\label{smoothing}}
+\hypertarget{language-model-smoothing}{%
+\subsubsection{Language model
+smoothing}\label{language-model-smoothing}}
+
+Once we have fitted our language model, we can compute the surprisal of
+a continuation by simply taking the negative log-probability of that
+word's ngram probability. To find the average information for a given
+position in a corpus, we take all utterances of a given length, and for
+each word position in utterances of that length, we compute the average
+of the surprisals for all of the non-unique words that occur in that
+position, conditioned or not conditioned on context.
 
 To avoid overfitting our models to the corpus, we use modified
 Kneser-Ney smoothing as implemented in the KenLM toolkit (Heafield,
@@ -234,31 +264,24 @@ weighting). For a longer explanation explanation of modified Kneser-Ney
 smoothing and comparison to other ngram smoothing methods, see Chen \&
 Goodman (1999).
 
-Once we have fitted our language model, we can compute the surprisal of
-a continuation by simply taking the negative log-probability of that
-word's ngram probability. To find the average information for a given
-position in a corpus, we take all utterances of a given length, and for
-each word position in utterances of that length, we compute the average
-of the surprisals for all of the non-unique words that occur in that
-position, conditioned or not conditioned on context.
-
-\hypertarget{dba}{%
-\subsubsection{DBA}\label{dba}}
+\hypertarget{aggregating-time-sequences}{%
+\subsubsection{Aggregating time
+sequences}\label{aggregating-time-sequences}}
 
 To aggregate across utterance lengths, we use the DTW barycenter
 algorithm (Petitjean, Ketterlin, \& Gançarski, 2011). The dynamic time
 warping (DTW) algorithm (Sakoe \& Chiba, 1978) compares time sequential
 data, first used for speech recognition to unite stretched and shifted
 sound patterns. This algorithm finds a prototypical time series given
-variable length series.
+variable length series. Something about length of barycenters.
 
 The flexibility of the surprisal metric we employ in this paper allows
 us to calculate the anticipated information for an individual utterance,
 as most work with the metric has done in the past. Averaging together
-the surprisal values for a word position within utterances is actually a
-step further than prior work, and indicates the tendencies speakers
-gravitate towards instead of examining individual stimuli in
-psycholinguistic experiments.
+the surprisal values for a word position within utterances is a step
+further than prior work, and indicates the tendencies speakers gravitate
+towards instead of examining individual stimuli in psycholinguistic
+experiments.
 
 \hypertarget{experiment-1-english-speech-and-writing}{%
 \section{Experiment 1: English speech and
@@ -289,25 +312,24 @@ the same frequency-based information trajectory as Yu et al.~with little
 information in the first words of utterances and the most information in
 the final word, see Figure~@ref(fig:bncunigrams).
 
+We compare this result with spoken English conversations from the
+Switchboard telephone conversation corpus ({\textbf{???}}). The spoken
+and written English corpora have the same information trajectory.
+
 \begin{CodeChunk}
 \begin{figure}[tb]
 \includegraphics{figs/bncunigrams-1} \caption[BNC and Switchboard frequency-based trigram curves]{BNC and Switchboard frequency-based trigram curves}\label{fig:bncunigrams}
 \end{figure}
 \end{CodeChunk}
 
-What about context? So far we've only discussed the frequency-based
-metric, considering words on their own without any explicit
-incorporation of prior context. As previously discussed, listeners
-decode information and process what they hear incrementally, using prior
-heard words to ease the comprehension process. We now include two words
-of context (trigrams) for each word in our measurements. We observe a
-flattening effect of context across both modalities and all speaker
-populations. After the first word or two, where the listener does not
-have access to prior context, then they decode information at a flat and
-more or less uniform rate. The contextual information curves for the BNC
-are in Figure @ref(fig:bnctrigrams). We also computed bigram curves with
-one word of context for each prediction: these bigram curves resemble
-the trigram curves.
+We now include two words of context (trigrams) for each word in our
+measurements. We observe a flattening effect of context for both spoken
+and written English. After the first word or two, where the listener
+does not have access to prior context, then they decode information at a
+flat and more or less uniform rate. The contextual information curves
+for the BNC are in Figure @ref(fig:bnctrigrams). We also computed bigram
+curves with one word of context for each prediction: these bigram curves
+resemble the trigram curves.
 
 \begin{CodeChunk}
 \begin{figure}[tb]
@@ -315,9 +337,9 @@ the trigram curves.
 \end{figure}
 \end{CodeChunk}
 
-So far, we have only looked at the distribution of information in words
-in English, both with and without context. We've looked at
-conversational speech.
+We now turn to developmental data, and show that frequency-based
+information curves characterize child speech from the time a child first
+begins speaking as well as adult speech, regardless of utterance length.
 
 \hypertarget{experiment-2-child-and-child-directed-speech}{%
 \section{Experiment 2: Child and child-directed
@@ -384,59 +406,54 @@ information distribution. See Figure~@ref(fig:childestrigrams).
 \end{figure}
 \end{CodeChunk}
 
+To make a claim about how languages on a larger scale, we need to use
+larger corpora and a much larger number of languages.
+
 \hypertarget{experiment-3-large-scale-data-and-linguistic-features}{%
 \section{Experiment 3: Large-scale data and linguistic
 features}\label{experiment-3-large-scale-data-and-linguistic-features}}
 
-To make a claim about how languages on a larger scale, we need to use
-larger corpora and a much larger number of languages. We pulled corpora
-for \(159\) diverse languages from Wikipedia, each of which had at least
-\(10,000\) articles. We split each article into sentences; the variance
-in sentence lengths for Wikipedia was significantly larger than for the
-CHILDES corpora we used in the previous section. Most sentences in
-Wikipedia contained between \(10\) and \(30\) words, unlike the CHILDES
-corpora which mainly contained utterances with under \(10\) words. We
-excluded the small fraction of utterances with more than \(50\) words
-since they were small in number and, from manual inspection,
-uncharacteristic of typical written sentences.
+We pulled corpora for \(159\) diverse languages from Wikipedia, each of
+which had at least \(10,000\) articles. To compare languages more
+rigorously, we used two databases of language similarity features. To
+target lexical differences between languages, we used the \(40\)-item
+Swadesh list (Swadesh, 1955), retrieved from the ASJP database (Wichmann
+et al., 2016). The Swadesh list is a well-known method for comparing
+lexical similarity between languages, by quantifying the similarity
+between the words on the list for pairs of languages, and is often used
+to compare genetic relationships between languages. We computed the
+average normalized Levenshtein distance, a string edit distance measure
+(LDN; Holman et al., 2008) between each pair of our Wikipedia languages.
 
-To more rigorously described the typological differences between
-languages, we used data from the World Atlas of Language Structures
-(WALS; Dryer \& Haspelmath, 2013). The WALS database has data for
-\(144\) typological features in \(2569\) languages from across the
-world. These features describe aspects of morphology, syntax, phonology,
-etymology and semantics--in short the features describe the structures
-in each language. As WALS is a compiled database from dozens of papers
-from different authors, most of the features and languages are fairly
-sparse. Even limiting ourselves to the \(159\) language corpora we
-pulled from Wikipedia and \(122\) features from WALS, there are nearly
-\(20000\) individual possible data values, fewer than half of which were
-already computed for those languages in the WALS database.
+As our surprisal metric is a lexical measure, we expect the Levenshtein
+distance to be high. To describe more structural relationships, we used
+the World Atlas of Language Structures (WALS; Dryer \& Haspelmath, 2013)
+to describe the morphology, syntax, phonology, etymology and
+semantics--in short the structures in each language. As WALS is a
+compiled database from dozens of papers from different authors, most of
+the features and languages are fairly sparse. We used a iterative
+imputation algorithm for categorical data Multiple Imputation Multiple
+Correspondence Analysis (MIMCA; Audigier, Husson, \& Josse, 2017) to
+fill in the missing features.
 
-To fill in the missing data for the features we selected using
-statistical imputation, we used Multiple Imputation Multiple
-Correspondence Analysis (MIMCA; Audigier, Husson, \& Josse, 2017). MIMCA
-begins with mean imputation, converts the categorical WALS features into
-a numerical contingency table with dummy coding, then repeatedly
-performs principle components analysis and reconstructs the contingency
-table. Our final result from the MIMCA algorithm was a fully imputed
-table with \(122\) feature values for each language.
+\begin{CodeChunk}
 
-However, the WALS features describe specific structural differences
-between languages, while our surprisal metric is word-based. To target
-lexical differences between languages, we computed the average
-normalized Levenshtein distance (LDN; Holman et al., 2008) over the
-\(40\) item Swadesh list (Swadesh, 1955), retrieved from the ASJP
-database (Wichmann et al., 2016). The Swadesh list is designed to
-include near-universal words that target basic cognitive concepts, and
-are useful in determining the genealogical similarities and differences
-between languages. The results of classifying languages using the
-Swadesh list and LDN are correlated with those using WALS features, but
-the Swadesh list and LDN do not suffer from the same sparsity problem as
-WALS (Holman et al., 2008).
+\includegraphics{figs/dendro-1} \end{CodeChunk}
+
+WALS plot goes here
+
+Lexical plot goes here.
+
+What did we learn from this? Unigrams vary kind of with features across
+languages. Trigrams are flat all-around.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
+
+In this paper we did model and it showed unique distributions for
+unigrams and same distribution for trigrams. Developmental angle.
+
+Follow-up. Possible questions one might have.
 
 \hypertarget{acknowledgements}{%
 \section{Acknowledgements}\label{acknowledgements}}
