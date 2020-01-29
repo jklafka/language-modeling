@@ -80,7 +80,7 @@ We first turn to working with written English in the British National Corpus [BN
 
 ### Pre-processing
 
-We separate the BNC into sentences. We discard utterances with five words or fewer and with $30$ words or more. We incorporate about $62\%$ of utterances in the BNC this way. 
+We separate the BNC into sentences, and lowercase all words. Compound words and words with apostrophes like "can't" we keep together. We discard utterances with five words or fewer and with $30$ words or more. We incorporate about $62\%$ of utterances in the BNC this way. 
 
 ```{r bnc-lengths, echo = F}
 # raw length distribution
