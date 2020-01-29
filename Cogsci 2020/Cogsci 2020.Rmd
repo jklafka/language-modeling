@@ -33,11 +33,14 @@ require(here)
 require(feather)
 require(jcolors)
 require(tidyverse)
+require(tidytext)
 library(ggthemes)
 ```
 
 ```{r preprocess-data}
-b <- read_csv(here("Data/final_barycenters.csv")) 
+lengths <- read_csv(here("Data/length_counts.csv"))
+
+b <- read_csv(here("Data/barycenters.csv")) 
 
 tidy_b <- b %>%
      pivot_longer(-c(language, source, gram), 
@@ -58,7 +61,7 @@ We use language for a variety of purposes like greeting friends, making records,
 
 If language has evolved to be a code for information transmission, its structure should reflect this process of optimization [@anderson1989]. The optimal code would have to work with two competing pressures: (1) For listeners to easily and successfully decode messages sent by the speaker, and (2) For speakers to easily code their messages and transmit them with minimal effort and error. A fundamental constraint on both of these processes is the linear order of spoken language--sounds are produced one at a time and each is unavailable perceptually once it is no longer being produced. 
 
-Humans accomodate this linear order constraint through incremental processing. People process solvespeech continuously as it arrives, predicting upcoming words and building expectations about the likely meaning of utterances in real-time rather than at their conclusion [@kutas2011; @tanenhaus1995; @pickering2013]. Since prediction errors can lead to severe processing costs and difficulty integrating new information on the part of listeners, speakers should seek to minimize prediction errors. However, the cost of producing more predictable utterances is using more words. Thus, the optimal strategy for speakers seeking to minimize their production costs is to produce utterances that are just at the prediction capacity of listeners without exceeding this capacity [@aylett2004; @genzel2002]. In other words, speakers should maintain a constant rate information of as close to the listener's fastest decoding rate as possible.
+Humans accomodate this linear order constraint through incremental processing. People process speech continuously as it arrives, predicting upcoming words and building expectations about the likely meaning of utterances in real-time rather than at their conclusion [@kutas2011; @tanenhaus1995; @pickering2013]. Since prediction errors can lead to severe processing costs and difficulty integrating new information on the part of listeners, speakers should seek to minimize prediction errors. However, the cost of producing more predictable utterances is using more words. Thus, the optimal strategy for speakers seeking to minimize their production costs is to produce utterances that are just at the prediction capacity of listeners without exceeding this capacity [@aylett2004; @genzel2002]. In other words, speakers should maintain a constant rate information of as close to the listener's fastest decoding rate as possible.
 
 This Uniform Information Density hypothesis has found support at a variety of levels of language from the structure of individual words, to the syntactic structure of utterances [@piantadosi2011; @jaeger2007; see @gibson2019 for a review]. Further, speakers make lexical choices that smooth out the information in their utterances [@mahowald2013; @jaeger2007]. However, while speakers can control which of several near-synonyms they produce, or whether to produce an optional complementizer like "that," they cannot control the grammatical properties of their native language like canonical word order that impose top-down constraints on the structure of utterances. While speakers may produce utterances as uniform in information density as their languages will allow, these top-down constraints may impose significant variation. 
 
@@ -76,6 +79,27 @@ How significant are these top-down constraints? One previous paper analyzed the 
 We first turn to working with written English in the British National Corpus [BNC; @leech1992]. The BNC is a collection of spoken and written records (90% written) from the turn of the century, intended to be a representative sample of British English. Using their word entropy metric without context, @yu2016 found a distinctive three-step distribution for information in written English sentences in the corpus. The first word tended to contain little information. While the middle words of sentences each had more information than the first word, they found a flat and non-increasing rate of information transmission across the middle of sentences. The final word contained the most, though not most, of the information out of any in the sentence, with a noticeable spike in information. They found the same distribution across sentence lengths, from sentences with $15$ words to sentences with $45$ words. 
 
 ### Pre-processing
+
+We separate the BNC into sentences. We discard utterances with five words or fewer and with $30$ words or more. We incorporate about $62\%$ of utterances in the BNC this way. 
+
+```{r bnc-lengths, echo = F}
+# raw length distribution
+lengths %>%
+    filter(language == "bnc") %>%
+    ggplot(aes(x = length, y = n)) +
+        geom_col()
+# cumulative length percentages below a certain threshold
+lengths %>% 
+    filter(language == "bnc") %>%
+    ggplot(aes(x = length, y = m)) + 
+        geom_col()
+# how many utterances in the bnc does filter cover? 
+lengths %>% 
+    mutate(in_cat = ifelse(length > 5 & length < 30, 1, 0)) %>%
+    group_by(in_cat) %>%
+    summarise(total = sum(n)) %>%
+    mutate(total = total / sum(total)) # around 62% have length where 5 < length < 30
+```
 
 ### Computing Surprisal
     Unigram, then trigram
@@ -119,12 +143,12 @@ We replicate the @yu2016 result using the surprisal metric in place of the entro
 ```{r bncunigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="BNC and Switchboard frequency-based trigram curves"}
 
 annotations <- tibble(position = c(4, 4), surprisal = c(4, 2),
-                      language = c("bnc", "switchboard"), gram = "unigram") %>%
+                      language = c("bnc", "sbc"), gram = "unigram") %>%
     mutate(gram = factor(gram, levels = c("unigram", "trigram")))
 
 
 tidy_b %>% 
-    filter(gram %in% c("unigram", "trigram"), language %in% c("bnc", "switchboard")) %>% 
+    filter(gram %in% c("unigram", "trigram"), language %in% c("bnc", "sbc")) %>% 
     ggplot(aes(x = position, y = surprisal, color = language)) + 
     facet_wrap(~ gram) +
     geom_point(size = .75) + 
@@ -133,7 +157,7 @@ tidy_b %>%
     scale_x_continuous(breaks = seq(1, 10, 3)) + 
     xlab("Coordinate") + 
     ylab("Surprisal") + 
-    scale_color_ptol() + 
+    # scale_color_ptol() + 
     theme(aspect.ratio = 1, legend.position = "none") 
 ```
 

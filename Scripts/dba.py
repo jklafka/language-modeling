@@ -2,7 +2,7 @@ import csv, argparse
 import numpy as np
 from tslearn.barycenters import dtw_barycenter_averaging
 
-BARYCENTER_SIZE = 10
+BARYCENTER_SIZE = 7
 
 parser = argparse.ArgumentParser()
 parser.add_argument("corpus", help="Type of corpus you're working with")
@@ -27,6 +27,6 @@ barycenter = dtw_barycenter_averaging(X, BARYCENTER_SIZE)\
 barycenter += [args.language, args.corpus, args.gram]
 
 # output barycenter to
-with open("Data/barycenters.csv", 'a') as f:
+with open("Data/7barycenters.csv", 'a') as f:
     writer = csv.writer(f)
     writer.writerow(barycenter)
