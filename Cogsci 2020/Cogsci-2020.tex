@@ -84,104 +84,114 @@ modeling
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-We can use language for a number of diverse yet useful purposes, such as
-greeting friends, making records and signaling group identity. All of
-these tasks share a common unifying purpose: changing the mental state
-of the listener or reader through the information we transmit to them
-(Austin, 1975). Language can naturally be thought of as a code, one that
-allows speakers to turn their intended meaning into a message that can
-be transmitted to a listener or reader, and subsequently converted by
-the listener back into an approximation of the intended meaning
-(Shannon, 1948).
+We use language for a variety of purposes like greeting friends, making
+records, and signaling group identity. But, these purposes all share a
+common goal: Transmitting information that changes the mental state of
+the listerner or reader (Austin, 1975). For this reason, language can be
+thought of as a code, one that allows speakers to turn their intended
+meaning into a message that can be transmitted to a listener or reader,
+and subsequently converted by the listener back into an approximation of
+the intended meaning (Shannon, 1948). How should we expect this code to
+be structured?
 
-Beyond its utility as a metaphor, this coding perspective on language is
-powerful as a framework for rational analysis. If language has evolved
-to be a code for information transmission, its structure should reflect
-this process of optimization (Anderson \& Milson, 1989). The optimal
-code would have to work with two competing pressures: (1) for listeners
-to easily and successfully decode messages sent by the speaker, and (2)
-for speakers to easily code their messages and transmit them with
-minimal effort and error. A fundamental constraint on both of these
-processes is the linear order of spoken language: sounds are produced
-one at a time and each is unavailable perceptually once it is no longer
-being produced.
+If language has evolved to be a code for information transmission, its
+structure should reflect this process of optimization (Anderson \&
+Milson, 1989). The optimal code would have to work with two competing
+pressures: (1) For listeners to easily and successfully decode messages
+sent by the speaker, and (2) For speakers to easily code their messages
+and transmit them with minimal effort and error. A fundamental
+constraint on both of these processes is the linear order of spoken
+language--sounds are produced one at a time and each is unavailable
+perceptually once it is no longer being produced.
 
-Listeners use a strategic solution which allows them to interpret words
-in rapid succession: \emph{incremental processing}. People process
-speech continuously as it arrives, predicting upcoming words and
-building expectations about the likely meaning of utterances in
-real-time rather than at their conclusion (Kutas \& Federmeier, 2011;
-Pickering \& Garrod, 2013; Tanenhaus, Spivey-Knowlton, Eberhard, \&
-Sedivy, 1995). Since prediction errors can lead to severe processing
-costs and difficulty integrating new information on the part of
-listeners, speakers should seek to minimize prediction errors. However,
-the cost of producing more predictable utterances is using more words.
-Thus, the optimal strategy for speakers seeking to minimize their
-production costs is to produce utterances that are just at the
-prediction capacity of listeners without exceeding this capacity (Aylett
-\& Turk, 2004; Genzel \& Charniak, 2002). In other words, speakers
-should maintain a constant transmission of information, with the optimal
-rate of information transfer as close to the listener's fastest decoding
-rate as possible.
+Humans accomodate this linear order constraint through incremental
+processing. People process solvespeech continuously as it arrives,
+predicting upcoming words and building expectations about the likely
+meaning of utterances in real-time rather than at their conclusion
+(Kutas \& Federmeier, 2011; Pickering \& Garrod, 2013; Tanenhaus,
+Spivey-Knowlton, Eberhard, \& Sedivy, 1995). Since prediction errors can
+lead to severe processing costs and difficulty integrating new
+information on the part of listeners, speakers should seek to minimize
+prediction errors. However, the cost of producing more predictable
+utterances is using more words. Thus, the optimal strategy for speakers
+seeking to minimize their production costs is to produce utterances that
+are just at the prediction capacity of listeners without exceeding this
+capacity (Aylett \& Turk, 2004; Genzel \& Charniak, 2002). In other
+words, speakers should maintain a constant rate information of as close
+to the listener's fastest decoding rate as possible.
 
-Previous research has shown evidence for optimal coding at the word
-(Piantadosi, Tily, \& Gibson, 2011) and phrasal (Jaeger \& Levy, 2007)
-levels, among others. Genzel \& Charniak (2002) found a specific
-information trajectory at the level of sentences in paragraphs: a
-constantly increasing and nearly linear rate of information
-transmission. Speakers have cognitive control over the speed at which
-they say a word and whether or not they insert complementizers. But
-speakers do not have control over the broad properties of their language
-such as canonical word order that affect the organization of utterances
-top-down. Does this whole-utterance level follow the predictions of
-optimal coding? The utterance level may show strong effects of variation
-between languages, as specific languages have properties that constrain
-how speakers may form utterances in those languages, such as canonical
-word order. These properties vary widely from language to language.
+This Uniform Information Density hypothesis has found support at a
+variety of levels of language from the structure of individual words, to
+the syntactic structure of utterances (Jaeger \& Levy, 2007; Piantadosi,
+Tily, \& Gibson, 2011; see Gibson et al., 2019 for a review). Further,
+speakers make lexical choices that smooth out the information in their
+utterances (Jaeger \& Levy, 2007; Mahowald, Fedorenko, Piantadosi, \&
+Gibson, 2013). However, while speakers can control which of several
+near-synonyms they produce, or whether to produce an optional
+complementizer like ``that,'' they cannot control the grammatical
+properties of their native language like canonical word order that
+impose top-down constraints on the structure of utterances. While
+speakers may produce utterances as uniform in information density as
+their languages will allow, these top-down constraints may impose
+significant variation.
 
-Previous work (Yu, Cong, Liang, \& Liu, 2016) studied this
-within-sentence level only in written English, finding an unexpected
-three-step distribution regardless of sentence length: little
-information in the first words of sentences and the most information in
-the final word. The the distribution found was robustly different from
-the linearly increasing trend in sentences from Genzel \& Charniak
-(2002), and also did not resemble the uniform distribution of
-information that one might expect from a communicative efficiency
-account, in which each word has approximately equal information close to
-the channel capacity.
+How significant are these top-down constraints? One previous paper
+analyzed the information content in English sentences and found a
+surprising three-step shape where information first rises, then plateus,
+and then sharply rises again at the ends of sentences (Yu, Cong, Liang,
+\& Liu, 2016). We build on these ideas, asking (1) Whether this shape
+depends on listener's predictive models, (2) Whether this shape varies
+across linguistic contexts, and (3) Whether this shape is broadly
+characteristic of a diverse set of languages or varies predictably from
+language to language. We find that languages are characterized by
+highly-reliable but cross-linguisticly variable structures that co-vary
+with typological features, but that predictive coding flattens these
+shapes across languages, in accord with predictions of the Uniform
+Information Density hypothesis.
 
-In this paper, we propose a novel method for modeling prototypical
-information structure in a language. We compute a unique information
-distributions for each language arising from word frequency. We find
-that this information distribution characterizes all data within a given
-language, both spoken and written, from the time child speakers
-pronounce their first utterances. We link the information curves within
-language families to their structures such as morphology and syntax,
-such that the information curve can be partially predicted by the
-features of the language. When considering communication and predictive
-processing, listeners decode language at the same constant and optimal
-rate regardless of language. Previous uniform information density work
-has focused on English, but we analyze well over a hundred diverse
-languages from across the world and from a variety of language families.
+\hypertarget{study-1-information-in-written-english}{%
+\section{Study 1: Information in Written
+English}\label{study-1-information-in-written-english}}
 
-\hypertarget{methods}{%
-\section{Methods}\label{methods}}
+\textbf{Describe the Genzel Idea and how to Generalize it to
+within-sentence} \textbf{Yu did a thing but it doesn't generalize, we do
+it with surprisal}
 
-We build a statistical model of a fluent listener: how much information
-do you tend to decode at each part of an utterance in a language? We
-begin by approximate language experience and linguistic knowledge by
-training on a corpus. We test on the same corpus to approximate the
-listener's real-time experience, avoiding overfitting by smoothing. We
-compute the prototypical information distribution over all sentences in
-the corpus.
+\hypertarget{method}{%
+\subsection{Method}\label{method}}
 
-\hypertarget{surprisal}{%
-\subsubsection{Surprisal}\label{surprisal}}
+\hypertarget{corpus}{%
+\subsubsection{Corpus}\label{corpus}}
+
+We first turn to working with written English in the British National
+Corpus (BNC; Leech, 1992). The BNC is a collection of spoken and written
+records (90\% written) from the turn of the century, intended to be a
+representative sample of British English. Using their word entropy
+metric without context, Yu et al. (2016) found a distinctive three-step
+distribution for information in written English sentences in the corpus.
+The first word tended to contain little information. While the middle
+words of sentences each had more information than the first word, they
+found a flat and non-increasing rate of information transmission across
+the middle of sentences. The final word contained the most, though not
+most, of the information out of any in the sentence, with a noticeable
+spike in information. They found the same distribution across sentence
+lengths, from sentences with \(15\) words to sentences with \(45\)
+words.
+
+\hypertarget{pre-processing}{%
+\subsubsection{Pre-processing}\label{pre-processing}}
+
+\hypertarget{computing-surprisal}{%
+\subsubsection{Computing Surprisal}\label{computing-surprisal}}
+
+\begin{verbatim}
+Unigram, then trigram
+\end{verbatim}
 
 Shannon (1948) defined information as ``the reduction in uncertainty
 about one variable given that the value of another variable is known''.
-The \emph{lexical surprisal} (Levy, 2008) metric applies Shannon's
-definition of information to words. This measure defines the information
+The \emph{lexical surprisal} metric applies Shannon's definition of
+information to words (Levy, 2008). This measure defines the information
 in a word as the predictability of the word based on previously heard or
 seen words in its context, as in the formula below. The surprisal of a
 word is inversely proportional to the predictability of that word, such
@@ -191,9 +201,6 @@ of the differences between word frequencies being explained by
 information content cross-linguistically (Piantadosi et al., 2011).
 
 \[\text{surprisal}(\text{word}) = -\log P(\text{word})\]
-
-\hypertarget{incorporating-context}{%
-\subsubsection{Incorporating context}\label{incorporating-context}}
 
 However, when reading or listening, people don't just consider each word
 as an isolated linguistic signal. Instead, listeners use the words they
@@ -217,9 +224,9 @@ neurological processing (Kutas \& Federmeier, 2011).
 Ideally, we would like to measure the predictability of each word in an
 utterance using all of the information available to that word. For
 example, in an utterance of twenty words, we would like to use the
-previous \(19\) words of context to predict the \(20\)th word. However,
-we would need to train on a corpus of many trillion word tokens to
-predict with this amount of context. Regardless of computational
+previous \(19\) words of context to predict the \(20^{th}\) word.
+However, we would need to train on a corpus of many trillion word tokens
+to predict with this amount of context. Regardless of computational
 constraints, we want to directly compare how predictable each word is
 regardless of its position in an utterance. We therefore use a
 simplifying \emph{Markov assumption}: we condition our next predictions
@@ -259,14 +266,11 @@ ngrams on probability calculations, and interpolates lower-order ngrams
 into the calcuations. These lower-order ngrams are weighted according to
 the number of distinct contexts they occur as a continuation (e.g.
 ``Francisco'' may be a common word in a corpus, but likely only occurs
-after ``San'' as in ``San Francisco'', so it receives a lower
-weighting). For a longer explanation explanation of modified Kneser-Ney
-smoothing and comparison to other ngram smoothing methods, see Chen \&
-Goodman (1999).
+after ``San'' as in ``San Francisco'', so it receives a lower weighting;
+see Chen \& Goodman, 1999).
 
-\hypertarget{aggregating-time-sequences}{%
-\subsubsection{Aggregating time
-sequences}\label{aggregating-time-sequences}}
+\hypertarget{averaging-curves}{%
+\subsubsection{Averaging curves}\label{averaging-curves}}
 
 To aggregate across utterance lengths, we use the DTW barycenter
 algorithm (Petitjean, Ketterlin, \& Gançarski, 2011). The dynamic time
@@ -283,24 +287,12 @@ further than prior work, and indicates the tendencies speakers gravitate
 towards instead of examining individual stimuli in psycholinguistic
 experiments.
 
-\hypertarget{experiment-1-english-speech-and-writing}{%
-\section{Experiment 1: English speech and
-writing}\label{experiment-1-english-speech-and-writing}}
+\textbf{Talk about choosing size based on something about utterance
+length distribution} \textbf{Maybe we even want to show this
+distribution?}
 
-We first turn to working with written English in the British National
-Corpus (BNC; Leech, 1992). The BNC is a collection of spoken and written
-records (90\% written) from the turn of the century, intended to be a
-representative sample of British English. Using their word entropy
-metric without context, Yu et al. (2016) found a distinctive three-step
-distribution for information in written English sentences in the corpus.
-The first word tended to contain little information. While the middle
-words of sentences each had more information than the first word, they
-found a flat and non-increasing rate of information transmission across
-the middle of sentences. The final word contained the most, though not
-most, of the information out of any in the sentence, with a noticeable
-spike in information. They found the same distribution across sentence
-lengths, from sentences with \(15\) words to sentences with \(45\)
-words.
+\hypertarget{results}{%
+\subsection{Results}\label{results}}
 
 We replicate the Yu et al. (2016) result using the surprisal metric in
 place of the entropy metric. We use the frequency-based or
@@ -310,11 +302,7 @@ priori we expect that the frequency-based metric will produce a flat
 distribution of information across word positions in the BNC. We find
 the same frequency-based information trajectory as Yu et al.~with little
 information in the first words of utterances and the most information in
-the final word, see Figure~@ref(fig:bncunigrams).
-
-We compare this result with spoken English conversations from the
-Switchboard telephone conversation corpus ({\textbf{???}}). The spoken
-and written English corpora have the same information trajectory.
+the final word, see Figure @ref(fig:bncunigrams).
 
 \begin{CodeChunk}
 \begin{figure}[tb]
@@ -331,19 +319,21 @@ for the BNC and Switchboard are in Figure @ref(fig:bnctrigrams). We also
 computed bigram curves with one word of context for each prediction:
 these bigram curves resemble the trigram curves.
 
-\begin{CodeChunk}
-\begin{figure}[tb]
-\includegraphics{figs/bnctrigrams-1} \caption[BNC and Switchboard context-based trigram curves]{BNC and Switchboard context-based trigram curves}\label{fig:bnctrigrams}
-\end{figure}
-\end{CodeChunk}
+\hypertarget{experiment-2-english-in-other-contexts}{%
+\section{Experiment 2: English in Other
+contexts}\label{experiment-2-english-in-other-contexts}}
+
+\textbf{Spoken adult-adult} \textbf{Spoken adult-child} \textbf{Spoken
+child}
 
 We now turn to developmental data, and show that frequency-based
 information curves characterize child speech from the time a child first
 begins speaking as well as adult speech, regardless of utterance length.
 
-\hypertarget{experiment-2-child-and-child-directed-speech}{%
-\section{Experiment 2: Child and child-directed
-speech}\label{experiment-2-child-and-child-directed-speech}}
+We compare this result with spoken English conversations from the
+Switchboard telephone conversation corpus (Godfrey, Holliman, \&
+McDaniel, 1992). The spoken and written English corpora have the same
+information trajectory.
 
 We're going to examine child and child-directed speech from CHILDES
 (MacWhinney, 2000) to capture the developmental picture. We use corpora
@@ -372,21 +362,6 @@ Figure~@ref(fig:childesunigrams)
 \end{figure}
 \end{CodeChunk}
 
-English, Spanish, French and German feature similar information curve
-shapes, with slight variations. The German information curve features
-lower information for longer towards the beginnings of utterances,
-possibly due to the grammatical restriction that the second word in
-German utterances must be a verb (V2). Spanish features a larger spike
-in the amount of information in the final word of utterances. For
-Japanese and Mandarin, we observe completely different frequency-based
-information curve trajectories. The Japanese frequency-based information
-curve trajectory begins high and finishes low, the mirror image of the
-German and Romance language information curves. The Mandarin curve
-begins low and finishes low, but features high information in the middle
-of utterances. We hypothesize this may be due to Japanese and Mandarin
-speakers typically ending their utterances with particles, which are
-common and thus contain little information on their own.
-
 For the trigram information curves, we see the same contextual smoothing
 effect as in English. While the frequency-based information curves may
 depend based on the language, the contextual information curves show the
@@ -398,7 +373,7 @@ frequency-based information curves may vary based on the genealogy and
 typology of the languages in question. However, this does not extend to
 the information curves with two words of context in particular, where
 all languages we have seen so far are characterized by the same
-information distribution. See Figure~@ref(fig:childestrigrams).
+information distribution. See Figure @ref(fig:childestrigrams).
 
 \begin{CodeChunk}
 \begin{figure}[tb]
@@ -491,12 +466,12 @@ A functional explanation for relationships between redundancy, prosodic
 prominence, and duration in spontaneous speech. \emph{Language and
 Speech}, \emph{47}(1), 31--56.
 
-\leavevmode\hypertarget{ref-chen1999empirical}{}%
+\leavevmode\hypertarget{ref-chen1999}{}%
 Chen, S. F., \& Goodman, J. (1999). An empirical study of smoothing
 techniques for language modeling. \emph{Computer Speech \& Language},
 \emph{13}(4), 359--394.
 
-\leavevmode\hypertarget{ref-wals}{}%
+\leavevmode\hypertarget{ref-2013}{}%
 Dryer, M. S., \& Haspelmath, M. (Eds.). (2013). \emph{WALS online}.
 Leipzig: Max Planck Institute for Evolutionary Anthropology. Retrieved
 from \url{https://wals.info/}
@@ -506,7 +481,18 @@ Genzel, D., \& Charniak, E. (2002). Entropy rate constancy in text. In
 \emph{Proceedings of the 40th annual meeting of the association for
 computational linguistics} (pp. 199--206).
 
-\leavevmode\hypertarget{ref-heafield2013scalable}{}%
+\leavevmode\hypertarget{ref-gibson2019}{}%
+Gibson, E., Futrell, R., Piandadosi, S. T., Dautriche, I., Mahowald, K.,
+Bergen, L., \& Levy, R. (2019). How efficiency shapes human language.
+\emph{Trends in Cognitive Sciences}.
+
+\leavevmode\hypertarget{ref-godfrey1992}{}%
+Godfrey, J. J., Holliman, E. C., \& McDaniel, J. (1992). SWITCHBOARD:
+Telephone speech corpus for research and development. In
+\emph{{[}Proceedings{]} icassp-92: 1992 ieee international conference on
+acoustics, speech, and signal processing} (Vol. 1, pp. 517--520). IEEE.
+
+\leavevmode\hypertarget{ref-heafield2013}{}%
 Heafield, K., Pouzyrevsky, I., Clark, J. H., \& Koehn, P. (2013).
 Scalable modified kneser-ney language model estimation. In
 \emph{Proceedings of the 51st annual meeting of the association for
@@ -540,6 +526,11 @@ Levy, R. (2008). Expectation-based syntactic comprehension.
 \leavevmode\hypertarget{ref-macwhinney2000}{}%
 MacWhinney, B. (2000). \emph{The childes project: The database} (Vol.
 2). Psychology Press.
+
+\leavevmode\hypertarget{ref-mahowald2013}{}%
+Mahowald, K., Fedorenko, E., Piantadosi, S. T., \& Gibson, E. (2013).
+Info/information theory: Speakers choose shorter words in predictive
+contexts. \emph{Cognition}, \emph{126}(2), 313--318.
 
 \leavevmode\hypertarget{ref-petitjean2011}{}%
 Petitjean, F., Ketterlin, A., \& Gançarski, P. (2011). A global
