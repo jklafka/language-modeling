@@ -18,7 +18,7 @@ require(lsa)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r read in data}
+```{r get data and preprocess}
 iso_to_language <- read_csv(here("Data/wiki/codes.csv")) %>%
   select(language, iso) %>%
   group_by(language) %>%
@@ -37,14 +37,34 @@ lang_forms <- asjp_forms %>%
   slice(1) %>%
   ungroup() 
 
-langs <- iso_to_language %>% pull(language) ## change this
-```
+wals_features <- read_csv(here("Data/Paper/wals_features.csv")) %>%
+  pivot_longer(-language, names_to = "feature", values_to = "value")
 
-```{r make swadesh space}
+langs <- iso_to_language %>% pull(language) ## change this
+
 langs_pairwise <- expand.grid(language1 = langs,
                            language2 = langs) %>%
   filter(language1 != language2)
+```
 
+```{r make wals distance space}
+wals_distance <- function(language1, language2) {
+  wals_features %>% 
+    filter(language == language1) %>%
+    left_join(wals_features %>% filter(language == language2), by = "feature") %>% 
+    filter(complete.cases(.)) %>% 
+    mutate(wals_dist = ifelse(value.x == value.y, 1, 0)) %>%
+    group_by(language.x, language.y) %>% 
+    summarise(wals_dist = sum(wals_dist)) %>% 
+    rename(language1 = language.x, language2 = language.y) %>% 
+    ungroup()
+}
+
+wals_space <- map_dfr(1:nrow(langs_pairwise), ~wals_distance(langs_pairwise[.x,"language1"],
+                                          langs_pairwise[.x,"language2"])) 
+```
+
+```{r make swadesh distance space}
 asjp_distance <- function(language1, language2) {
   lang_forms %>% 
     filter(language == language1) %>%
