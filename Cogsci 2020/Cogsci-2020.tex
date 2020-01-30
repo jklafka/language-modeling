@@ -55,7 +55,9 @@
 \title{Speakers communicate using language-specific information distributions}
 
 
-\author{{\large \bf Morton Ann Gernsbacher (MAG@Macc.Wisc.Edu)} \\ Department of Psychology, 1202 W. Johnson Street \\ Madison, WI 53706 USA \AND {\large \bf Sharon J.~Derry (SDJ@Macc.Wisc.Edu)} \\ Department of Educational Psychology, 1025 W. Johnson Street \\ Madison, WI 53706 USA}
+\author{Josef Klafka \and Daniel Yurovsky \\
+        \texttt{klafka@andrew.cmu.edu} and \texttt{yurovsky@cmu.edu} \\
+       Department of Psychology \\ Carnegie Mellon University}
 
 \begin{document}
 
@@ -105,20 +107,20 @@ language--sounds are produced one at a time and each is unavailable
 perceptually once it is no longer being produced.
 
 Humans accomodate this linear order constraint through incremental
-processing. People process solvespeech continuously as it arrives,
-predicting upcoming words and building expectations about the likely
-meaning of utterances in real-time rather than at their conclusion
-(Kutas \& Federmeier, 2011; Pickering \& Garrod, 2013; Tanenhaus,
-Spivey-Knowlton, Eberhard, \& Sedivy, 1995). Since prediction errors can
-lead to severe processing costs and difficulty integrating new
-information on the part of listeners, speakers should seek to minimize
-prediction errors. However, the cost of producing more predictable
-utterances is using more words. Thus, the optimal strategy for speakers
-seeking to minimize their production costs is to produce utterances that
-are just at the prediction capacity of listeners without exceeding this
-capacity (Aylett \& Turk, 2004; Genzel \& Charniak, 2002). In other
-words, speakers should maintain a constant rate information of as close
-to the listener's fastest decoding rate as possible.
+processing. People process speech continuously as it arrives, predicting
+upcoming words and building expectations about the likely meaning of
+utterances in real-time rather than at their conclusion (Kutas \&
+Federmeier, 2011; Pickering \& Garrod, 2013; Tanenhaus, Spivey-Knowlton,
+Eberhard, \& Sedivy, 1995). Since prediction errors can lead to severe
+processing costs and difficulty integrating new information on the part
+of listeners, speakers should seek to minimize prediction errors.
+However, the cost of producing more predictable utterances is using more
+words. Thus, the optimal strategy for speakers seeking to minimize their
+production costs is to produce utterances that are just at the
+prediction capacity of listeners without exceeding this capacity (Aylett
+\& Turk, 2004; Genzel \& Charniak, 2002). In other words, speakers
+should maintain a constant rate information of as close to the
+listener's fastest decoding rate as possible.
 
 This Uniform Information Density hypothesis has found support at a
 variety of levels of language from the structure of individual words, to
@@ -155,116 +157,95 @@ English}\label{study-1-information-in-written-english}}
 
 \textbf{Describe the Genzel Idea and how to Generalize it to
 within-sentence} \textbf{Yu did a thing but it doesn't generalize, we do
-it with surprisal}
-
-\hypertarget{method}{%
-\subsection{Method}\label{method}}
-
-\hypertarget{corpus}{%
-\subsubsection{Corpus}\label{corpus}}
-
-We first turn to working with written English in the British National
-Corpus (BNC; Leech, 1992). The BNC is a collection of spoken and written
-records (90\% written) from the turn of the century, intended to be a
-representative sample of British English. Using their word entropy
-metric without context, Yu et al. (2016) found a distinctive three-step
-distribution for information in written English sentences in the corpus.
-The first word tended to contain little information. While the middle
-words of sentences each had more information than the first word, they
-found a flat and non-increasing rate of information transmission across
-the middle of sentences. The final word contained the most, though not
-most, of the information out of any in the sentence, with a noticeable
-spike in information. They found the same distribution across sentence
+it with surprisal} Using their word entropy metric without context, Yu
+et al. (2016) found a distinctive three-step distribution for
+information in written English sentences in the corpus. The first word
+tended to contain little information. While the middle words of
+sentences each had more information than the first word, they found a
+flat and non-increasing rate of information transmission across the
+middle of sentences. The final word contained the most, though not most,
+of the information out of any in the sentence, with a noticeable spike
+in information. They found the same distribution across sentence
 lengths, from sentences with \(15\) words to sentences with \(45\)
 words.
 
+\hypertarget{corpus}{%
+\subsection{Corpus}\label{corpus}}
+
+Following Yu et al. (2016), we selected the British National Corpus
+(BNC) for analysis (British National Corpus Consortium, 2007). The BNC
+is a collection of spoken (10\%) and written (90\%) from the turn of the
+century, intended to be a representative sample of British English.
+
 \hypertarget{pre-processing}{%
-\subsubsection{Pre-processing}\label{pre-processing}}
+\subsection{Pre-processing}\label{pre-processing}}
 
-\hypertarget{computing-surprisal}{%
-\subsubsection{Computing Surprisal}\label{computing-surprisal}}
+We began the XML version of the corpus, and used the
+\texttt{justTheWords.xsl} script provided along with the corpus to
+produce a text file with one sentence of the corpus on each line.
+Compound words (like ``can't'') were combined, and all words were
+converted to lowercase before analysis. This produced a corpus of just
+over six million utterance of varying lenghts. From these, we excluded
+utterances that were too short to allow for reasonable estimation of
+information shape (fewer than 5 words), and utterances that were
+unusually long (more than 30 words). This exclusion left us with 67.64\%
+of the utterances (Fig @ref\{fig:bnc-lengths\}.
 
-\begin{verbatim}
-Unigram, then trigram
-\end{verbatim}
+\begin{CodeChunk}
+\begin{figure}[tb]
+\includegraphics{figs/bnc-lengths-1} \caption[Sentence length distribution in the British National Corpus]{Sentence length distribution in the British National Corpus. Lengths included in analysis are dark.}\label{fig:bnc-lengths}
+\end{figure}
+\end{CodeChunk}
 
-Shannon (1948) defined information as ``the reduction in uncertainty
-about one variable given that the value of another variable is known''.
-The \emph{lexical surprisal} metric applies Shannon's definition of
-information to words (Levy, 2008). This measure defines the information
-in a word as the predictability of the word based on previously heard or
-seen words in its context, as in the formula below. The surprisal of a
-word is inversely proportional to the predictability of that word, such
-that less common and less predictable words carry more information.
-Frequency is intimately tied rto information content in words, with much
-of the differences between word frequencies being explained by
-information content cross-linguistically (Piantadosi et al., 2011).
+\hypertarget{estimating-information}{%
+\subsection{Estimating information}\label{estimating-information}}
 
-\[\text{surprisal}(\text{word}) = -\log P(\text{word})\]
+To estimate how information is distributed across utterances, we
+computed the lexical surprisal of each word under two different models
+(Levy, 2008; Shannon, 1948). Intuitively, the surprisal of a word is a
+measure of how unexpected it would be to read that word, and thus how
+much information it contains. First, following Yu et al. (2016), we
+estimated a unigram model which considers each word independently,
+asking how unexpected that word would be in the absence of any context:
+\(\text{surprisal}(\text{word}) = -\log P(\text{word})\). This unigram
+surprisal measure is a direct transformation of the word's frequency and
+thus less frequent words are more surprising.
 
-However, when reading or listening, people don't just consider each word
-as an isolated linguistic signal. Instead, listeners use the words they
-have already heard to predict and decode the word they are currently
-hearing. Following this incremental processing paradigm, we can also
-condition the surprisal of a word in its context. In the formula below,
-\(w_i\) denotes the word currently being read or heard, while
-\(w_{i-1}\) denotes the first word before the current word, \(w_{i-2}\)
-denotes the second word before the current word, and so on.
+Second, we estimated a trigram model in which the surprisal of a given
+word (\(w_i\)) encodes how unexpected it is to read it after reading the
+prior two words (\(w_{i-1}\) and \(w_{i-2}\)):
+\(\text{surprisal}(w_{i}) = -log P(w_i|w_{i-1},w_{i-2})\). This metric
+encodes the idea that words that are low frequency in isolation (e.g.
+``meatballs'') may become much less surprising in certain contexts (e.g.
+``spaghetti and meatballs'') but more surprising in others (e.g.
+``coffee with meatballs''). In principle, we would like to encode the
+surprisal of a word given all of the prior sentential context
+(\(\text{surprisal}(w_{i}) = -P(w_i|w_{i-1}w_{i-2}...w_{1})\). However,
+the difficulty of correctly estimating these probabilities from a corpus
+grow combinatorically with the number of prior words, and in practice
+trigram models perform well as an approximation (see e.g. Chen \&
+Goodman, 1999; Smith \& Levy, 2013).
 
-\[\text{surprisal}(w_i|w_{i-1}w_{i-2}...) = -log P(w_i|w_{i-1}w_{i-2}...)\]
+\hypertarget{model-details}{%
+\subsubsection{Model details}\label{model-details}}
 
-When we use a word or two of context in our surprisal calculations, then
-the set of reasonable final items in our ngrams is greatly restricted.
-For example, in the sentence ``I take my coffee with cream and sugar'',
-when hearing ``cream and'', a listener might automatically predict
-``sugar'', but there are few possible continuations with even the two
-words ``cream and''. This is linked to the N400 component in
-neurological processing (Kutas \& Federmeier, 2011).
+We estimated the surprisal for each word type in the British National
+Corpus using the KenLM toolkit (Heafield, Pouzyrevsky, Clark, \& Koehn,
+2013). Each utterance was padded with a special start-of-sentence word
+``\(\left<s\right>\)'' and end of sentence word ``\(\left</s\right>\)''.
+Trigram estimates did not cross sentence boundaries, so for example the
+surprisal of the second word in an utterances was estimated as
+(\(\text{surprisal}(w_{2}) = -P(w_2|w_{i},\left<s\right>)\).
 
-Ideally, we would like to measure the predictability of each word in an
-utterance using all of the information available to that word. For
-example, in an utterance of twenty words, we would like to use the
-previous \(19\) words of context to predict the \(20^{th}\) word.
-However, we would need to train on a corpus of many trillion word tokens
-to predict with this amount of context. Regardless of computational
-constraints, we want to directly compare how predictable each word is
-regardless of its position in an utterance. We therefore use a
-simplifying \emph{Markov assumption}: we condition our next predictions
-on a fixed-size context window instead of all preceding words.
-
-\[\text{surprisal}(w_i|w_{i-1}w_{i-2}...) \approx \text{surprisal}(w_i|w_{i-1}w_{i-2})\]
-
-We train two types of ngram language models independently on a corpus.
-One of our models is frequency-based: we do not incorporate context into
-our surprisal calculations. To incorporate context into our models, we
-train bigram and trigram language models, which incorporate one and two
-words of context for each processed word, respectively. Although these
-models may seem to use an inconsequential amount of context when
-predicting the next word, bigram and trigram models introduce a great
-deal of improvement over unigram models across tasks (Chen \& Goodman,
-1999). Models which incorporate more than two words of context have
-issues with overfitting to the corpus and only predicting observed
-sequences, often generalizing poorly.
-
-\hypertarget{language-model-smoothing}{%
-\subsubsection{Language model
-smoothing}\label{language-model-smoothing}}
-
-Once we have fitted our language model, we can compute the surprisal of
-a continuation by simply taking the negative log-probability of that
-word's ngram probability. To find the average information for a given
-position in a corpus, we take all utterances of a given length, and for
-each word position in utterances of that length, we compute the average
-of the surprisals for all of the non-unique words that occur in that
-position, conditioned or not conditioned on context.
-
-To avoid overfitting our models to the corpus, we use modified
-Kneser-Ney smoothing as implemented in the KenLM toolkit (Heafield,
-Pouzyrevsky, Clark, \& Koehn, 2013). Briefly, this smoothing technique
-discounts all ngram frequency counts, which reduces the impact of rare
-ngrams on probability calculations, and interpolates lower-order ngrams
-into the calcuations. These lower-order ngrams are weighted according to
-the number of distinct contexts they occur as a continuation (e.g.
+Naïve trigram models will underestimate the surprisal of words in
+low-frequency trigrams (e.g.~if the word ``meatballs'' appears only once
+in the corpus following exactly the words ``spaghetti and'', it is
+perfectly predictable from its prior two words). To avoid this
+underestimation, we used modified Kneser-Ney smoothing which discounts
+all ngram frequency counts--reducing the impact of rare ngrams on
+probability calculations--and interpolates lower-order ngrams into the
+calcuations. These lower-order ngrams are weighted according to the
+number of distinct contexts they occur as a continuation (e.g.
 ``Francisco'' may be a common word in a corpus, but likely only occurs
 after ``San'' as in ``San Francisco'', so it receives a lower weighting;
 see Chen \& Goodman, 1999).
@@ -272,24 +253,15 @@ see Chen \& Goodman, 1999).
 \hypertarget{averaging-curves}{%
 \subsubsection{Averaging curves}\label{averaging-curves}}
 
-To aggregate across utterance lengths, we use the DTW barycenter
-algorithm (Petitjean, Ketterlin, \& Gançarski, 2011). The dynamic time
-warping (DTW) algorithm (Sakoe \& Chiba, 1978) compares time sequential
-data, first used for speech recognition to unite stretched and shifted
-sound patterns. This algorithm finds a prototypical time series given
-variable length series. Something about length of barycenters.
-
-The flexibility of the surprisal metric we employ in this paper allows
-us to calculate the anticipated information for an individual utterance,
-as most work with the metric has done in the past. Averaging together
-the surprisal values for a word position within utterances is a step
-further than prior work, and indicates the tendencies speakers gravitate
-towards instead of examining individual stimuli in psycholinguistic
-experiments.
-
-\textbf{Talk about choosing size based on something about utterance
-length distribution} \textbf{Maybe we even want to show this
-distribution?}
+To aggregate across utterance lengths, we used dynamic time warping
+barycenter averaging (Petitjean, Ketterlin, \& Gançarski, 2011). The
+dynamic time warping (DTW) algorithm (Sakoe \& Chiba, 1978) compares
+time sequential data, first used for speech recognition to unite
+stretched and shifted sound patterns. This algorithm finds a
+prototypical time series given variable length series. Something about
+length of barycenters. \textbf{Talk about choosing size based on
+something about utterance length distribution} \textbf{Maybe we even
+want to show this distribution?}
 
 \hypertarget{results}{%
 \subsection{Results}\label{results}}
@@ -411,12 +383,6 @@ imputation algorithm for categorical data Multiple Imputation Multiple
 Correspondence Analysis (MIMCA; Audigier, Husson, \& Josse, 2017) to
 fill in the missing features.
 
-\begin{CodeChunk}
-\begin{figure}[tb]
-\includegraphics{figs/dendro-1} \caption[CHILDES context-based trigram curves]{CHILDES context-based trigram curves}\label{fig:dendro}
-\end{figure}
-\end{CodeChunk}
-
 WALS plot goes here
 
 Lexical plot goes here.
@@ -465,6 +431,12 @@ Aylett, M., \& Turk, A. (2004). The smooth signal redundancy hypothesis:
 A functional explanation for relationships between redundancy, prosodic
 prominence, and duration in spontaneous speech. \emph{Language and
 Speech}, \emph{47}(1), 31--56.
+
+\leavevmode\hypertarget{ref-british-national-corpus-consortium2007}{}%
+British National Corpus Consortium. (2007). \emph{British national
+corpus version 3 (BNC XML edition)}. Oxford: Oxford University Computing
+Services. Retrieved from
+\href{URL:\%20http://www.natcorp.ox.ac.uk/}{URL: http://www.natcorp.ox.ac.uk/}
 
 \leavevmode\hypertarget{ref-chen1999}{}%
 Chen, S. F., \& Goodman, J. (1999). An empirical study of smoothing
@@ -515,10 +487,6 @@ Finding meaning in the n400 component of the event-related brain
 potential (erp). \emph{Annual Review of Psychology}, \emph{62},
 621--647.
 
-\leavevmode\hypertarget{ref-leech1992}{}%
-Leech, G. N. (1992). 100 million words of english: The british national
-corpus (bnc).
-
 \leavevmode\hypertarget{ref-levy2008}{}%
 Levy, R. (2008). Expectation-based syntactic comprehension.
 \emph{Cognition}, \emph{106}(3), 1126--1177.
@@ -555,6 +523,10 @@ Acoustics, Speech, and Signal Processing}, \emph{26}(1), 43--49.
 \leavevmode\hypertarget{ref-shannon1948}{}%
 Shannon, C. E. (1948). A mathematical theory of communication.
 \emph{Bell System Technical Journal}, \emph{27}(3), 379--423.
+
+\leavevmode\hypertarget{ref-smith2013}{}%
+Smith, N. J., \& Levy, R. (2013). The effect of word predictability on
+reading time is logarithmic. \emph{Cognition}, \emph{128}(3), 302--319.
 
 \leavevmode\hypertarget{ref-swadesh1955}{}%
 Swadesh, M. (1955). Towards greater accuracy in lexicostatistic dating.

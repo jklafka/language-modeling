@@ -5,8 +5,9 @@ csl: apa6.csl
 document-params: "10pt, letterpaper"
 
 author-information: > 
-    \author{{\large \bf Morton Ann Gernsbacher (MAG@Macc.Wisc.Edu)} \\ Department of Psychology, 1202 W. Johnson Street \\ Madison, WI 53706 USA
-    \AND {\large \bf Sharon J.~Derry (SDJ@Macc.Wisc.Edu)} \\ Department of Educational Psychology, 1025 W. Johnson Street \\ Madison, WI 53706 USA}
+ \author{Josef Klafka \and Daniel Yurovsky \\
+         \texttt{klafka@andrew.cmu.edu} and \texttt{yurovsky@cmu.edu} \\
+        Department of Psychology \\ Carnegie Mellon University}
 
 abstract: >
     What role does communicative efficiency play in how we organize our utterances? In this paper, we present a novel method of examining how much information speakers in a given language communicate in each word, surveying numerous diverse languages. We find that speakers produce frequent and informative words at regular parts of their utterances, depending on language they use. The information distribution for each language is derived in part from the features and genealogy of the language. This robust information distribution characterizes both spoken and written communication, and emerges in children's earliest utterances. However, in real-time communication, in-context word predictability allows listeners to process information at a constant, optimal rate, regardless of the information distribution in the language they understand.
@@ -31,7 +32,6 @@ require(grid)
 require(xtable)
 require(here)
 require(feather)
-require(jcolors)
 require(tidyverse)
 require(tidytext)
 library(ggthemes)
@@ -71,73 +71,70 @@ How significant are these top-down constraints? One previous paper analyzed the 
 
 **Describe the Genzel Idea and how to Generalize it to within-sentence**
 **Yu did a thing but it doesn't generalize, we do it with surprisal**
+Using their word entropy metric without context, @yu2016 found a distinctive three-step distribution for information in written English sentences in the corpus. The first word tended to contain little information. While the middle words of sentences each had more information than the first word, they found a flat and non-increasing rate of information transmission across the middle of sentences. The final word contained the most, though not most, of the information out of any in the sentence, with a noticeable spike in information. They found the same distribution across sentence lengths, from sentences with $15$ words to sentences with $45$ words. 
 
-## Method
+## Corpus
 
-### Corpus
+Following @yu2016, we selected the British National Corpus (BNC) for analysis [@british-national-corpus-consortium2007]. The BNC is a collection of spoken (10%) and written (90%) from the turn of the century, intended to be a representative sample of British English. 
 
-We first turn to working with written English in the British National Corpus [BNC; @leech1992]. The BNC is a collection of spoken and written records (90% written) from the turn of the century, intended to be a representative sample of British English. Using their word entropy metric without context, @yu2016 found a distinctive three-step distribution for information in written English sentences in the corpus. The first word tended to contain little information. While the middle words of sentences each had more information than the first word, they found a flat and non-increasing rate of information transmission across the middle of sentences. The final word contained the most, though not most, of the information out of any in the sentence, with a noticeable spike in information. They found the same distribution across sentence lengths, from sentences with $15$ words to sentences with $45$ words. 
+## Pre-processing
 
-### Pre-processing
+```{r bnc-setup}
+MIN <- 5
+MAX <- 30
 
-We separate the BNC into sentences, and lowercase all words. Compound words and words with apostrophes like "can't" we keep together. We discard utterances with five words or fewer and with $30$ words or more. We incorporate about $62\%$ of utterances in the BNC this way. 
+bnc_total <- lengths %>%
+    filter(language == "bnc") %>%
+    pull(n) %>%
+    sum()
 
-```{r bnc-lengths, echo = F}
+bnc_kept <- lengths %>% 
+    filter(length >= MIN, length <= MAX) %>% 
+    summarise(n = sum(n)) %>%
+    mutate(n = (n/bnc_total) * 100) %>%
+    pull(n) %>%
+    round(2)
+    
+```
+
+We began the XML version of the corpus, and used the \texttt{justTheWords.xsl} script provided along with the corpus to produce a text file with one sentence of the corpus on each line. Compound words (like "can't") were combined, and all words were converted to lowercase before analysis. This produced a corpus of just over six million utterance of varying lenghts. From these, we excluded utterances that were too short to allow for reasonable estimation of information shape (fewer than `r MIN` words), and utterances that were unusually long (more than `r MAX` words). This exclusion left us with `r bnc_kept`% of the utterances (Fig \@ref{fig:bnc-lengths}.
+
+```{r bnc-lengths, echo = F, fig.height = 3, fig.width = 3, fig.cap="Sentence length distribution in the British National Corpus. Lengths included in analysis are dark."}
+
 # raw length distribution
 lengths %>%
     filter(language == "bnc") %>%
-    ggplot(aes(x = length, y = n)) +
-        geom_col()
-# cumulative length percentages below a certain threshold
-lengths %>% 
-    filter(language == "bnc") %>%
-    ggplot(aes(x = length, y = m)) + 
-        geom_col()
-# how many utterances in the bnc does filter cover? 
-lengths %>% 
-    mutate(in_cat = ifelse(length > 5 & length < 30, 1, 0)) %>%
-    group_by(in_cat) %>%
-    summarise(total = sum(n)) %>%
-    mutate(total = total / sum(total)) # around 62% have length where 5 < length < 30
+    mutate(group = if_else(length < MIN | length > MAX, "out", "in")) %>%
+    ggplot(aes(x = length, y = n, fill = group, color = group)) +
+    geom_col() +
+    labs(x = "sentence length", y = "frequency") +
+    theme(legend.position = "none", aspect.ratio = 1) + 
+    scale_fill_manual(values = c(ptol_pal()(1), "light gray")) +
+    scale_color_manual(values = c(ptol_pal()(1), "light gray"))
+
 ```
 
-### Computing Surprisal
-    Unigram, then trigram
-    
-    
-@shannon1948 defined information as "the reduction in uncertainty about one variable given that the value of another variable is known". The *lexical surprisal* metric applies Shannon's definition of information to words [@levy2008]. This measure defines the information in a word as the predictability of the word based on previously heard or seen words in its context, as in the formula below. The surprisal of a word is inversely proportional to the predictability of that word, such that less common and less predictable words carry more information. Frequency is intimately tied rto information content in words, with much of the differences between word frequencies being explained by information content cross-linguistically [@piantadosi2011]. 
+## Estimating information
 
-$$\text{surprisal}(\text{word}) = -\log P(\text{word})$$
+To estimate how information is distributed across utterances, we computed the lexical surprisal of each word under two different models [@levy2008; @shannon1948]. Intuitively, the surprisal of a word is a measure of how unexpected it would be to read that word, and thus how much information it contains. First, following @yu2016, we estimated a unigram model which considers each word independently, asking how unexpected that word would be in the absence of any context: $\text{surprisal}(\text{word}) = -\log P(\text{word})$. This unigram surprisal measure is a direct transformation of the word's frequency and thus less frequent words are more surprising.
 
+Second, we estimated a trigram model in which the surprisal of a given word ($w_i$) encodes how unexpected it is to read it after reading the prior two words ($w_{i-1}$ and $w_{i-2}$): $\text{surprisal}(w_{i}) = -log P(w_i|w_{i-1},w_{i-2})$. This metric encodes the idea that words that are low frequency in isolation (e.g. "meatballs") may become much less surprising in certain contexts (e.g. "spaghetti and meatballs") but more surprising in others (e.g. "coffee with meatballs"). In principle, we would like to encode the surprisal of a word given all of the prior sentential context ($\text{surprisal}(w_{i}) = -P(w_i|w_{i-1}w_{i-2}...w_{1})$. However, the difficulty of correctly estimating these probabilities from a corpus grow combinatorically with the number of prior words, and in practice trigram models perform well as an approximation [see e.g. @chen1999; @smith2013].
 
-However, when reading or listening, people don’t just consider each word as an isolated linguistic signal. Instead, listeners use the words they have already heard to predict and decode the word they are currently hearing. Following this incremental processing paradigm, we can also condition the surprisal of a word in its context. In the formula below, $w_i$ denotes the word currently being read or heard, while $w_{i-1}$ denotes the first word before the current word, $w_{i-2}$ denotes the second word before the current word, and so on. 
+### Model details
 
-$$\text{surprisal}(w_i|w_{i-1}w_{i-2}...) = -log P(w_i|w_{i-1}w_{i-2}...)$$
+We estimated the surprisal for each word type in the British National Corpus using the KenLM toolkit [@heafield2013]. Each utterance was padded with a special start-of-sentence word "$\left<s\right>$" and end of sentence word "$\left</s\right>$". Trigram estimates did not cross sentence boundaries, so for example the surprisal of the second word in an utterances was estimated as ($\text{surprisal}(w_{2}) = -P(w_2|w_{i},\left<s\right>)$. 
 
-When we use a word or two of context in our surprisal calculations, then the set of reasonable final items in our ngrams is greatly restricted. For example, in the sentence “I take my coffee with cream and sugar”, when hearing “cream and”, a listener might automatically predict “sugar”, but there are few possible continuations with even the two words "cream and". This is linked to the N400 component in neurological processing [@kutas2011].
-
-Ideally, we would like to measure the predictability of each word in an utterance using all of the information available to that word. For example, in an utterance of twenty words, we would like to use the previous $19$ words of context to predict the $20^{th}$ word. However, we would need to train on a corpus of many trillion word tokens to predict with this amount of context. Regardless of computational constraints, we want to directly compare how predictable each word is regardless of its position in an utterance. We therefore use a simplifying *Markov assumption*: we condition our next predictions on a fixed-size context window instead of all preceding words.
-
-$$\text{surprisal}(w_i|w_{i-1}w_{i-2}...) \approx \text{surprisal}(w_i|w_{i-1}w_{i-2})$$
-
-We train two types of ngram language models independently on a corpus. One of our models is frequency-based: we do not incorporate context into our surprisal calculations. To incorporate context into our models, we train bigram and trigram language models, which incorporate one and two words of context for each processed word, respectively. Although these models may seem to use an inconsequential amount of context when predicting the next word, bigram and trigram models introduce a great deal of improvement over unigram models across tasks [@chen1999]. Models which incorporate more than two words of context have issues with overfitting to the corpus and only predicting observed sequences, often generalizing poorly. 
-
-### Language model smoothing 
-
-Once we have fitted our language model, we can compute the surprisal of a continuation by simply taking the negative log-probability of that word's ngram probability. To find the average information for a given position in a corpus, we take all utterances of a given length, and for each word position in utterances of that length, we compute the average of the surprisals for all of the non-unique words that occur in that position, conditioned or not conditioned on context. 
-
-To avoid overfitting our models to the corpus, we use modified Kneser-Ney smoothing as implemented in the KenLM toolkit [@heafield2013]. Briefly, this smoothing technique discounts all ngram frequency counts, which reduces the impact of rare ngrams on probability calculations, and interpolates lower-order ngrams into the calcuations. These lower-order ngrams are weighted according to the number of distinct contexts they occur as a continuation [e.g. "Francisco" may be a common word in a corpus, but likely only occurs after "San" as in "San Francisco", so it receives a lower weighting; see @chen1999]. 
+Naïve trigram models will underestimate the surprisal of words in low-frequency trigrams (e.g. if the word "meatballs" appears only once in the corpus following exactly the words "spaghetti and", it is perfectly predictable from its prior two words). To avoid this underestimation, we used modified Kneser-Ney smoothing which discounts all ngram frequency counts--reducing the impact of rare ngrams on probability calculations--and interpolates lower-order ngrams into the calcuations. These lower-order ngrams are weighted according to the number of distinct contexts they occur as a continuation [e.g. "Francisco" may be a common word in a corpus, but likely only occurs after "San" as in "San Francisco", so it receives a lower weighting; see @chen1999]. 
 
 ### Averaging curves
 
-To aggregate across utterance lengths, we use the DTW barycenter algorithm [@petitjean2011]. The dynamic time warping (DTW) algorithm [@sakoe1978] compares time sequential data, first used for speech recognition to unite stretched and shifted sound patterns. This algorithm finds a prototypical time series given variable length series. Something about length of barycenters. 
-
-The flexibility of the surprisal metric we employ in this paper allows us to calculate the anticipated information for an individual utterance, as most work with the metric has done in the past. Averaging together the surprisal values for a word position within utterances is a step further than prior work, and indicates the tendencies speakers gravitate towards instead of examining individual stimuli in psycholinguistic experiments. 
-
+To aggregate across utterance lengths, we used dynamic time warping barycenter averaging [@petitjean2011]. The dynamic time warping (DTW) algorithm [@sakoe1978] compares time sequential data, first used for speech recognition to unite stretched and shifted sound patterns. This algorithm finds a prototypical time series given variable length series.
+Something about length of barycenters.
 **Talk about choosing size based on something about utterance length distribution**
 **Maybe we even want to show this distribution?**
 
 ## Results 
+
 We replicate the @yu2016 result using the surprisal metric in place of the entropy metric. We use the frequency-based or “contextless” surprisal metric, which determines the average distribution of information based on word frequencies in a corpus. A priori we expect that the frequency-based metric will produce a flat distribution of information across word positions in the BNC. We find the same frequency-based information trajectory as Yu et al. with little information in the first words of utterances and the most information in the final word, see Figure \@ref(fig:bncunigrams). 
 
 ```{r bncunigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="BNC and Switchboard frequency-based trigram curves"}
@@ -157,7 +154,7 @@ tidy_b %>%
     scale_x_continuous(breaks = seq(1, 10, 3)) + 
     xlab("Coordinate") + 
     ylab("Surprisal") + 
-    # scale_color_ptol() + 
+    scale_color_ptol() + 
     theme(aspect.ratio = 1, legend.position = "none") 
 ```
 
@@ -233,7 +230,7 @@ We pulled corpora for $159$ diverse languages from Wikipedia, each of which had 
 
 As our surprisal metric is a lexical measure, we expect the Levenshtein distance to be high. To describe more structural relationships, we used the World Atlas of Language Structures [WALS; @2013] to describe the morphology, syntax, phonology, etymology and semantics--in short the structures in each language. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. We used a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis [MIMCA; @audigier2017] to fill in the missing features. 
 
-```{r dendro, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves"}
+```{r dendro, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
 b %>% 
     filter(source == "wikipedia", gram == "unigram") %>%
     select(-source, -gram) %>%
