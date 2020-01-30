@@ -40,7 +40,7 @@ library(ggthemes)
 ```{r preprocess-data}
 lengths <- read_csv(here("Data/length_counts.csv"))
 
-b <- read_csv(here("Data/barycenters.csv")) 
+b <- read_csv(here("Data/final_barycenters.csv")) 
 
 tidy_b <- b %>%
      pivot_longer(-c(language, source, gram), 
@@ -48,7 +48,10 @@ tidy_b <- b %>%
      mutate(position = as.numeric(position),
             gram = factor(gram, levels = c("unigram", "trigram")))
 
-wals <- read_csv(here("Data/Paper/wals_features.csv"))
+# wals <- read_csv(here("Data/final_features.csv"))
+wals <- read_csv(here("Data/Paper/wals_distances.csv"))
+swadesh <- read_csv(here("Data/Paper/swadesh_distances.csv"))
+cosines <- read_csv(here("Data/Paper/cosines.csv")) 
 ```
 
 ```{r theme}
@@ -168,7 +171,7 @@ We now include two words of context (trigrams) for each word in our measurements
 
 We now turn to developmental data, and show that frequency-based information curves characterize child speech from the time a child first begins speaking as well as adult speech, regardless of utterance length. 
 
-We compare this result with spoken English conversations from the Switchboard telephone conversation corpus [@godfrey1992]. The spoken and written English corpora have the same information trajectory. 
+We compare this result to the one for the Santa Barbara corpus of spoken American English [@sbc]. 
 
 
 We're going to examine child and child-directed speech from CHILDES [@macwhinney2000] to capture the developmental picture. We use corpora for Spanish, German, French, Mandarin Chinese and Japanese as well as English. Mandarin and Japanese are not natively written using the Latin alphabet, and moreover words are not segmented in their native scripts. Instead of the native scripts, we use transliterations from the corpus for each of the Mandarin and Japanese utterances into pinyin for Mandarin and romanji for Japanese. In these transliterations, words are previously segmented. 
@@ -241,11 +244,15 @@ b %>%
     plot()
 ```
 
-WALS plot goes here
+```{r wals-plot}
 
-Lexical plot goes here. 
+```
 
-What did we learn from this? Unigrams vary kind of with features across languages. Trigrams are flat all-around. 
+```{r swadesh-plot}
+
+```
+
+
 
 # Conclusion
 

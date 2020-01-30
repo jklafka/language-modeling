@@ -18,13 +18,92 @@ require(lsa)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r get data and preprocess}
+Download and unzip the WALS data file from "https://wals.info/download" (the file is called wals_language.csv.zip) to get the originals for this data processing pipeline. Codes are created from the language_dict.json file in the top-level directory of the repository, filled out manually from here: "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Languages/List_of_ISO_639-3_language_codes_(2019)"
+```{r get WALS features, echo = F, include = F}
+# get list of all languages we use in wikipedia dataset
+langs <- read_csv(here("Data/final_features.csv")) %>%
+  pull(language)
+
+
+# get iso code and WALS code mappings
+languages <- read_csv(here("Data/wiki/wals_dataset/languages.csv")) %>% 
+  select(ID, ISO639P3code) %>%
+  rename(iso = ISO639P3code)
+
+# get iso code paired with all initial feature values and NAs
+values <- read_csv(here("Data/wiki/wals_dataset/values.csv")) %>%
+  select(Language_ID, Parameter_ID, Value) %>% 
+  pivot_wider(names_from = Parameter_ID, values_from = Value) %>% 
+  left_join(languages, by = c("Language_ID" = "ID")) %>%
+  clean_names()
+
+# get wikipedia language name to iso code mappings
 iso_to_language <- read_csv(here("Data/wiki/codes.csv")) %>%
   select(language, iso) %>%
   group_by(language) %>%
   slice(1) %>% 
   ungroup()
 
+# match up initial wals features with wikipedia language name mappings
+final_features <- values %>% 
+  inner_join(iso_to_language, by = "iso") %>% 
+  semi_join(langs, by = "language") %>%
+  select(-language_id, -iso) %>%
+  distinct(language, .keep_all = TRUE) 
+
+# get all currently valued features
+wals_features <- read_csv(here("Data/Paper/wals_features.csv")) %>%
+  clean_names() %>%
+  bind_rows(final_features) %>% 
+  select(language:x120a) %>%
+  distinct(language, .keep_all=T) %>%
+  remove_na
+
+# imputation
+imputed_wals <- wals_features %>%
+  column_to_rownames("language") %>%
+  mutate_all(as_factor) %>%
+  MIMCA(ncp = 20, threshold = 1e-2, maxiter = 1000)
+
+imputed_features <- imputed_wals[[1]][99]$`nboot=99` %>%
+  as_tibble() %>%
+  bind_cols(wals_features %>% select(language))
+
+imputed_features %>%
+  write_csv(here("Data/final_features.csv"))
+```
+
+```{r cosines}
+b <- read_csv(here("Data/final_barycenters.csv")) 
+
+unigram_cosines <- b %>%
+    filter(gram == "unigram", source == "wikipedia") %>% 
+    distinct(language, .keep_all = T) %>% 
+    select(-gram, -source) %>% 
+    column_to_rownames("language") %>% 
+    data.matrix() %>%
+    t() %>%
+    cosine() %>%
+    as_tibble(rownames = "language1") %>%
+    pivot_longer(-language1, names_to = "language2", values_to = "cosine")
+
+unigram_cosines %>% write_csv(here("Data/unigram_cosines.csv"))
+
+trigram_cosines <- b %>%
+    filter(gram == "trigram", source == "wikipedia") %>% 
+    distinct(language, .keep_all = T) %>% 
+    select(-gram, -source) %>% 
+    column_to_rownames("language") %>% 
+    data.matrix() %>%
+    t() %>%
+    cosine() %>%
+    as_tibble(rownames = "language1") %>%
+    pivot_longer(-language1, names_to = "language2", values_to = "cosine")
+
+trigram_cosines %>% write_csv(here("Data/trigram_cosines.csv"))
+```
+
+```{r get data and preprocess}
 asjp_forms <- read_csv(here("Data/asjp_dataset/forms.csv"))
 asjp_langs <- read_csv(here("Data/asjp_dataset/languages.csv"))
 lang_forms <- asjp_forms %>% 
@@ -37,17 +116,15 @@ lang_forms <- asjp_forms %>%
   slice(1) %>%
   ungroup() 
 
-wals_features <- read_csv(here("Data/Paper/wals_features.csv")) %>%
-  pivot_longer(-language, names_to = "feature", values_to = "value")
-
-langs <- iso_to_language %>% pull(language) ## change this
-
 langs_pairwise <- expand.grid(language1 = langs,
                            language2 = langs) %>%
   filter(language1 != language2)
 ```
 
 ```{r make wals distance space}
+wals_features <- read_csv(here("Data/final_features.csv")) %>%
+  pivot_longer(-language, names_to = "feature", values_to = "value")
+
 wals_distance <- function(language1, language2) {
   wals_features %>% 
     filter(language == language1) %>%
@@ -62,6 +139,8 @@ wals_distance <- function(language1, language2) {
 
 wals_space <- map_dfr(1:nrow(langs_pairwise), ~wals_distance(langs_pairwise[.x,"language1"],
                                           langs_pairwise[.x,"language2"])) 
+wals_space %>% 
+  write_csv(here("Data/Paper/wals_distances.csv"))
 ```
 
 ```{r make swadesh distance space}
@@ -81,39 +160,7 @@ swadesh_space <- map_dfr(1:nrow(langs_pairwise), ~asjp_distance(langs_pairwise[.
                                           langs_pairwise[.x,"language2"])) 
 ```
 
-Download and unzip the WALS data file from "https://wals.info/download" (the file is called wals_language.csv.zip) to get the originals for this data processing pipeline. Codes are created from the language_dict.json file in the top-level directory of the repository, filled out manually from here: "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Languages/List_of_ISO_639-3_language_codes_(2019)"
-```{r get WALS features, echo = F, include = F}
-# get all of the features for each language
-langs <- read_csv(here("Data/wiki/wals_dataset/languages.csv")) %>% 
-  select(ID, ISO639P3code) %>%
-  rename(iso = ISO639P3code)
-
-values <- read_csv(here("Data/wiki/wals_dataset/values.csv")) %>%
-  select(Language_ID, Parameter_ID, Value) %>% 
-  pivot_wider(names_from = Parameter_ID, values_from = Value) %>% 
-  left_join(langs, by = c("Language_ID" = "ID")) %>%
-  clean_names()
-
-# ## imputation
-# imputed_wals <- values %>%
-#   column_to_rownames("language_id") %>%
-#   filter_all(any_vars(!is.na(.))) %>% # each language and each feature has at least one value
-#   MIMCA(ncp = 50, threshold = 1e-2, maxiter = 500)
-
-wiki <- read_csv(here("Data/Wikipedia/codes.csv"))
-slopes <- read_csv(here("Data/Paper/relative_ngrams.csv"))
-
-features <- values %>% 
-  left_join(wiki, by = "iso") %>%
-  filter(!is.na(language))
-
-# features %>% 
-#   column_to_rownames("language_id") %>%
-#   filter_all(any_vars(!is.na(.))) %>% # each language and each feature has at least one value
-#   MIMCA(ncp = 20, threshold = 1e-2, maxiter = 1000)
-```
-
-Does word order covary with trigram information curve shape? It seems like yes, although the aggregated curves you get for each language family are difficult to understand. 
+Does word order covary with trigram information curve shape? 
 ```{r shape-feature covariance}
 boot_slopes <- features %>% 
   inner_join(slopes %>% filter(gram == "Unigram"), by = "language") %>% 
