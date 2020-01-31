@@ -214,8 +214,8 @@ For the trigram information curves, we see the same contextual smoothing effect 
 ```{r childestrigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves"}
 tidy_b %>% 
     filter(gram == "trigram", source %in% c("adult", "child"),
-           language %in% c("Eng-NA", "Chinese", "French", "Spanish", "German", "Japanese")) %>% 
-    ggplot(aes(x = position, y = surprisal, color = source)) + 
+           language %in% c("Eng-NA", "sbc")) %>% 
+    ggplot(aes(x = position, y = surprisal, color = language)) + ## group by source and language simultaneously
         geom_point(size = .75) + 
         geom_line() + 
         scale_x_continuous(breaks = seq(1, 10, 3)) + 
@@ -225,13 +225,13 @@ tidy_b %>%
         facet_wrap(~language, nrow = 3) 
 ```
 
-To make a claim about how languages on a larger scale, we need to use larger corpora and a much larger number of languages. 
+For our next experiment, we will use typological, top-down features of each language to predict the shape of its information curve. 
 
 # Experiment 3: Large-scale data and linguistic features 
 
 We pulled corpora for $159$ diverse languages from Wikipedia, each of which had at least $10,000$ articles. To compare languages more rigorously, we used two databases of language similarity features. To target lexical differences between languages, we used the $40$-item Swadesh list [@swadesh1955], retrieved from the ASJP database [@wichmann2016]. The Swadesh list is a well-known method for comparing lexical similarity between languages, by quantifying the similarity between the words on the list for pairs of languages, and is often used to compare genetic relationships between languages. We computed the average normalized Levenshtein distance, a string edit distance measure [LDN; @holman2008] between each pair of our Wikipedia languages. 
 
-As our surprisal metric is a lexical measure, we expect the Levenshtein distance to be high. To describe more structural relationships, we used the World Atlas of Language Structures [WALS; @2013] to describe the morphology, syntax, phonology, etymology and semantics--in short the structures in each language. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. We used a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis [MIMCA; @audigier2017] to fill in the missing features. 
+As our surprisal metric is a lexical measure, we expect the Levenshtein distance to be high. To describe more structural relationships, we used the World Atlas of Language Structures [WALS; @2013] to describe the morphology, syntax, phonology, etymology and semantics--in short the structures in each language. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. We use a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis [MIMCA; @audigier2017] to fill in the missing features. 
 
 ```{r dendro, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
 b %>% 
@@ -244,15 +244,27 @@ b %>%
     plot()
 ```
 
-```{r wals-plot}
+We see no correlation between WALS features and cosine distances between information curves. 
 
+```{r wals-plot, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
+cosines %>%
+    left_join(wals) %>%
+    filter(complete.cases(.)) %>%
+    ggplot(aes(x = cosine, y = wals_dist, color = gram)) + 
+        geom_point(alpha = .5) + 
+        geom_smooth(method = "lm")
 ```
 
-```{r swadesh-plot}
+We see no correlation between average normalized edit distances between strings in two languages and cosine distances between information curves. 
 
+```{r swadesh-plot, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
+cosines %>%
+    left_join(swadesh) %>%
+    filter(complete.cases(.)) %>%
+    ggplot(aes(x = cosine, y = ldn, color = gram)) + 
+        geom_point(alpha = .5) + 
+        geom_smooth(method = "lm")
 ```
-
-
 
 # Conclusion
 
