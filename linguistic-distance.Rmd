@@ -76,31 +76,49 @@ imputed_features %>%
 ```{r cosines}
 b <- read_csv(here("Data/final_barycenters.csv")) 
 
+b <- read_csv(here("Data/5barycenters.csv"), 
+              col_names = c("1", "2", "3", "4", "5", 
+                            "language", "source", "gram"))
+
+
 unigram_cosines <- b %>%
-    filter(gram == "unigram", source == "wikipedia") %>% 
-    distinct(language, .keep_all = T) %>% 
-    select(-gram, -source) %>% 
-    column_to_rownames("language") %>% 
-    data.matrix() %>%
-    t() %>%
-    cosine() %>%
-    as_tibble(rownames = "language1") %>%
-    pivot_longer(-language1, names_to = "language2", values_to = "cosine")
+  filter(gram == "unigram", source == "wikipedia") %>% 
+  distinct(language, .keep_all = T) %>% 
+  select(-gram, -source) %>% 
+  pivot_longer(-language, names_to = "position", values_to = "surprisal") %>%
+  group_by(language) %>%
+  mutate(surprisal = scale(surprisal, scale = FALSE)) %>%
+  pivot_wider(names_from = position, values_from = surprisal) %>%
+  column_to_rownames("language") %>% 
+  data.matrix() %>%
+  t() %>%
+  cosine() %>%
+  as_tibble(rownames = "language1") %>%
+  pivot_longer(-language1, names_to = "language2", values_to = "cosine")
 
 unigram_cosines %>% write_csv(here("Data/unigram_cosines.csv"))
 
 trigram_cosines <- b %>%
-    filter(gram == "trigram", source == "wikipedia") %>% 
-    distinct(language, .keep_all = T) %>% 
-    select(-gram, -source) %>% 
-    column_to_rownames("language") %>% 
-    data.matrix() %>%
-    t() %>%
-    cosine() %>%
-    as_tibble(rownames = "language1") %>%
-    pivot_longer(-language1, names_to = "language2", values_to = "cosine")
+  filter(gram == "trigram", source == "wikipedia") %>% 
+  distinct(language, .keep_all = T) %>% 
+  select(-gram, -source) %>% 
+  pivot_longer(-language, names_to = "position", values_to = "surprisal") %>%
+  group_by(language) %>%
+  mutate(surprisal = scale(surprisal, scale = FALSE)) %>%
+  pivot_wider(names_from = position, values_from = surprisal) %>%
+  column_to_rownames("language") %>% 
+  data.matrix() %>%
+  t() %>%
+  cosine() %>%
+  as_tibble(rownames = "language1") %>%
+  pivot_longer(-language1, names_to = "language2", values_to = "cosine")
 
 trigram_cosines %>% write_csv(here("Data/trigram_cosines.csv"))
+
+unigram_cosines %>%
+  mutate(gram = "unigram") %>%
+  bind_rows(mutate(trigram_cosines, gram = "trigram")) %>%
+  write_csv(here("Data/Paper/cosines.csv"))
 ```
 
 ```{r get data and preprocess}
@@ -122,8 +140,13 @@ langs_pairwise <- expand.grid(language1 = langs,
 ```
 
 ```{r make wals distance space}
+feature_types <- read_csv(here("Data/feature_types.csv"))
+
 wals_features <- read_csv(here("Data/final_features.csv")) %>%
-  pivot_longer(-language, names_to = "feature", values_to = "value")
+  pivot_longer(-language, names_to = "feature", values_to = "value") %>%
+  mutate(feature = gsub("x", "", feature),
+         feature = gsub("a", "A", feature)) %>%
+  left_join(feature_types, by = "feature")
 
 wals_distance <- function(language1, language2) {
   wals_features %>% 
@@ -137,10 +160,32 @@ wals_distance <- function(language1, language2) {
     ungroup()
 }
 
+wals_type_distance <- function(language1, language2) {
+  wals_features %>% 
+    filter(language == language1) %>%
+    left_join(wals_features %>% filter(language == language2), 
+              by = c("feature", "type")) %>% 
+    filter(complete.cases(.)) %>% 
+    mutate(wals_dist = ifelse(value.x == value.y, 1, 0)) %>%
+    group_by(type, language.x, language.y) %>% 
+    summarise(wals_dist = sum(wals_dist)) %>% 
+    rename(language1 = language.x, language2 = language.y) %>% 
+    ungroup()
+}
+
+langs_pairwise <- expand_grid(language1 = distinct(wals_features,language),
+                              language2 = distinct(wals_features,language))
+
 wals_space <- map_dfr(1:nrow(langs_pairwise), ~wals_distance(langs_pairwise[.x,"language1"],
                                           langs_pairwise[.x,"language2"])) 
 wals_space %>% 
   write_csv(here("Data/Paper/wals_distances.csv"))
+
+wals_type_space <- map_dfr(1:nrow(langs_pairwise), ~wals_type_distance(langs_pairwise[.x,"language1"],
+                                          langs_pairwise[.x,"language2"])) 
+wals_type_space %>% 
+  write_csv(here("Data/Paper/wals_type_distances.csv"))
+
 ```
 
 ```{r make swadesh distance space}

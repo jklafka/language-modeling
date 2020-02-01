@@ -35,12 +35,21 @@ require(feather)
 require(tidyverse)
 require(tidytext)
 library(ggthemes)
+library(widyr)
 ```
 
 ```{r preprocess-data}
 lengths <- read_csv(here("Data/length_counts.csv"))
 
 b <- read_csv(here("Data/final_barycenters.csv")) 
+
+b <- read_csv(here("Data/5barycenters.csv"),
+              col_names = c("1", "2", "3", "4", "5",
+                            "language", "source", "gram"))
+
+# b <- read_csv(here("Data/7barycenters.csv"), 
+#               col_names = c("1", "2", "3", "4", "5", "6", "7", 
+#                             "language", "source", "gram"))
 
 tidy_b <- b %>%
      pivot_longer(-c(language, source, gram), 
@@ -50,6 +59,7 @@ tidy_b <- b %>%
 
 # wals <- read_csv(here("Data/final_features.csv"))
 wals <- read_csv(here("Data/Paper/wals_distances.csv"))
+wals_types <- read_csv(here("Data/Paper/wals_type_distances.csv"))
 swadesh <- read_csv(here("Data/Paper/swadesh_distances.csv"))
 cosines <- read_csv(here("Data/Paper/cosines.csv")) 
 ```
@@ -252,8 +262,23 @@ b %>%
 
 ```
 
+```{r}
 
+tidy_b %>%
+    filter(language %in% c("German", "Serbian", "Japanese", "Catalan", "Russian", "Slovak"),
+           source == "wikipedia") %>%
+    ggplot(aes(x = position, y = surprisal, color = language)) +
+    facet_wrap(~ gram) +
+    geom_point() + 
+    geom_line()
 
+cor_data <- left_join(cosines, wals, by = c("language1", "language2")) %>%
+    left_join(swadesh, by = c("language1", "language2")) %>%
+    group_by(gram) %>%
+    summarise(wals_cor = cor(wals_dist, cosine ,
+                             use = "pairwise"),
+              swadesh_cor = cor(cosine, ldn, use = "pairwise"))
+```
 # Conclusion
 
 In this paper we did model and it showed unique distributions for unigrams and same distribution for trigrams. Developmental angle. 
