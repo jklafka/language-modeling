@@ -27,6 +27,6 @@ barycenter = dtw_barycenter_averaging(X, BARYCENTER_SIZE)\
 barycenter += [args.language, args.corpus, args.gram]
 
 # output barycenter to
-with open("Data/5barycenters.csv", 'a') as f:
+with open("Data/5barycenters_new.csv", 'a') as f:
     writer = csv.writer(f)
     writer.writerow(barycenter)

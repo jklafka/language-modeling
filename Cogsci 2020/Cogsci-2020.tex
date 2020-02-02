@@ -155,27 +155,49 @@ Information Density hypothesis.
 \section{Study 1: Information in Written
 English}\label{study-1-information-in-written-english}}
 
-\textbf{Describe the Genzel Idea and how to Generalize it to
-within-sentence} \textbf{Yu did a thing but it doesn't generalize, we do
-it with surprisal} Using their word entropy metric without context, Yu
-et al. (2016) found a distinctive three-step distribution for
-information in written English sentences in the corpus. The first word
-tended to contain little information. While the middle words of
-sentences each had more information than the first word, they found a
-flat and non-increasing rate of information transmission across the
-middle of sentences. The final word contained the most, though not most,
-of the information out of any in the sentence, with a noticeable spike
-in information. They found the same distribution across sentence
-lengths, from sentences with \(15\) words to sentences with \(45\)
-words.
+The Uniform Information Density Hypothesis predicts that people should
+structure their utterances so that the amount of information in each
+unit of language remains constant. An influentual early test of this
+idea was performed by Genzel \& Charniak (2002) who analyzed the amount
+of information in successive paragraphs of the same text. They found
+that the amount of information increased across paragraphs when each was
+considered in isolation. They reasoned that since all prior paragraphs
+provide the context for reading each new paragraph, the amount of total
+information (context + paragraph) was constant for human readers.
+
+Yu et al. (2016) applied this same logic to analysis of the information
+in individual sentences, computing the entropy of each successive word
+in an utterance. Surprisingly, they found found a distinctive three-step
+distribution for information in a corpus of written English. The first
+word of each sentence tended to contain little information; words in the
+middle of sentences each contained roughly the same amount of
+information, nut the final word of each sentence contained much more
+information than any other word. They found the same distribution across
+sentence lengths, from sentences with \(15\) words to sentences with
+\(45\) words. They took this as evidence against the Uniform Information
+Density Hypothesis as, unlike Genzel and Charniak's (2002) results,
+information plateud in the middle of sentences rather than increasing as
+it did at the beginnings and ends.
+
+We replicate their analysis here, bringing it more in line with Genzel
+and Charniak's (2002) methods. While Yu et al. (2016) considered only
+the information in each word, we build two different models. The first,
+replicating their analysis, considers the surprisal of each word read in
+isolation. The second, following Genzel \& Charniak (2002), is a trigram
+model which considers the surprisal of each word having read the prior
+two words. We take this trigram model as a better proxy for human
+reader's processing of these sentences. We also develop a method for
+averaging the curves for sentences of different lenghts together to
+provide a single typical information curve signature.
 
 \hypertarget{corpus}{%
 \subsection{Corpus}\label{corpus}}
 
 Following Yu et al. (2016), we selected the British National Corpus
-(BNC) for analysis (British National Corpus Consortium, 2007). The BNC
-is a collection of spoken (10\%) and written (90\%) from the turn of the
-century, intended to be a representative sample of British English.
+(BNC) for analysis (British National Corpus Consortium, 2007). The
+British National Corpus is \textasciitilde{}100 million word corpus
+consisting of spoken (10\%) and written (90\%) English from the late
+20th Century.
 
 \hypertarget{pre-processing}{%
 \subsection{Pre-processing}\label{pre-processing}}
@@ -188,8 +210,8 @@ converted to lowercase before analysis. This produced a corpus of just
 over six million utterance of varying lenghts. From these, we excluded
 utterances that were too short to allow for reasonable estimation of
 information shape (fewer than 5 words), and utterances that were
-unusually long (more than 30 words). This exclusion left us with 67.64\%
-of the utterances (Fig @ref\{fig:bnc-lengths\}.
+unusually long (more than 45 words). This exclusion left us with 89.83\%
+of the utterances (Fig \ref{fig:bnc-lengths}.
 
 \begin{CodeChunk}
 \begin{figure}[tb]
@@ -253,28 +275,41 @@ see Chen \& Goodman, 1999).
 \hypertarget{averaging-curves}{%
 \subsubsection{Averaging curves}\label{averaging-curves}}
 
-To aggregate across utterance lengths, we used dynamic time warping
-barycenter averaging (Petitjean, Ketterlin, \& Gançarski, 2011). The
-dynamic time warping (DTW) algorithm (Sakoe \& Chiba, 1978) compares
-time sequential data, first used for speech recognition to unite
-stretched and shifted sound patterns. This algorithm finds a
-prototypical time series given variable length series. Something about
-length of barycenters. \textbf{Talk about choosing size based on
-something about utterance length distribution} \textbf{Maybe we even
-want to show this distribution?}
+To develop a characteristic information curve for sentences in the
+corpus, we needed to aggregate sentences that varied dramatically in
+length (Fig \ref{bnc-lengths}). We used Dynamic Time Warping Barycenter
+Averaging (DBA), an algorithm for finding the average of sequences that
+share and underlying pattern but vary in length (Petitjean, Ketterlin,
+\& Gançarski, 2011). DBA is an extension of standard Dynamic Time
+Warping, which searches for an invariant template in shifted and
+stretched instances of that template {[}e.g.~all instances of the vowel
+`a' in acoustic recordings of a speaker's productions even if the
+instances vary in their duration and intensity{]}. DBA inverts this
+idea, discovering a latent invariant template from a set of sequences.
+
+We used DBA to discover the short sequence of surprisal values that
+characterized the surprisal curves common to sentences of varying
+sentence lengths. We first averaged individual sentences of the same
+length together, and then applied the DBA algorithm to this set of
+average sequences. DBA requires a parameter specifying the length of the
+template sequence. We chose 5 as the length of the template sequence
+based on our inspection of the curves from the British National Corpus
+as well as the curves we found in subsequent studies. However, the
+results of this and the following studies were robust to other choices
+of this length parameter (7 and 10).
 
 \hypertarget{results}{%
 \subsection{Results}\label{results}}
 
-We replicate the Yu et al. (2016) result using the surprisal metric in
-place of the entropy metric. We use the frequency-based or
+We replicate ({\textbf{???}}) et al.'s (2016) result using the surprisal
+metric in place of the entropy metric. We use the frequency-based or
 ``contextless'' surprisal metric, which determines the average
 distribution of information based on word frequencies in a corpus. A
 priori we expect that the frequency-based metric will produce a flat
 distribution of information across word positions in the BNC. We find
 the same frequency-based information trajectory as Yu et al.~with little
 information in the first words of utterances and the most information in
-the final word, see Figure @ref(fig:bncunigrams).
+the final word, see Figure \ref(fig:bncunigrams).
 
 \begin{CodeChunk}
 \begin{figure}[tb]
@@ -295,8 +330,11 @@ these bigram curves resemble the trigram curves.
 \section{Experiment 2: English in Other
 contexts}\label{experiment-2-english-in-other-contexts}}
 
-\textbf{Spoken adult-adult} \textbf{Spoken adult-child} \textbf{Spoken
-child}
+\begin{CodeChunk}
+\begin{figure}[tb]
+\includegraphics{figs/spoken-lengths-1} \caption[Sentence length distributions in the Spoken Language Corpora]{Sentence length distributions in the Spoken Language Corpora}\label{fig:spoken-lengths}
+\end{figure}
+\end{CodeChunk}
 
 We now turn to developmental data, and show that frequency-based
 information curves characterize child speech from the time a child first
@@ -326,12 +364,6 @@ hearing a rare word. We include the frequency-based information curve
 from the North American English CHILDES collection for comparison. See
 Figure~@ref(fig:childesunigrams)
 
-\begin{CodeChunk}
-\begin{figure}[tb]
-\includegraphics{figs/childesunigrams-1} \caption[CHILDES frequency-based trigram curves]{CHILDES frequency-based trigram curves}\label{fig:childesunigrams}
-\end{figure}
-\end{CodeChunk}
-
 For the trigram information curves, we see the same contextual smoothing
 effect as in English. While the frequency-based information curves may
 depend based on the language, the contextual information curves show the
@@ -345,14 +377,8 @@ the information curves with two words of context in particular, where
 all languages we have seen so far are characterized by the same
 information distribution. See Figure @ref(fig:childestrigrams).
 
-\begin{CodeChunk}
-\begin{figure}[tb]
-\includegraphics{figs/childestrigrams-1} \caption[CHILDES context-based trigram curves]{CHILDES context-based trigram curves}\label{fig:childestrigrams}
-\end{figure}
-\end{CodeChunk}
-
-To make a claim about how languages on a larger scale, we need to use
-larger corpora and a much larger number of languages.
+For our next experiment, we will use typological, top-down features of
+each language to predict the shape of its information curve.
 
 \hypertarget{experiment-3-large-scale-data-and-linguistic-features}{%
 \section{Experiment 3: Large-scale data and linguistic
@@ -376,10 +402,17 @@ the World Atlas of Language Structures (WALS; Dryer \& Haspelmath, 2013)
 to describe the morphology, syntax, phonology, etymology and
 semantics--in short the structures in each language. As WALS is a
 compiled database from dozens of papers from different authors, most of
-the features and languages are fairly sparse. We used a iterative
+the features and languages are fairly sparse. We use a iterative
 imputation algorithm for categorical data Multiple Imputation Multiple
 Correspondence Analysis (MIMCA; Audigier, Husson, \& Josse, 2017) to
 fill in the missing features.
+
+We see no correlation between WALS features and cosine distances between
+information curves.
+
+We see no correlation between average normalized edit distances between
+strings in two languages and cosine distances between information
+curves.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
@@ -504,11 +537,6 @@ Academy of Sciences}, \emph{108}(9), 3526--3529.
 Pickering, M. J., \& Garrod, S. (2013). An integrated theory of language
 production and comprehension. \emph{Behavioral and Brain Sciences},
 \emph{36}(4), 329--347.
-
-\leavevmode\hypertarget{ref-sakoe1978}{}%
-Sakoe, H., \& Chiba, S. (1978). Dynamic programming algorithm
-optimization for spoken word recognition. \emph{IEEE Transactions on
-Acoustics, Speech, and Signal Processing}, \emph{26}(1), 43--49.
 
 \leavevmode\hypertarget{ref-shannon1948}{}%
 Shannon, C. E. (1948). A mathematical theory of communication.

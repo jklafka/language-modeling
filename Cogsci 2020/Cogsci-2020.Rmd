@@ -39,9 +39,9 @@ library(widyr)
 ```
 
 ```{r preprocess-data}
-lengths <- read_csv(here("Data/length_counts.csv"))
-
-b <- read_csv(here("Data/final_barycenters.csv")) 
+lengths <- read_csv(here("Data/Paper/lengths.csv"))
+# 
+# b <- read_csv(here("Data/final_barycenters.csv")) 
 
 b <- read_csv(here("Data/5barycenters.csv"),
               col_names = c("1", "2", "3", "4", "5",
@@ -62,6 +62,9 @@ wals <- read_csv(here("Data/Paper/wals_distances.csv"))
 wals_types <- read_csv(here("Data/Paper/wals_type_distances.csv"))
 swadesh <- read_csv(here("Data/Paper/swadesh_distances.csv"))
 cosines <- read_csv(here("Data/Paper/cosines.csv")) 
+
+#bnc_surprisals <- read_csv(here("Data/Paper/bnc_surprisals.csv"))
+
 ```
 
 ```{r theme}
@@ -82,19 +85,21 @@ How significant are these top-down constraints? One previous paper analyzed the 
 
 # Study 1: Information in Written English
 
-**Describe the Genzel Idea and how to Generalize it to within-sentence**
-**Yu did a thing but it doesn't generalize, we do it with surprisal**
-Using their word entropy metric without context, @yu2016 found a distinctive three-step distribution for information in written English sentences in the corpus. The first word tended to contain little information. While the middle words of sentences each had more information than the first word, they found a flat and non-increasing rate of information transmission across the middle of sentences. The final word contained the most, though not most, of the information out of any in the sentence, with a noticeable spike in information. They found the same distribution across sentence lengths, from sentences with $15$ words to sentences with $45$ words. 
+The Uniform Information Density Hypothesis predicts that people should structure their utterances so that the amount of information in each unit of language remains constant. An influentual early test of this idea was performed by @genzel2002 who analyzed the amount of information in successive paragraphs of the same text. They found that the amount of information increased across paragraphs when each was considered in isolation. They reasoned that since all prior paragraphs provide the context for reading each new paragraph, the amount of total information (context + paragraph) was constant for human readers.
+
+@yu2016 applied this same logic to analysis of the information in individual sentences, computing the entropy of each successive word in an utterance. Surprisingly, they found found a distinctive three-step distribution for information in a corpus of written English. The first word of each sentence tended to contain little information; words in the middle of sentences each contained roughly the same amount of information, nut the final word of each sentence contained much more information than any other word. They found the same distribution across sentence lengths, from sentences with $15$ words to sentences with $45$ words. They took this as evidence against the Uniform Information Density Hypothesis as, unlike Genzel and Charniak's [-@genzel2002] results, information plateud in the middle of sentences rather than increasing as it did at the beginnings and ends.
+
+We replicate their analysis here, bringing it more in line with Genzel and Charniak's [-@genzel2002] methods. While Yu et al. [-@yu2016] considered only the information in each word, we build two different models. The first, replicating their analysis, considers the surprisal of each word read in isolation. The second, following @genzel2002, is a trigram model which considers the surprisal of each word having read the prior two words. We take this trigram model as a better proxy for human reader's processing of these sentences. We also develop a method for averaging the curves for sentences of different lenghts together to provide a single typical information curve signature.
 
 ## Corpus
 
-Following @yu2016, we selected the British National Corpus (BNC) for analysis [@british-national-corpus-consortium2007]. The BNC is a collection of spoken (10%) and written (90%) from the turn of the century, intended to be a representative sample of British English. 
+Following @yu2016, we selected the British National Corpus (BNC) for analysis [@british-national-corpus-consortium2007]. The British National Corpus is ~100 million word corpus consisting of spoken (10%) and written (90%) English from the late 20th Century.
 
 ## Pre-processing
 
 ```{r bnc-setup}
 MIN <- 5
-MAX <- 30
+MAX <- 45
 
 bnc_total <- lengths %>%
     filter(language == "bnc") %>%
@@ -110,13 +115,13 @@ bnc_kept <- lengths %>%
     
 ```
 
-We began the XML version of the corpus, and used the \texttt{justTheWords.xsl} script provided along with the corpus to produce a text file with one sentence of the corpus on each line. Compound words (like "can't") were combined, and all words were converted to lowercase before analysis. This produced a corpus of just over six million utterance of varying lenghts. From these, we excluded utterances that were too short to allow for reasonable estimation of information shape (fewer than `r MIN` words), and utterances that were unusually long (more than `r MAX` words). This exclusion left us with `r bnc_kept`% of the utterances (Fig \@ref{fig:bnc-lengths}.
+We began the XML version of the corpus, and used the \texttt{justTheWords.xsl} script provided along with the corpus to produce a text file with one sentence of the corpus on each line. Compound words (like "can't") were combined, and all words were converted to lowercase before analysis. This produced a corpus of just over six million utterance of varying lenghts. From these, we excluded utterances that were too short to allow for reasonable estimation of information shape (fewer than `r MIN` words), and utterances that were unusually long (more than `r MAX` words). This exclusion left us with `r bnc_kept`% of the utterances (Fig \ref{fig:bnc-lengths}.
 
 ```{r bnc-lengths, echo = F, fig.height = 3, fig.width = 3, fig.cap="Sentence length distribution in the British National Corpus. Lengths included in analysis are dark."}
 
 # raw length distribution
 lengths %>%
-    filter(language == "bnc") %>%
+    filter(language == "bnc", length <= 100) %>%
     mutate(group = if_else(length < MIN | length > MAX, "out", "in")) %>%
     ggplot(aes(x = length, y = n, fill = group, color = group)) +
     geom_col() +
@@ -141,14 +146,13 @@ Naïve trigram models will underestimate the surprisal of words in low-frequency
 
 ### Averaging curves
 
-To aggregate across utterance lengths, we used dynamic time warping barycenter averaging [@petitjean2011]. The dynamic time warping (DTW) algorithm [@sakoe1978] compares time sequential data, first used for speech recognition to unite stretched and shifted sound patterns. This algorithm finds a prototypical time series given variable length series.
-Something about length of barycenters.
-**Talk about choosing size based on something about utterance length distribution**
-**Maybe we even want to show this distribution?**
+To develop a characteristic information curve for sentences in the corpus, we needed to aggregate sentences that varied dramatically in length (Fig \ref{bnc-lengths}). We used Dynamic Time Warping Barycenter Averaging (DBA), an algorithm for finding the average of sequences that share and underlying pattern but vary in length [@petitjean2011]. DBA is an extension of standard Dynamic Time Warping, which searches for an invariant template in shifted and stretched instances of that template [e.g. all instances of the vowel 'a' in acoustic recordings of a speaker's productions even if the instances vary in their duration and intensity]. DBA inverts this idea, discovering a latent invariant template from a set of sequences. 
+
+We used DBA to discover the short sequence of surprisal values that characterized the surprisal curves common to sentences of varying sentence lengths. We first averaged individual sentences of the same length together, and then applied the DBA algorithm to this set of average sequences. DBA requires a parameter specifying the length of the template sequence. We chose 5 as the length of the template sequence based on our inspection of the curves from the British National Corpus as well as the curves we found in subsequent studies. However, the results of this and the following studies were robust to other choices of this length parameter (7 and 10).
 
 ## Results 
 
-We replicate the @yu2016 result using the surprisal metric in place of the entropy metric. We use the frequency-based or “contextless” surprisal metric, which determines the average distribution of information based on word frequencies in a corpus. A priori we expect that the frequency-based metric will produce a flat distribution of information across word positions in the BNC. We find the same frequency-based information trajectory as Yu et al. with little information in the first words of utterances and the most information in the final word, see Figure \@ref(fig:bncunigrams). 
+We replicate @Yu et al.'s [-@yu2016] result using the surprisal metric in place of the entropy metric. We use the frequency-based or “contextless” surprisal metric, which determines the average distribution of information based on word frequencies in a corpus. A priori we expect that the frequency-based metric will produce a flat distribution of information across word positions in the BNC. We find the same frequency-based information trajectory as Yu et al. with little information in the first words of utterances and the most information in the final word, see Figure \ref(fig:bncunigrams). 
 
 ```{r bncunigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="BNC and Switchboard frequency-based trigram curves"}
 
@@ -175,9 +179,28 @@ We now include two words of context (trigrams) for each word in our measurements
 
 # Experiment 2: English in Other contexts
 
-**Spoken adult-adult**
-**Spoken adult-child**
-**Spoken child**
+```{r spoken-lengths,  fig.height = 4.5, fig.width = 3, fig.cap="Sentence length distributions in the Spoken Language Corpora"}
+SPOKEN_MIN <- 5
+SPOKEN_MAX <- 15
+
+# raw length distribution
+lengths %>%
+    filter(language != "bnc", length <= 40) %>%
+    mutate(corpus = case_when(language == "sbc" ~ "Santa Barbara",
+                              source == "adult" ~ "Parents",
+                              T ~ "Children"),
+           corpus = factor(corpus, levels = c("Santa Barbara", "Parents",
+                                              "Children")),
+           group = if_else(length < MIN | length > SPOKEN_MAX, "out", "in")) %>%
+    ggplot(aes(x = length, y = n, fill = group, color = group)) +
+    facet_wrap(~ corpus, scales = "free_y", ncol = 2) +
+    geom_col() +
+    labs(x = "sentence length", y = "frequency") +
+    theme(legend.position = "none", aspect.ratio = 1) + 
+    scale_fill_manual(values = c(ptol_pal()(1), "light gray")) +
+    scale_color_manual(values = c(ptol_pal()(1), "light gray"))
+
+```
 
 We now turn to developmental data, and show that frequency-based information curves characterize child speech from the time a child first begins speaking as well as adult speech, regardless of utterance length. 
 
@@ -188,7 +211,7 @@ We're going to examine child and child-directed speech from CHILDES [@macwhinney
 
 We observe a distinct and characteristic frequency-based information trajectory for each language, robust across each utterance length. We see the same distribution of information for both parents and children. The parent often has more information on average at each word position in their utterances. This is an effect of the surprisal metric: parents speak more utterances than their children in most of the corpora, which inflates the number of tokens they use and increases the surprisal of hearing a rare word. We include the frequency-based information curve from the North American English CHILDES collection for comparison. See Figure\ \@ref(fig:childesunigrams)
 
-```{r childesunigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES frequency-based trigram curves"}
+```{r childesunigrams, fig.height=2, fig.width=3.5, fig.cap="CHILDES frequency-based trigram curves", eval = F}
 # 
 # tidy_b %>% 
 #     filter(gram %in% c("unigram", "trigram"), source %in% c("adult", "child"),
@@ -221,7 +244,7 @@ tidy_b %>%
 
 For the trigram information curves, we see the same contextual smoothing effect as in English. While the frequency-based information curves may depend based on the language, the contextual information curves show the same trajectory cross-linguistically. Using more than two words of context is difficult for parent-child speech corpora because the utterances are so short on average (less than $10$ words). Based on our results from the CHILDES collections, we hypothesize that the frequency-based information curves may vary based on the genealogy and typology of the languages in question. However, this does not extend to the information curves with two words of context in particular, where all languages we have seen so far are characterized by the same information distribution. See Figure \@ref(fig:childestrigrams).  
 
-```{r childestrigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves"}
+```{r childestrigrams, eval = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves"}
 tidy_b %>% 
     filter(gram == "trigram", source %in% c("adult", "child"),
            language %in% c("Eng-NA", "sbc")) %>% 
