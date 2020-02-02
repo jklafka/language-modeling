@@ -1,12 +1,5 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 png
-grid
 xtable
 here
 feather
