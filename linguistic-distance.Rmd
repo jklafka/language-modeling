@@ -74,7 +74,7 @@ imputed_features %>%
 ```
 
 ```{r cosines}
-b <- read_csv(here("Data/final_barycenters.csv")) 
+#b <- read_csv(here("Data/final_barycenters.csv")) 
 
 b <- read_csv(here("Data/5barycenters.csv"), 
               col_names = c("1", "2", "3", "4", "5", 

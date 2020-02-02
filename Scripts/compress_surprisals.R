@@ -3,7 +3,7 @@ require(glue)
 require(here)
 
 MIN_LENGTH <- 5
-MAX_LENGTH <- 45
+MAX_LENGTH <- 15
 
 ## center but don't scale
 # scale(center = TRUE, scale = FALSE)
@@ -14,7 +14,7 @@ gram <- commandArgs(trailingOnly=TRUE)[3]
 surprisals <- read_csv(here(glue("Surprisals/{corpus_name}/{gram}/{language_name}.csv")))
 
 surprisals %>%
-  filter(length >= 5, length <= 45, complete.cases(.)) %>%
+  filter(length >= MIN_LENGTH, length <= MAX_LENGTH, complete.cases(.)) %>%
   mutate(switch = position < lag(position)) %>%
   mutate(switch = if_else(is.na(switch), FALSE, switch)) %>%
   mutate(switch = cumsum(switch)) %>%

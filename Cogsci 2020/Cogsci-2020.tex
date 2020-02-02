@@ -301,39 +301,48 @@ of this length parameter (7 and 10).
 \hypertarget{results}{%
 \subsection{Results}\label{results}}
 
-We replicate ({\textbf{???}}) et al.'s (2016) result using the surprisal
-metric in place of the entropy metric. We use the frequency-based or
+\begin{CodeChunk}
+\begin{figure}[tb]
+\includegraphics{figs/bnc_raw-1} \caption[Surprisal by sentence position in the British National Corpus]{Surprisal by sentence position in the British National Corpus. Error bars indicate 95\% confidence intervals (sometimes invisible because of precision)}\label{fig:bnc_raw}
+\end{figure}
+\end{CodeChunk}
+
+\begin{CodeChunk}
+\begin{figure}[tb]
+\includegraphics{figs/bnc_barycenters-1} \caption[Charateristic surprisal curves for the British National Corpus]{Charateristic surprisal curves for the British National Corpus}\label{fig:bnc_barycenters}
+\end{figure}
+\end{CodeChunk}
+
+We replicate Yu et al.'s (2016) result using the surprisal metric in
+place of the entropy metric. We use the frequency-based or
 ``contextless'' surprisal metric, which determines the average
 distribution of information based on word frequencies in a corpus. A
 priori we expect that the frequency-based metric will produce a flat
 distribution of information across word positions in the BNC. We find
 the same frequency-based information trajectory as Yu et al.~with little
 information in the first words of utterances and the most information in
-the final word, see Figure \ref(fig:bncunigrams).
-
-\begin{CodeChunk}
-\begin{figure}[tb]
-\includegraphics{figs/bncunigrams-1} \caption[BNC and Switchboard frequency-based trigram curves]{BNC and Switchboard frequency-based trigram curves}\label{fig:bncunigrams}
-\end{figure}
-\end{CodeChunk}
+the final word, see Figure \ref(fig:bnc\_raw).
 
 We now include two words of context (trigrams) for each word in our
 measurements. We observe a flattening effect of context for both spoken
 and written English. After the first word or two, where the listener
 does not have access to prior context, then they decode information at a
 flat and more or less uniform rate. The contextual information curves
-for the BNC and Switchboard are in Figure @ref(fig:bnctrigrams). We also
-computed bigram curves with one word of context for each prediction:
-these bigram curves resemble the trigram curves.
+for the BNC and Switchboard are in Figure @ref(fig:bnctrigrams).
 
 \hypertarget{experiment-2-english-in-other-contexts}{%
 \section{Experiment 2: English in Other
 contexts}\label{experiment-2-english-in-other-contexts}}
 
 \begin{CodeChunk}
-\begin{figure}[tb]
-\includegraphics{figs/spoken-lengths-1} \caption[Sentence length distributions in the Spoken Language Corpora]{Sentence length distributions in the Spoken Language Corpora}\label{fig:spoken-lengths}
-\end{figure}
+\begin{figure*}[tb]
+
+{\centering \includegraphics{figs/spoken_figs-1} 
+
+}
+
+\caption[(A) Sentence length distributions in the spoken language Corpora]{(A) Sentence length distributions in the spoken language Corpora: Adults in Santa Barbara, and Parents and children in CHILDES. (B) Charateristic surprisal curves for these corpora.}\label{fig:spoken_figs}
+\end{figure*}
 \end{CodeChunk}
 
 We now turn to developmental data, and show that frequency-based
@@ -362,7 +371,7 @@ speak more utterances than their children in most of the corpora, which
 inflates the number of tokens they use and increases the surprisal of
 hearing a rare word. We include the frequency-based information curve
 from the North American English CHILDES collection for comparison. See
-Figure~@ref(fig:childesunigrams)
+Figure @ref(fig:childesunigrams)
 
 For the trigram information curves, we see the same contextual smoothing
 effect as in English. While the frequency-based information curves may
@@ -414,6 +423,12 @@ We see no correlation between average normalized edit distances between
 strings in two languages and cosine distances between information
 curves.
 
+\begin{CodeChunk}
+\begin{figure}[tb]
+\includegraphics{figs/type_cors-1} \caption[Correlations between Information curve shapes and WALS features]{Correlations between Information curve shapes and WALS features.}\label{fig:type_cors}
+\end{figure}
+\end{CodeChunk}
+
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
@@ -421,12 +436,6 @@ In this paper we did model and it showed unique distributions for
 unigrams and same distribution for trigrams. Developmental angle.
 
 Follow-up. Possible questions one might have.
-
-\hypertarget{acknowledgements}{%
-\section{Acknowledgements}\label{acknowledgements}}
-
-Place acknowledgments (including funding information) in a section at
-the end of the paper.
 
 \hypertarget{references}{%
 \section{References}\label{references}}
@@ -459,8 +468,7 @@ Speech}, \emph{47}(1), 31--56.
 \leavevmode\hypertarget{ref-british-national-corpus-consortium2007}{}%
 British National Corpus Consortium. (2007). \emph{British national
 corpus version 3 (BNC XML edition)}. Oxford: Oxford University Computing
-Services. Retrieved from
-\href{URL:\%20http://www.natcorp.ox.ac.uk/}{URL: http://www.natcorp.ox.ac.uk/}
+Services.
 
 \leavevmode\hypertarget{ref-chen1999}{}%
 Chen, S. F., \& Goodman, J. (1999). An empirical study of smoothing
@@ -469,8 +477,7 @@ techniques for language modeling. \emph{Computer Speech \& Language},
 
 \leavevmode\hypertarget{ref-2013}{}%
 Dryer, M. S., \& Haspelmath, M. (Eds.). (2013). \emph{WALS online}.
-Leipzig: Max Planck Institute for Evolutionary Anthropology. Retrieved
-from \url{https://wals.info/}
+Leipzig: Max Planck Institute for Evolutionary Anthropology.
 
 \leavevmode\hypertarget{ref-sbc}{}%
 Du Bois, J. W., Chafe, W. L., Meyer, C., Thompson, S. A., \& Martey, N.

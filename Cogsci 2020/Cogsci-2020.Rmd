@@ -22,7 +22,7 @@ output: cogsci2016::cogsci_paper
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(fig.width=3, fig.height=3, fig.crop = F, 
                       fig.pos = "tb", fig.path='figs/',
-                      echo=F, warning=F, cache=F, 
+                      echo=F, warning=F, cache = T, 
                       message=F, sanitize = T)
 ```
 
@@ -34,6 +34,7 @@ require(here)
 require(feather)
 require(tidyverse)
 require(tidytext)
+library(tidyboot)
 library(ggthemes)
 library(widyr)
 ```
@@ -69,13 +70,26 @@ tidy_b <- b %>%
      mutate(position = as.numeric(position),
             gram = factor(gram, levels = c("unigram", "trigram")))
 
+
+non_wiki_b <- read_csv(here("Data/5barycenters_new.csv"),
+              col_names = c("1", "2", "3", "4", "5",
+                            "language", "source", "gram"))
+
+tidy_non_wiki_b <- non_wiki_b %>%
+     pivot_longer(-c(language, source, gram), 
+                  names_to = "position", values_to = "surprisal") %>%
+     mutate(position = as.numeric(position),
+            gram = factor(gram, levels = c("unigram", "trigram")))
+
+
 # wals <- read_csv(here("Data/final_features.csv"))
 wals <- read_csv(here("Data/Paper/wals_distances.csv"))
 wals_types <- read_csv(here("Data/Paper/wals_type_distances.csv"))
 swadesh <- read_csv(here("Data/Paper/swadesh_distances.csv"))
 cosines <- read_csv(here("Data/Paper/cosines.csv")) 
 
-#bnc_surprisals <- read_csv(here("Data/Paper/bnc_surprisals.csv"))
+bnc_surprisals <- read_csv(here("Data/Paper/bnc_subset.csv")) %>%
+    mutate(gram = factor(gram, levels = c("unigram", "trigram")))
 
 ```
 
@@ -164,54 +178,132 @@ We used DBA to discover the short sequence of surprisal values that characterize
 
 ## Results 
 
-We replicate @Yu et al.'s [-@yu2016] result using the surprisal metric in place of the entropy metric. We use the frequency-based or “contextless” surprisal metric, which determines the average distribution of information based on word frequencies in a corpus. A priori we expect that the frequency-based metric will produce a flat distribution of information across word positions in the BNC. We find the same frequency-based information trajectory as Yu et al. with little information in the first words of utterances and the most information in the final word, see Figure \ref(fig:bncunigrams). 
+```{r bnc_raw_full, eval = F}
+bnc_unigram_surprisals <- read_csv(here("Surprisals/adult/unigram/bnc.csv"))
+bnc_trigram_surprisals <- read_csv(here("Surprisals/adult/trigram/bnc.csv"))
 
-```{r bncunigrams, echo = F, fig.height=2, fig.width=3.5, fig.cap="BNC and Switchboard frequency-based trigram curves"}
+bnc_subset_unigram <- bnc_unigram_surprisals %>%
+    filter(length %in% c(15, 30, 45)) %>%
+    mutate(new_sent = !(position > lag(position)), 
+           new_sent = if_else(is.na(new_sent), 0, as.numeric(new_sent)),
+           sentence = cumsum(new_sent)) %>%
+    group_by(length, position) %>%
+    summarise(mean = mean(surprisal), sem = sd(surprisal)/sqrt(n()-1)) %>%
+    mutate(gram = "unigram")
 
-annotations <- tibble(position = c(4, 4), surprisal = c(4, 2),
-                      language = c("bnc", "sbc"), gram = "unigram") %>%
-    mutate(gram = factor(gram, levels = c("unigram", "trigram")))
+bnc_subset_trigram <- bnc_trigram_surprisals %>%
+    filter(length %in% c(15, 30, 45)) %>%
+    mutate(new_sent = !(position > lag(position)), 
+           new_sent = if_else(is.na(new_sent), 0, as.numeric(new_sent)),
+           sentence = cumsum(new_sent)) %>%
+    group_by(length, position) %>%
+    summarise(mean = mean(surprisal), sem = sd(surprisal)/sqrt(n()-1)) %>%
+    mutate(gram = "trigram")
+
+write_csv(bind_rows(bnc_subset_unigram, bnc_subset_trigram),
+          here("Data/Paper/bnc_subset.csv"))
+
+```
+
+```{r bnc_raw, fig.cap="Surprisal by sentence position in the British National Corpus. Error bars indicate 95\\% confidence intervals (sometimes invisible because of precision)"}
+bnc_annotations <- tibble(position = c(12, 27, 42),
+                          length = c(15, 30, 45),
+                          gram = c("unigram", "unigram", "unigram"),
+                          mean= c(4, 4, 4))
+
+ggplot(bnc_surprisals, aes(x = position, y = mean, color = as.factor(length),
+                           linetype = gram, label = length)) + 
+    geom_errorbar(aes(ymin = mean - 1.96 * sem, ymax = mean + 1.96 * sem), width = 0) + 
+    geom_line(position = position_dodge(.5)) + 
+    scale_color_ptol() + 
+    theme(legend.position = "none") + 
+    scale_linetype_manual(values = c("solid", "longdash")) + 
+    geom_text(data = bnc_annotations) + 
+    annotate("text", x = 6.5, y = 3.5, label = "Unigram") + 
+    annotate("text", x = 6.5, y = 2.5, label = "Trigram") + 
+    labs(x = "Sentence position", y = "Surprisal") + 
+    theme(aspect.ratio = 1)
+```
 
 
-tidy_b %>% 
-    filter(gram %in% c("unigram", "trigram"), language %in% c("bnc", "sbc")) %>% 
-    ggplot(aes(x = position, y = surprisal, color = language)) + 
-    facet_wrap(~ gram) +
+```{r bnc_barycenters, fig.cap="Charateristic surprisal curves for the British National Corpus"}
+bnc_b_annotations <- tibble(position = c(2.5, 2.5),
+                          gram = c("unigram","trigram"),
+                          surprisal = c(3.5, 2))
+
+tidy_non_wiki_b %>% 
+    filter(gram %in% c("unigram", "trigram"), language %in% c("bnc")) %>% 
+    ggplot(aes(x = position, y = surprisal, color = gram)) + 
     geom_point(size = .75) + 
     geom_line() + 
-    geom_text(aes(label = language), data = annotations) +
-    scale_x_continuous(breaks = seq(1, 10, 3)) + 
+    geom_text(aes(label = gram), data = bnc_b_annotations) +
+    scale_x_continuous(breaks = 1:5) + 
     xlab("Coordinate") + 
     ylab("Surprisal") + 
     scale_color_ptol() + 
     theme(aspect.ratio = 1, legend.position = "none") 
 ```
 
-We now include two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context for both spoken and written English. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC and Switchboard are in Figure \@ref(fig:bnctrigrams). We also computed bigram curves with one word of context for each prediction: these bigram curves resemble the trigram curves. 
+
+We replicate Yu et al.'s [-@yu2016] result using the surprisal metric in place of the entropy metric. We use the frequency-based or “contextless” surprisal metric, which determines the average distribution of information based on word frequencies in a corpus. A priori we expect that the frequency-based metric will produce a flat distribution of information across word positions in the BNC. We find the same frequency-based information trajectory as Yu et al. with little information in the first words of utterances and the most information in the final word, see Figure \ref(fig:bnc_raw). 
+
+We now include two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context for both spoken and written English. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC and Switchboard are in Figure \@ref(fig:bnctrigrams).
 
 # Experiment 2: English in Other contexts
 
-```{r spoken-lengths,  fig.height = 4.5, fig.width = 3, fig.cap="Sentence length distributions in the Spoken Language Corpora"}
+```{r spoken_figs, fig.env = "figure*", fig.pos = "tb", fig.height = 4.5, fig.width = 7, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "(A) Sentence length distributions in the spoken language Corpora: Adults in Santa Barbara, and Parents and children in CHILDES. (B) Charateristic surprisal curves for these corpora."}
 SPOKEN_MIN <- 5
 SPOKEN_MAX <- 15
 
 # raw length distribution
-lengths %>%
+spoken_plot1 <- lengths %>%
     filter(language != "bnc", length <= 40) %>%
-    mutate(corpus = case_when(language == "sbc" ~ "Santa Barbara",
-                              source == "adult" ~ "Parents",
-                              T ~ "Children"),
-           corpus = factor(corpus, levels = c("Santa Barbara", "Parents",
-                                              "Children")),
-           group = if_else(length < MIN | length > SPOKEN_MAX, "out", "in")) %>%
+    mutate(corpus = case_when(language == "sbc" ~ "adults",
+                              source == "adult" ~ "parents",
+                              T ~ "children"),
+           corpus = factor(corpus, levels = c("adults", "parents",
+                                              "children")),
+           group = if_else(length < SPOKEN_MIN | length > SPOKEN_MAX, "out", "in")) %>%
     ggplot(aes(x = length, y = n, fill = group, color = group)) +
-    facet_wrap(~ corpus, scales = "free_y", ncol = 2) +
+    facet_wrap(~ corpus, scales = "free_y") +
     geom_col() +
     labs(x = "sentence length", y = "frequency") +
     theme(legend.position = "none", aspect.ratio = 1) + 
     scale_fill_manual(values = c(ptol_pal()(1), "light gray")) +
-    scale_color_manual(values = c(ptol_pal()(1), "light gray"))
+    scale_color_manual(values = c(ptol_pal()(1), "light gray")) + 
+    labs(tag = "A")
 
+
+
+spoken_annotations <- tibble(position = c(2.5, 2.5),
+                          gram = c("unigram","trigram"),
+                          surprisal = c(3.25, 1.75),
+                          plot_person = c("adults", "adults")) %>%
+    mutate(plot_person = factor(plot_person, levels = c("adults", "parents",
+                                              "children")))
+
+spoken_plot2 <- tidy_non_wiki_b %>% 
+    filter(gram %in% c("unigram", "trigram"), 
+           language %in% c("sbc", "childes")) %>% 
+    mutate(plot_person = case_when(language == "sbc" ~ "adults",
+                                   source == "adult" ~ "parents",
+                                   T ~ "children"),
+           plot_person = factor(plot_person, levels = c("adults", "parents",
+                                              "children"))) %>%
+    ggplot(aes(x = position, y = surprisal, color = gram)) + 
+    facet_wrap(~ plot_person) + 
+    geom_point(size = .75) + 
+    geom_line() + 
+    geom_text(aes(label = gram), data = spoken_annotations) +
+    scale_x_continuous(breaks = 1:5) + 
+    xlab("barycenter coordinate") + 
+    ylab("surprisal") + 
+    scale_color_ptol() + 
+    theme(legend.position = "none", aspect.ratio = 1) +
+    labs(tag = "B")
+
+gridExtra::grid.arrange(spoken_plot1, spoken_plot2, ncol = 1)
+#cowplot::plot_grid(spoken_plot1, spoken_plot2, axis = 'b', nrow = 1)
 ```
 
 We now turn to developmental data, and show that frequency-based information curves characterize child speech from the time a child first begins speaking as well as adult speech, regardless of utterance length. 
@@ -221,54 +313,11 @@ We compare this result to the one for the Santa Barbara corpus of spoken America
 
 We're going to examine child and child-directed speech from CHILDES [@macwhinney2000] to capture the developmental picture. We use corpora for Spanish, German, French, Mandarin Chinese and Japanese as well as English. Mandarin and Japanese are not natively written using the Latin alphabet, and moreover words are not segmented in their native scripts. Instead of the native scripts, we use transliterations from the corpus for each of the Mandarin and Japanese utterances into pinyin for Mandarin and romanji for Japanese. In these transliterations, words are previously segmented. 
 
-We observe a distinct and characteristic frequency-based information trajectory for each language, robust across each utterance length. We see the same distribution of information for both parents and children. The parent often has more information on average at each word position in their utterances. This is an effect of the surprisal metric: parents speak more utterances than their children in most of the corpora, which inflates the number of tokens they use and increases the surprisal of hearing a rare word. We include the frequency-based information curve from the North American English CHILDES collection for comparison. See Figure\ \@ref(fig:childesunigrams)
-
-```{r childesunigrams, fig.height=2, fig.width=3.5, fig.cap="CHILDES frequency-based trigram curves", eval = F}
-# 
-# tidy_b %>% 
-#     filter(gram %in% c("unigram", "trigram"), source %in% c("adult", "child"),
-#            language %in% c("Eng-NA")) %>% 
-#     ggplot(aes(x = position, y = surprisal, color = source)) + 
-#     facet_wrap(~ gram) +
-#     geom_point(size = .75) + 
-#     geom_line() + 
-#     #geom_text(aes(label = language), data = annotations) +
-#     scale_x_continuous(breaks = seq(1, 10, 3)) + 
-#     xlab("Coordinate") + 
-#     ylab("Surprisal") + 
-#     scale_color_ptol() + 
-#     theme(aspect.ratio = 1, legend.position = "none") 
-
-tidy_b %>% 
-    filter(gram == "unigram", source %in% c("adult", "child"),
-           language %in% c("Eng-NA", "Chinese", "French", "Spanish", "German", "Japanese")) %>% 
-    ggplot(aes(x = position, y = surprisal, color = source)) + 
-        geom_point(size = .75) + 
-        geom_line() + 
-        scale_x_continuous(breaks = seq(1, 10, 3)) + 
-        xlab("Coordinate") + 
-        ylab("Mean information") + 
-        #scale_color_manual(values = c("black", "orange")) + 
-        facet_wrap(~language, nrow = 3) 
-```
+We observe a distinct and characteristic frequency-based information trajectory for each language, robust across each utterance length. We see the same distribution of information for both parents and children. The parent often has more information on average at each word position in their utterances. This is an effect of the surprisal metric: parents speak more utterances than their children in most of the corpora, which inflates the number of tokens they use and increases the surprisal of hearing a rare word. We include the frequency-based information curve from the North American English CHILDES collection for comparison. See Figure \@ref(fig:childesunigrams)
 
 <!-- English, Spanish, French and German feature similar information curve shapes, with slight variations. The German information curve features lower information for longer towards the beginnings of utterances, possibly due to the grammatical restriction that the second word in German utterances must be a verb (V2). Spanish features a larger spike in the amount of information in the final word of utterances. For Japanese and Mandarin, we observe completely different frequency-based information curve trajectories. The Japanese frequency-based information curve trajectory begins high and finishes low, the mirror image of the German and Romance language information curves. The Mandarin curve begins low and finishes low, but features high information in the middle of utterances. We hypothesize this may be due to Japanese and Mandarin speakers typically ending their utterances with particles, which are common and thus contain little information on their own.   -->
 
 For the trigram information curves, we see the same contextual smoothing effect as in English. While the frequency-based information curves may depend based on the language, the contextual information curves show the same trajectory cross-linguistically. Using more than two words of context is difficult for parent-child speech corpora because the utterances are so short on average (less than $10$ words). Based on our results from the CHILDES collections, we hypothesize that the frequency-based information curves may vary based on the genealogy and typology of the languages in question. However, this does not extend to the information curves with two words of context in particular, where all languages we have seen so far are characterized by the same information distribution. See Figure \@ref(fig:childestrigrams).  
-
-```{r childestrigrams, eval = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves"}
-tidy_b %>% 
-    filter(gram == "trigram", source %in% c("adult", "child"),
-           language %in% c("Eng-NA", "sbc")) %>% 
-    ggplot(aes(x = position, y = surprisal, color = language)) + ## group by source and language simultaneously
-        geom_point(size = .75) + 
-        geom_line() + 
-        scale_x_continuous(breaks = seq(1, 10, 3)) + 
-        xlab("Coordinate") + 
-        ylab("Mean information") + 
-        #scale_color_manual(values = c("black", "orange")) + 
-        facet_wrap(~language, nrow = 3) 
-```
 
 For our next experiment, we will use typological, top-down features of each language to predict the shape of its information curve. 
 
@@ -320,13 +369,65 @@ tidy_b %>%
     facet_wrap(~ gram) +
     geom_point() + 
     geom_line()
+```
 
+```{r cor_data}
 cor_data <- left_join(cosines, wals, by = c("language1", "language2")) %>%
     left_join(swadesh, by = c("language1", "language2")) %>%
+    filter(language1 < language2) %>%
     group_by(gram) %>%
-    summarise(wals_cor = cor(wals_dist, cosine ,
-                             use = "pairwise"),
-              swadesh_cor = cor(cosine, ldn, use = "pairwise"))
+    nest() %>%
+    mutate(wals_cor = map(data, ~cor.test(.x$cosine, .x$wals_dist,
+                                          use = "pairwise") %>% tidy()),
+           swadesh_cor = map(data, ~cor.test(.x$cosine, .x$ldn,
+                                             use = "pairwise") %>% tidy()),
+           dist_cor = map(data, ~cor.test(.x$wals_dist, .x$ldn, 
+                                          use = "pairwise") %>% tidy())) %>%
+    select(-data) %>%
+    pivot_longer(-gram, names_to = "measure", values_to = "correlation") %>%
+    unnest(cols = c(correlation))
+
+
+type_cor_data <- left_join(cosines, wals_types, 
+                           by = c("language1", "language2")) %>%
+    filter(language1 < language2) %>%
+    group_by(gram, type) %>%
+    nest() %>%
+    mutate(wals_cor = map(data, ~cor.test(.x$cosine, .x$wals_dist,
+                                          use = "pairwise") %>% tidy())) %>%
+    select(-data) %>%
+    unnest(cols = c(wals_cor)) %>%
+    ungroup() %>%
+    mutate(type = factor(type, levels = c("nom_syntax", "clauses", 
+                                          "verb_categories", "phonology", 
+                                          "word_order", "nom_categories"),
+                         labels = c("nominative syntax", "clauses", 
+                                    "verb categories", "phonology", 
+                                    "word order", "nominative categories")),
+           gram = factor(gram, levels = c("unigram", "trigram")))
+
+```
+
+
+```{r type_cors, fig.height = 5, fig.cap="Correlations between Information curve shapes and WALS features."}
+type_annotations <- tibble(type = c("phonology", "phonology"),
+                          estimate = c(-.02, .1),
+                          gram = c("unigram", "trigram")) %>%
+    mutate(type = factor(type, levels = c("nominative syntax", "clauses", 
+                                          "verb categories", "phonology", 
+                                          "word order", "nominative categories")),
+           gram = factor(gram, levels = c("unigram", "trigram")))
+
+ggplot(type_cor_data, aes(x = type, y = estimate, color = gram)) + 
+    geom_pointrange(aes(ymin = conf.low, ymax = conf.high),
+                    position = position_dodge(.5)) +
+    geom_hline(aes(yintercept = 0), linetype = "dashed") + 
+    scale_color_ptol() +
+    theme_few() +
+    theme(legend.position = "none", aspect.ratio = 1,
+          axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) + 
+    labs(x = "", y = "correlation between information and WALS") + 
+    geom_text(aes(label = gram), data = type_annotations)
 ```
 
 # Conclusion
@@ -334,11 +435,6 @@ cor_data <- left_join(cosines, wals, by = c("language1", "language2")) %>%
 In this paper we did model and it showed unique distributions for unigrams and same distribution for trigrams. Developmental angle. 
 
 Follow-up. Possible questions one might have. 
-
-# Acknowledgements
-
-Place acknowledgments (including funding information) in a section at
-the end of the paper.
 
 # References 
 
