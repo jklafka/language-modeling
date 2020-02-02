@@ -238,11 +238,14 @@ boot_slopes %>%
 Are information curve shapes consistent within language families? 
 language.csv is from "https://wals.info/download", in wals_language.csv.zip. It's the only file in the zip. 
 ```{r language family}
-slopes <- read_csv(here("Data/Paper/relative_ngrams.csv"))
-families <- read_csv(here("Data/Wikipedia/wals_dataset/language.csv"))
+features <- read_csv(here("Data/final_features.csv"))
+slopes <- read_csv(here("Data/final_barycenters.csv"))
+iso_codes <- read_csv(here("Data/wiki/codes.csv"))
+families <- read_csv(here("Data/wiki/wals_dataset/language.csv"))
 
 ## match up language curves with their language families
 family_slopes <- features %>% 
+  left_join(iso_codes) %>%
   select(language, iso) %>% 
   inner_join(slopes) %>% 
   inner_join(families %>% select(iso_code, family), by = c("iso" = "iso_code")) %>% 
@@ -250,23 +253,17 @@ family_slopes <- features %>%
 
 ## construct sample curves and bootstrap
 family_bootstraps <- family_slopes %>% 
-  select(-iso) %>% 
-  mutate(slope0 = 5) %>% 
-  mutate(slope1 = slope1 + slope0) %>% 
-  mutate(slope2 = slope2 + slope1) %>% 
-  mutate(slope3 = slope3 + slope2) %>% 
-  mutate(slope4 = slope4 + slope3) %>% 
-  mutate(slope5 = slope5 + slope4) %>% 
-  pivot_longer(cols = c(slope1:slope5, slope0), names_to = "slope", values_to = "value") %>%
+  select(-iso, -source) %>% 
+  pivot_longer(cols = `1`:`10`, names_to = "slope", values_to = "surprisal") %>%
   group_by(family, gram, slope) %>%
-  tidyboot_mean(column = value) %>%
+  tidyboot_mean(column = surprisal) %>%
   ungroup()
 
 ## plotting the sample curves
 family_bootstraps %>% 
   mutate(slope = str_extract(slope, "\\d"), # turn slope into integer
          slope = as.integer(slope) + 1) %>%
-  filter(gram == "Trigram") %>% 
+  filter(gram == "trigram") %>% 
   ggplot(aes(x = slope, y = empirical_stat, group = gram, color = gram)) + 
     geom_point() + 
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.25) +

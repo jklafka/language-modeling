@@ -42,6 +42,18 @@ library(widyr)
 lengths <- read_csv(here("Data/Paper/lengths.csv"))
 # 
 # b <- read_csv(here("Data/final_barycenters.csv")) 
+# bnc <- read_csv(here("Surprisals/adult/unigram/bnc_compressed.csv"),
+#                 col_names = F) %>%
+#   mutate(id = 1:n()) %>%
+#   pivot_longer(-id, names_to = "position", values_to = "surprisal") %>%
+#   filter(complete.cases(.)) %>%
+#   mutate(position = str_extract(position, "\\d+"),
+#          position = as.numeric(position)) %>%
+#   group_by(id) %>%
+#   mutate(length = max(position)) %>%
+#   ungroup() %>%
+#   select(-id)
+bnc <- read_csv(here("Data/bnc_lengths.csv"))
 
 b <- read_csv(here("Data/5barycenters.csv"),
               col_names = c("1", "2", "3", "4", "5",
