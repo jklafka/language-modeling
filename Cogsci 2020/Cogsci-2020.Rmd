@@ -247,7 +247,9 @@ tidy_non_wiki_b %>%
 
 We replicate Yu et al.'s [-@yu2016] result using the surprisal metric in place of the entropy metric. We use the frequency-based or “contextless” surprisal metric, which determines the average distribution of information based on word frequencies in a corpus. A priori we expect that the frequency-based metric will produce a flat distribution of information across word positions in the BNC. We find the same frequency-based information trajectory as Yu et al. with little information in the first words of utterances and the most information in the final word, see Figure \ref(fig:bnc_raw). 
 
-We now include two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context for both spoken and written English. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curves for the BNC and Switchboard are in Figure \@ref(fig:bnctrigrams).
+We now include two words of context (trigrams) for each word in our measurements. We observe a flattening effect of context for both spoken and written English. After the first word or two, where the listener does not have access to prior context, then they decode information at a flat and more or less uniform rate. The contextual information curve for the BNC is in Figure \@ref(fig:bnctrigrams).
+
+We now show that spoken English from adults, parents and children all follows the same characteristic frequency-based and context-based information distributions as written English. English as a whole is characterized by the three-step frequency-based distribution, and context enables the listener or reader to process English at a nearly constant rate. 
 
 # Experiment 2: English in Other contexts
 
@@ -306,26 +308,27 @@ gridExtra::grid.arrange(spoken_plot1, spoken_plot2, ncol = 1)
 #cowplot::plot_grid(spoken_plot1, spoken_plot2, axis = 'b', nrow = 1)
 ```
 
-We now turn to developmental data, and show that frequency-based information curves characterize child speech from the time a child first begins speaking as well as adult speech, regardless of utterance length. 
+Spoken language and written language diverse in a number of respects. Speech in general is produced and therefore can only be processed at a slower rate than the written word. Speech occurs in a multimodal environment, along with other features such as prosody and visual information such as gesture and information from the environment. The words in speech are often different from the set of words writers draw from in a particular language: writers do not have to obey the same cost of production or the now-or-never bottleneck in comprehension [CITE CHRISTIANSEN and CHATER]. See Figure [WHICH FIGURE] for the distribution of word lengths in the Santa Barbara corpus of spoken conversations between adult strangers [@sbc]. Compared to Figure 
 
-We compare this result to the one for the Santa Barbara corpus of spoken American English [@sbc]. 
+Child language input before children learn to read [AT WHAT AGE] is entirely spoken, and children's main interlocutors are their parents. In particular, the language input children receive may differ in terms of the vocabulary, rate of speech, length of words and syntax from adult speech [CDS CITATION]. In North American English, speech to children is often simplified [CDS CITATION]. In return, child speech is simplified: children typically do not speak their first multiword utterances until their second birthday [IS THIS RIGHT?]. Much complex children's language input actually comes from children's books [CITE Jessica Montag]. See Figure [WHICH FIGURE] for a typical distribution of word lengths in child-directed and child speech. The vast majority of utterances are only a few words long.  
 
+In this context, we will show that despite the differences in utterance length, vocabulary and grammatical complexity between spoken and written English, we observe the same information trajectory in both modalities. For spoken English, we use the Santa Barbara corpus of spoken English telephone conversations [@sbc]. We use the North American English collection of corpora from CHILDES [@macwhinney2000], which includes `1.07` million child utterances mainly before the age of five, and `1.7` million parent child-directed utterances. We apply a similar cleaning procedure to the one we used for the BNC. We lowercase and remove punctuation from all utterances in the corpora. To obtain the CHILDES utterances, we use childesr [childesr citation], a frontend in the R programming language [CITE R core team]. 
 
-We're going to examine child and child-directed speech from CHILDES [@macwhinney2000] to capture the developmental picture. We use corpora for Spanish, German, French, Mandarin Chinese and Japanese as well as English. Mandarin and Japanese are not natively written using the Latin alphabet, and moreover words are not segmented in their native scripts. Instead of the native scripts, we use transliterations from the corpus for each of the Mandarin and Japanese utterances into pinyin for Mandarin and romanji for Japanese. In these transliterations, words are previously segmented. 
+<!-- We use spoken  [@macwhinney2000] to capture the developmental picture. We use corpora for Spanish, German, French, Mandarin Chinese and Japanese as well as English. Mandarin and Japanese are not natively written using the Latin alphabet, and moreover words are not segmented in their native scripts. Instead of the native scripts, we use transliterations from the corpus for each of the Mandarin and Japanese utterances into pinyin for Mandarin and romanji for Japanese. In these transliterations, words are previously segmented. 
 
-We observe a distinct and characteristic frequency-based information trajectory for each language, robust across each utterance length. We see the same distribution of information for both parents and children. The parent often has more information on average at each word position in their utterances. This is an effect of the surprisal metric: parents speak more utterances than their children in most of the corpora, which inflates the number of tokens they use and increases the surprisal of hearing a rare word. We include the frequency-based information curve from the North American English CHILDES collection for comparison. See Figure \@ref(fig:childesunigrams)
+We observe a distinct and characteristic frequency-based information trajectory for each language, robust across each utterance length. We see the same distribution of information for both parents and children. The parent often has more information on average at each word position in their utterances. This is an effect of the surprisal metric: parents speak more utterances than their children in most of the corpora, which inflates the number of tokens they use and increases the surprisal of hearing a rare word. We include the frequency-based information curve from the North American English CHILDES collection for comparison. See Figure \@ref(fig:childesunigrams)-->
 
 <!-- English, Spanish, French and German feature similar information curve shapes, with slight variations. The German information curve features lower information for longer towards the beginnings of utterances, possibly due to the grammatical restriction that the second word in German utterances must be a verb (V2). Spanish features a larger spike in the amount of information in the final word of utterances. For Japanese and Mandarin, we observe completely different frequency-based information curve trajectories. The Japanese frequency-based information curve trajectory begins high and finishes low, the mirror image of the German and Romance language information curves. The Mandarin curve begins low and finishes low, but features high information in the middle of utterances. We hypothesize this may be due to Japanese and Mandarin speakers typically ending their utterances with particles, which are common and thus contain little information on their own.   -->
 
-For the trigram information curves, we see the same contextual smoothing effect as in English. While the frequency-based information curves may depend based on the language, the contextual information curves show the same trajectory cross-linguistically. Using more than two words of context is difficult for parent-child speech corpora because the utterances are so short on average (less than $10$ words). Based on our results from the CHILDES collections, we hypothesize that the frequency-based information curves may vary based on the genealogy and typology of the languages in question. However, this does not extend to the information curves with two words of context in particular, where all languages we have seen so far are characterized by the same information distribution. See Figure \@ref(fig:childestrigrams).  
+We observe the exact same frequency-based distribution for our information curves in adult conversation, parent speech to children and children's speech as in spoken English. This indicates that the three-step frequency-based distribution in English holds for all modalities and ages in the language. Children, from their first multiword utterances, tend to produce words according to the information distribution we have found, and continue following that distribution when they grow up and speak to other adults. Final words in English are important in child-directed speech [CITE ASLIN PAPER]. 
 
-For our next experiment, we will use typological, top-down features of each language to predict the shape of its information curve. 
+We observe that the contextual distribution is likewise similar to the distribution we found for the BNC: high and then immediately flattening out once the listener has a word or two of context to predict the word their interlocutor will produce next. 
+
+This only captures the picture for English. In our next experiment, we find unique frequency-based distributions for each language, which are determined in part by top-down features in the language such as word order. We will show a similar contextual smoothing effect, where readers and listeners in each language are able to decode information at a constant rate with only a couple of words of context. 
 
 # Experiment 3: Large-scale data and linguistic features 
 
-We pulled corpora for $159$ diverse languages from Wikipedia, each of which had at least $10,000$ articles. To compare languages more rigorously, we used two databases of language similarity features. To target lexical differences between languages, we used the $40$-item Swadesh list [@swadesh1955], retrieved from the ASJP database [@wichmann2016]. The Swadesh list is a well-known method for comparing lexical similarity between languages, by quantifying the similarity between the words on the list for pairs of languages, and is often used to compare genetic relationships between languages. We computed the average normalized Levenshtein distance, a string edit distance measure [LDN; @holman2008] between each pair of our Wikipedia languages. 
-
-As our surprisal metric is a lexical measure, we expect the Levenshtein distance to be high. To describe more structural relationships, we used the World Atlas of Language Structures [WALS; @2013] to describe the morphology, syntax, phonology, etymology and semantics--in short the structures in each language. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. We use a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis [MIMCA; @audigier2017] to fill in the missing features. 
+We pulled corpora for $159$ diverse languages from Wikipedia, an online general knowledge repository with separate repositories for each of hundreds of languages. We filtered our selection of language corpora on Wikipedia to those which had at least $10,000$ articles. We used the Wikiextractor tool from GitHub [WIKIEXTRACTOR CITATION] to retrieve the dumps of entire Wikipedia archives, then lowercased, removed punctuation and split the corpora into sentences. We trained and tested a model on each language's Wikipedia corpus independently, constructing unigram and trigram surprisals for each language separately. We create frequency-based and contextual surprisal curves for each corpus. The distribution of sentence lengths in Wikipedia corpora tend to resemble the distribution of sentence lengths in the BNC (another written corpus). 
 
 ```{r dendro, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
 b %>% 
@@ -338,8 +341,6 @@ b %>%
     plot()
 ```
 
-We see no correlation between WALS features and cosine distances between information curves. 
-
 ```{r wals-plot, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
 cosines %>%
     left_join(wals) %>%
@@ -349,7 +350,6 @@ cosines %>%
         geom_smooth(method = "lm")
 ```
 
-We see no correlation between average normalized edit distances between strings in two languages and cosine distances between information curves. 
 
 ```{r swadesh-plot, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
 cosines %>%
@@ -360,7 +360,11 @@ cosines %>%
         geom_smooth(method = "lm")
 ```
 
-```{r, eval = F}
+See Figure [Diff languages plot] for examples of frequency-based languages from several different language families. We see that the frequency-based curve for German resembles the English curve we found in Experiments 1 and 2 with a three-step distribution, while the Japanese curve looks very different from all the other curves. The Slavic language curves (for Serbian, Russian and Slovak) resemble each other. 
+
+Regardless of the shape of their respective unigram curves, the trigram curves for all the languages look the same as the English curve. 
+
+```{r diff-languages-plot, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES frequency-based and context-based curves", eval = F}
 
 tidy_b %>%
     filter(language %in% c("German", "Serbian", "Japanese", "Catalan", "Russian", "Slovak"),
@@ -370,6 +374,16 @@ tidy_b %>%
     geom_point() + 
     geom_line()
 ```
+
+To compare languages more rigorously, we used two databases of language similarity features. To target lexical differences between languages, we used the $40$-item Swadesh list [@swadesh1955], retrieved from the ASJP database [@wichmann2016]. The Swadesh list is a well-known method for comparing lexical similarity between languages, by quantifying the similarity between the words on the list for pairs of languages, and is often used to compare genetic relationships between languages. We computed the average normalized Levenshtein distance, a string edit distance measure [LDN; @holman2008] between each pair of our Wikipedia languages. 
+
+We split the WALS features by type of feature: the nominative categories features describe aspects of morphology such as case systems and definite/indefinite articles; word order describes SVO as well as head-modifier word order; nominative syntax describes noun behavior such as possessives and adjectives acting as nouns; clauses describes phrasal and broader sentence syntax; and verb categories describe tense, mood and aspect as well as morphology on the verb. 
+
+As our surprisal metric is a lexical measure, we expect the Levenshtein distance to be high. To describe more structural relationships, we used the World Atlas of Language Structures [WALS; @2013] to describe the morphology, syntax, phonology, etymology and semantics--in short the structures in each language. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. We use a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis [MIMCA; @audigier2017] to fill in the missing features. 
+
+We see that only word order shows a significant correlation with the shape of the information curves in the wikipedia corpora. The rest of the features show virtually no correlation with the wikipedia corpora. 
+
+WHAT ABOUT THE SWADESH LIST? 
 
 ```{r cor_data}
 cor_data <- left_join(cosines, wals, by = c("language1", "language2")) %>%
