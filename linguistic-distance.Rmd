@@ -250,7 +250,12 @@ family_slopes <- features %>%
   inner_join(slopes) %>% 
   inner_join(families %>% select(iso_code, family), by = c("iso" = "iso_code")) %>% 
   distinct() ## deduplicate--WALS has some duplicate entries but doesn't affect families
-
+# 
+# family_slopes %>%
+#   select(language, family) %>%
+#   distinct() %>%
+#   write_csv(here("Data/paper/families.csv"))
+# 
 ## construct sample curves and bootstrap
 family_bootstraps <- family_slopes %>% 
   select(-iso, -source) %>% 
