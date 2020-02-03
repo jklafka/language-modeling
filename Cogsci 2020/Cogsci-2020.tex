@@ -52,7 +52,8 @@
 % \textwidth 16cm
 % \textheight 21cm
 
-\title{Speakers communicate using language-specific information distributions}
+\title{Top-down language features predict little variation in information
+structure across languages}
 
 
 \author{Josef Klafka \and Daniel Yurovsky \\
@@ -70,13 +71,13 @@ much information speakers in a given language communicate in each word,
 surveying numerous diverse languages. We find that speakers produce
 frequent and informative words at regular parts of their utterances,
 depending on language they use. The information distribution for each
-language is derived in part from the features and genealogy of the
-language. This robust information distribution characterizes both spoken
-and written communication, and emerges in children's earliest
+language is derived in part from the top-down features of the language,
+but largely derives from bottom-up choices made by speakers during
+communication. Each robust information distribution characterizes both
+spoken and written communication, and emerges in children's earliest
 utterances. However, in real-time communication, in-context word
 predictability allows listeners to process information at a constant,
-optimal rate, regardless of the information distribution in the language
-they understand.
+optimal rate, regardless of information distribution.
 
 \textbf{Keywords:}
 information theory; communication; language modeling; computational
@@ -441,6 +442,12 @@ language curves (for Serbian, Russian and Slovak) resemble each other.
 Regardless of the shape of their respective unigram curves, the trigram
 curves for all the languages look the same as the English curve.
 
+\begin{CodeChunk}
+\begin{figure}[tb]
+\includegraphics{figs/diff-languages-plot-1} \caption[Wikipedia frequency-based and context-based curves for diverse languages]{Wikipedia frequency-based and context-based curves for diverse languages}\label{fig:diff-languages-plot}
+\end{figure}
+\end{CodeChunk}
+
 To compare languages more rigorously, we used two databases of language
 similarity features. To target lexical differences between languages, we
 used the \(40\)-item Swadesh list (Swadesh, 1955), retrieved from the
@@ -472,8 +479,12 @@ Correspondence Analysis (MIMCA; Audigier, Husson, \& Josse, 2017) to
 fill in the missing features.
 
 We see that only word order shows a significant correlation with the
-shape of the information curves in the wikipedia corpora. The rest of
-the features show virtually no correlation with the wikipedia corpora.
+shape of the frequency-based information curves in the wikipedia
+corpora. The rest of the features show virtually no correlation with the
+wikipedia corpora. For the context-based information curves, all
+categories of WALS features show correlations. However, across all
+languages, the context-based information curves are flat after the first
+word or two.
 
 WHAT ABOUT THE SWADESH LIST?
 
@@ -483,13 +494,38 @@ WHAT ABOUT THE SWADESH LIST?
 \end{figure}
 \end{CodeChunk}
 
+By considering data from \(159\) diverse languages, we see that the
+frequency-based information curves display unique information
+distributions for each language. A small part of this cross-linguistic
+variation is explicable due to top-down features of the language in
+question, such as canonical word order. The majority of the variation
+for each language does not derive from top-down features, but we suspect
+instead arises from bottom-up choices made by the speakers in each
+language.
+
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
-In this paper we did model and it showed unique distributions for
-unigrams and same distribution for trigrams. Developmental angle.
+In this paper we have proposed a novel method for quantifying
+information structure in any language. Our method derives the unique
+distribution of information based on word frequency in the language,
+irrespective of whether the language in question is spoken or written.
+This information structure characterizes the earliest utterances in
+child speech all the way to complex sentences in knowledge base entries
+by adult writers. The shape of the information distribution in a
+language is correlated with the canonical word order in a language, but
+is mainly derived from the individual choices speakers make in
+communication in a language.
 
-Follow-up. Possible questions one might have.
+In communication, due to predictive processing, the variation in these
+unique frequency-based distributions are washed out. Instead, a uniform
+distribution of information emerges across languages, which may allow
+listeners to decode information quickly and at a nearly constant rate.
+Once they have enough context, listeners optimally decode information.
+
+We average over the surprisal sequences of each length, which obscures
+most of the variation in information curve shapes. This may also mean
+that there's more bottom-up processing.
 
 \hypertarget{references}{%
 \section{References}\label{references}}

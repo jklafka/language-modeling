@@ -1,5 +1,5 @@
 ---
-title: "Speakers communicate using language-specific information distributions"
+title: "Top-down language features predict little variation in information structure across languages and information structures are robust in each language"
 bibliography: library.bib
 csl: apa6.csl
 document-params: "10pt, letterpaper"
@@ -10,7 +10,7 @@ author-information: >
         Department of Psychology \\ Carnegie Mellon University}
 
 abstract: >
-    What role does communicative efficiency play in how we organize our utterances? In this paper, we present a novel method of examining how much information speakers in a given language communicate in each word, surveying numerous diverse languages. We find that speakers produce frequent and informative words at regular parts of their utterances, depending on language they use. The information distribution for each language is derived in part from the features and genealogy of the language. This robust information distribution characterizes both spoken and written communication, and emerges in children's earliest utterances. However, in real-time communication, in-context word predictability allows listeners to process information at a constant, optimal rate, regardless of the information distribution in the language they understand.
+    What role does communicative efficiency play in how we organize our utterances? In this paper, we present a novel method of examining how much information speakers in a given language communicate in each word, surveying numerous diverse languages. We find that speakers produce frequent and informative words at regular parts of their utterances, depending on language they use. The information distribution for each language is derived in part from the top-down features of the language, but largely derives from bottom-up choices made by speakers during communication. Each robust information distribution characterizes both spoken and written communication, and emerges in children's earliest utterances. However, in real-time communication, in-context word predictability allows listeners to process information at a constant, optimal rate, regardless of information distribution.
     
 keywords: >
     information theory; communication; language modeling; computational modeling
@@ -364,7 +364,7 @@ See Figure [Diff languages plot] for examples of frequency-based languages from 
 
 Regardless of the shape of their respective unigram curves, the trigram curves for all the languages look the same as the English curve. 
 
-```{r diff-languages-plot, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES frequency-based and context-based curves", eval = F}
+```{r diff-languages-plot, echo = F, fig.height=2, fig.width=3.5, fig.cap="Wikipedia frequency-based and context-based curves for diverse languages"}
 
 tidy_b %>%
     filter(language %in% c("German", "Serbian", "Japanese", "Catalan", "Russian", "Slovak"),
@@ -381,7 +381,7 @@ We split the WALS features by type of feature: the nominative categories feature
 
 As our surprisal metric is a lexical measure, we expect the Levenshtein distance to be high. To describe more structural relationships, we used the World Atlas of Language Structures [WALS; @2013] to describe the morphology, syntax, phonology, etymology and semantics--in short the structures in each language. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. We use a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis [MIMCA; @audigier2017] to fill in the missing features. 
 
-We see that only word order shows a significant correlation with the shape of the information curves in the wikipedia corpora. The rest of the features show virtually no correlation with the wikipedia corpora. 
+We see that only word order shows a significant correlation with the shape of the frequency-based information curves in the wikipedia corpora. The rest of the features show virtually no correlation with the wikipedia corpora. For the context-based information curves, all categories of WALS features show correlations. However, across all languages, the context-based information curves are flat after the first word or two. 
 
 WHAT ABOUT THE SWADESH LIST? 
 
@@ -444,11 +444,15 @@ ggplot(type_cor_data, aes(x = type, y = estimate, color = gram)) +
     geom_text(aes(label = gram), data = type_annotations)
 ```
 
+By considering data from $159$ diverse languages, we see that the frequency-based information curves display unique information distributions for each language. A small part of this cross-linguistic variation is explicable due to top-down features of the language in question, such as canonical word order. The majority of the variation for each language does not derive from top-down features, but we suspect instead arises from bottom-up choices made by the speakers in each language. 
+
 # Conclusion
 
-In this paper we did model and it showed unique distributions for unigrams and same distribution for trigrams. Developmental angle. 
+In this paper we have proposed a novel method for quantifying information structure in any language. Our method derives the unique distribution of information based on word frequency in the language, irrespective of whether the language in question is spoken or written. This information structure characterizes the earliest utterances in child speech all the way to complex sentences in knowledge base entries by adult writers. The shape of the information distribution in a language is correlated with the canonical word order in a language, but is mainly derived from the individual choices speakers make in communication in a language. 
 
-Follow-up. Possible questions one might have. 
+In communication, due to predictive processing, the variation in these unique frequency-based distributions are washed out. Instead, a uniform distribution of information emerges across languages, which may allow listeners to decode information quickly and at a nearly constant rate. Once they have enough context, listeners optimally decode information. 
+
+We average over the surprisal sequences of each length, which obscures most of the variation in information curve shapes. This may also mean that there's more bottom-up processing. 
 
 # References 
 
