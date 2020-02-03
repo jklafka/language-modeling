@@ -195,8 +195,8 @@ reader's processing of these sentences. Finally, we also develop a
 method for averaging the curves for sentences of different lengths
 together to provide a single typical information curve signature.
 
-\hypertarget{corpus}{%
-\subsection{Corpus}\label{corpus}}
+\hypertarget{data}{%
+\subsection{Data}\label{data}}
 
 Following Yu et al. (2016), we selected the British National Corpus
 (BNC) for analysis (British National Corpus Consortium, 2007). The
@@ -402,8 +402,8 @@ imposed by their developing knowledge of both the lexicon and grammar
 In Study 2, we ask whether spoken English--produced both by adults and
 children-- has the same information structure as written English.
 
-\hypertarget{corpus-1}{%
-\subsection{Corpus}\label{corpus-1}}
+\hypertarget{data-1}{%
+\subsection{Data}\label{data-1}}
 
 To estimate the information in utterances of adult-adult spoken English,
 we used the Santa Barbara Corpus of Spoken American English, \(\sim\)
@@ -433,17 +433,17 @@ the 3 corpora.
 
 The information curves found in adults-adult utterances were quite
 similar to those of parent-child utterances and child-parent utterances
-(Fig. \ref{fig:spoken_figs}(B)). Under the unigram model, information
-rose steeply in the beginnings of utterances, was relatively flatter in
-the middle of utterances, and the rose even more steeply at the ends.
-Under the trigram model, the first parts words of sentences contained
-the most information, information was relatively constant in the middle
-of utterances, and then rose slightly again at the ends.
+(Fig. \ref{fig:spoken_figs}B). Under the unigram model, information rose
+steeply in the beginnings of utterances, was relatively flatter in the
+middle of utterances, and the rose even more steeply at the ends. Under
+the trigram model, the first parts words of sentences contained the most
+information, information was relatively constant in the middle of
+utterances, and then rose slightly again at the ends.
 
 Unfortunately, we we cannot compare the amount of information in each
 word across corpora--surprisal is highly correlated with corpus size
 (e.g.~there is less information in adults' speech in Santa Babara than
-in children's speech in CHIDLES). However, we can compare the shapes of
+in children's speech in CHILDES). However, we can compare the shapes of
 these curves both to each-other and to the written English sentences in
 Study 1 \ref{fig:bnc_plots}(B). All of these curves appeared to share
 their important qualitative features, including the sharp rise at the
@@ -472,83 +472,94 @@ cross-linguisticly.
 \end{figure*}
 \end{CodeChunk}
 
-\hypertarget{experiment-3-large-scale-data-and-linguistic-features}{%
-\section{Experiment 3: Large-scale data and linguistic
-features}\label{experiment-3-large-scale-data-and-linguistic-features}}
+\hypertarget{study-3-cross-linguistic-variation-in-information}{%
+\section{Study 3: Cross-linguistic variation in
+information}\label{study-3-cross-linguistic-variation-in-information}}
 
-We pulled corpora for \(159\) diverse languages from Wikipedia, an
-online general knowledge repository with separate repositories for each
-of hundreds of languages. We filtered our selection of language corpora
-on Wikipedia to those which had at least \(10,000\) articles. We used
-the Wikiextractor tool from GitHub {[}WIKIEXTRACTOR CITATION{]} to
-retrieve the dumps of entire Wikipedia archives, then lowercased,
-removed punctuation and split the corpora into sentences. We trained and
-tested a model on each language's Wikipedia corpus independently,
-constructing unigram and trigram surprisals for each language
-separately. We create frequency-based and contextual surprisal curves
-for each corpus. The distribution of sentence lengths in Wikipedia
-corpora tend to resemble the distribution of sentence lengths in the BNC
-(another written corpus).
+\hypertarget{data-2}{%
+\subsection{Data}\label{data-2}}
 
-See Figure {[}Diff languages plot{]} for examples of frequency-based
-languages from several different language families. We see that the
-frequency-based curve for German resembles the English curve we found in
-Experiments 1 and 2 with a three-step distribution, while the Japanese
-curve looks very different from all the other curves. The Slavic
-language curves (for Serbian, Russian and Slovak) resemble each other.
+To study cross-linguistic variation in the struture of information
+across sentences, we constructed a corpus of Wikipedia articles from all
+languages with at least 10,000 articles. This resulted a set of 152
+languages from \texttt{n\_fams} families. To examine the relationships
+between information curves and linguistic similarity, we used two
+meausures of linguistic distance.
 
-Regardless of the shape of their respective unigram curves, the trigram
-curves for all the languages look the same as the English curve.
+To target lexical differences between languages, we used the 40-item
+Swadesh word list consisting of basic concepts appearing in all
+langauges (Swadesh, 1955; Wichmann et al., 2016). The more similar two
+languages' words are, the more similar the two languages are. For each
+pair of languages, We computed the average normalized Levenshtein
+distance, a string edit distance measure.
+
+To understand the relationship between information curves and
+typological features, we used the World Atlas of Language Structures, a
+collection of morphological, syntactic, phonological, and other features
+of linguistic structure (WALS; Dryer \& Haspelmath, 2013). As WALS is a
+compiled database from dozens of papers from different authors, most
+features for most languages are fairly sparse. We use a iterative
+imputation algorithm for categorical data Multiple Imputation Multiple
+Correspondence Analysis to fill in the missing features (MIMCA;
+Audigier, Husson, \& Josse, 2017).
+
+\hypertarget{data-processing-1}{%
+\subsection{Data processing}\label{data-processing-1}}
+
+All processing was identical to Studies 1 and 2 except for the lengths
+of utterances chosen for analyses. To accomodate the variety of lengths
+across language corpora, we analyzed sentences of lengths 5 to 30.
+
+\hypertarget{results-and-discussion-2}{%
+\subsection{Results and Discussion}\label{results-and-discussion-2}}
+
+Unlike the striking consistency across multiple English corpora, we
+found significant variability in the structure of information curves
+across languages estimated under the unigram. Fig.
+\ref{fig:diff-languages} shows a sample of languages from several
+language families. Despite this variability, the shapes of information
+curves estimated under the trigram model were more similar
+cross-linguistically and to the shapes found in English: Sentences began
+with highly informative words (presumably due to lack of context) and
+then rapidly approached a uniform level of information. Consistent with
+this characterization, pairwise similarities in languages' information
+curves estimated under the unigram model were more correlated with their
+Swadesh distances (\(r =\) -0.11, \(t =\) -10.27, \(p\) \textless{}
+.001) than their distances estimated under the trigram model (\(r =\)
+0.03, \(t =\) 2.33, \(p =\) .020).
 
 \begin{CodeChunk}
 \begin{figure}[tb]
-\includegraphics{figs/diff-languages-plot-1} \caption[Characteristic curves for a sample of languages from Wikipedia]{Characteristic curves for a sample of languages from Wikipedia}\label{fig:diff-languages-plot}
+\includegraphics{figs/diff-languages-1} \caption[Characteristic curves for a sample of languages from Wikipedia]{Characteristic curves for a sample of languages from Wikipedia}\label{fig:diff-languages}
 \end{figure}
 \end{CodeChunk}
 
-To compare languages more rigorously, we used two databases of language
-similarity features. To target lexical differences between languages, we
-used the \(40\)-item Swadesh list (Swadesh, 1955), retrieved from the
-ASJP database (Wichmann et al., 2016). The Swadesh list is a well-known
-method for comparing lexical similarity between languages, by
-quantifying the similarity between the words on the list for pairs of
-languages, and is often used to compare genetic relationships between
-languages. We computed the average normalized Levenshtein distance, a
-string edit distance measure (LDN; Holman et al., 2008) between each
-pair of our Wikipedia languages.
+While the trigram information curves have a more consistent qualitative
+shape, there are differences between languages. The pairwise
+similarities between languages' trigram information curves were more
+correlated with the number of WALS features they shared (\(r =\) 0.12,
+\(t =\) 13.35, \(p\) \textless{} .001) than their similarities estimated
+under the trigram model (\(r =\) 0.03, \(t =\) 2.72,\(p =\) .007).
 
-We split the WALS features by type of feature: the nominative categories
-features describe aspects of morphology such as case systems and
-definite/indefinite articles; word order describes SVO as well as
-head-modifier word order; nominative syntax describes noun behavior such
-as possessives and adjectives acting as nouns; clauses describes phrasal
+To understand which typological features contribute to these
+similarities, we split the WALS features by type: the nominative
+categories features describe aspects of morphology such as case systems
+and definite/indefinite articles; word order describes the relationship
+of the subject, verb, and object to each-other as well as head-modifier
+word order; nominative syntax describes noun behavior such as
+possessives and adjectives acting as nouns; clauses describes phrasal
 and broader sentence syntax; and verb categories describe tense, mood
-and aspect as well as morphology on the verb.
-
-As our surprisal metric is a lexical measure, we expect the Levenshtein
-distance to be high. To describe more structural relationships, we used
-the World Atlas of Language Structures (WALS; Dryer \& Haspelmath, 2013)
-to describe the morphology, syntax, phonology, etymology and
-semantics--in short the structures in each language. As WALS is a
-compiled database from dozens of papers from different authors, most of
-the features and languages are fairly sparse. We use a iterative
-imputation algorithm for categorical data Multiple Imputation Multiple
-Correspondence Analysis (MIMCA; Audigier, Husson, \& Josse, 2017) to
-fill in the missing features.
-
-We see that only word order shows a significant correlation with the
-shape of the frequency-based information curves in the wikipedia
-corpora. The rest of the features show virtually no correlation with the
-wikipedia corpora. For the context-based information curves, all
-categories of WALS features show correlations. However, across all
-languages, the context-based information curves are flat after the first
-word or two.
-
-WHAT ABOUT THE SWADESH LIST?
+and aspect as well as morphology on the verb. Fig. \ref{fig:type_cors}
+shows the correlation between the similarity of information curves under
+both the unigram and trigram models and the number of features of each
+of these types two-languages shared. Under the unigram model, word order
+features appear to predict information curve similarity. In contrast,
+under the trigram model, all features types except for nominative syntax
+are reliably correlated with information curve similarity.
 
 \begin{CodeChunk}
 \begin{figure}[tb]
-\includegraphics{figs/type_cors-1} \caption[Correlations between Information curve shapes and WALS features]{Correlations between Information curve shapes and WALS features.}\label{fig:type_cors}
+\includegraphics{figs/type_cors-1} \caption[Correlation between info curve and feature similarity]{Correlation between info curve and feature similarity}\label{fig:type_cors}
 \end{figure}
 \end{CodeChunk}
 
@@ -661,12 +672,6 @@ Heafield, K., Pouzyrevsky, I., Clark, J. H., \& Koehn, P. (2013).
 Scalable modified kneser-ney language model estimation. In
 \emph{Proceedings of the 51st annual meeting of the association for
 computational linguistics (volume 2: Short papers)} (pp. 690--696).
-
-\leavevmode\hypertarget{ref-holman2008}{}%
-Holman, E. W., Wichmann, S., Brown, C. H., Velupillai, V., Müller, A.,
-Bakker, D., \& others. (2008). Advances in automated language
-classification. \emph{Quantitative Investigations in Theoretical
-Linguistics}, 40--43.
 
 \leavevmode\hypertarget{ref-jaeger2007}{}%
 Jaeger, T. F., \& Levy, R. P. (2007). Speakers optimize information

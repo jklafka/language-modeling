@@ -24,6 +24,8 @@ knitr::opts_chunk$set(fig.width=3, fig.height=3, fig.crop = F,
                       fig.pos = "tb", fig.path='figs/',
                       echo=F, warning=F, cache = T, 
                       message=F, sanitize = T)
+
+options(digits = 2)
 ```
 
 ```{r, libraries, include=FALSE}
@@ -118,7 +120,7 @@ The Uniform Information Density Hypothesis predicts that people should structure
 
 We replicate their analysis here, bringing it more in line with Genzel and Charniak's [-@genzel2002] methods. While Yu et al. [-@yu2016] considered only the information in each word, we build two different models. The first, replicating their analysis, considers the surprisal of each word read in isolation. The second, following @genzel2002, is a trigram model that considers the surprisal of each word having read the prior two words. We take this trigram model as a better proxy for human reader's processing of these sentences. Finally, we also develop a method for averaging the curves for sentences of different lengths together to provide a single typical information curve signature.
 
-## Corpus
+## Data
 
 Following @yu2016, we selected the British National Corpus (BNC) for analysis [@british-national-corpus-consortium2007]. The British National Corpus is ~100 million word corpus consisting of spoken (10%) and written (90%) English from the late 20th Century.
 
@@ -266,7 +268,7 @@ The language young children hear is further different from the language adults s
 
 In Study 2, we ask whether spoken English--produced both by adults and children-- has the same information structure as written English.
 
-## Corpus
+## Data
 
 To estimate the information in utterances of adult-adult spoken English, we used the Santa Barbara Corpus of Spoken American English, $\sim$ 250,000 word corpus of recordings of naturally occurring spoken interactions from diverse regions of the United States [@sbc]. For parent-child interactions, we used all of the North American English corpora in the Child Language Data Exchange System (CHILDES) hosted hosted childes-db [@macwhinney2000; @sanchez2019]. We selected for analyses all $\sim$ 1 million utterances produced by children (mostly under the age of five), and $\sim$ 1.7 million utterances produced by the parents of these children.
 
@@ -276,9 +278,9 @@ All pre-processing and modeling details were identical to Study 1 except for the
 
 ## Results and Discussion
 
-The information curves found in adults-adult utterances were quite similar to those of parent-child utterances and child-parent utterances (Fig. \ref{fig:spoken_figs}(B)). Under the unigram model, information rose steeply in the beginnings of utterances, was relatively flatter in the middle of utterances, and the rose even more steeply at the ends. Under the trigram model, the first parts words of sentences contained the most information, information was relatively constant in the middle of utterances, and then rose slightly again at the ends. 
+The information curves found in adults-adult utterances were quite similar to those of parent-child utterances and child-parent utterances (Fig. \ref{fig:spoken_figs}B). Under the unigram model, information rose steeply in the beginnings of utterances, was relatively flatter in the middle of utterances, and the rose even more steeply at the ends. Under the trigram model, the first parts words of sentences contained the most information, information was relatively constant in the middle of utterances, and then rose slightly again at the ends. 
 
-Unfortunately, we we cannot compare the amount of information in each word across corpora--surprisal is highly correlated with corpus size (e.g. there is less information in adults' speech in Santa Babara than in children's speech in CHIDLES). However, we can compare the shapes of these curves both to each-other and to the written English sentences in Study 1 \ref{fig:bnc_plots}(B). All of these curves appeared to share their important qualitative features, including the sharp rise at the end under the unigram model and the attenuation of this rise under the trigram model. There are small differences--such as the flatter shape in the middle of written sentences than spoken utterances, but this difference is pronounced in the utterances of the Santa Barbara corpus relative to utterances of parents in CHILDES, suggesting that it may be partly a function of corpus size. 
+Unfortunately, we we cannot compare the amount of information in each word across corpora--surprisal is highly correlated with corpus size (e.g. there is less information in adults' speech in Santa Babara than in children's speech in CHILDES). However, we can compare the shapes of these curves both to each-other and to the written English sentences in Study 1 \ref{fig:bnc_plots}(B). All of these curves appeared to share their important qualitative features, including the sharp rise at the end under the unigram model and the attenuation of this rise under the trigram model. There are small differences--such as the flatter shape in the middle of written sentences than spoken utterances, but this difference is pronounced in the utterances of the Santa Barbara corpus relative to utterances of parents in CHILDES, suggesting that it may be partly a function of corpus size. 
 
 Thus, English--both writen and spoken, both produced by adults and by children-appears to have a characteristic shape. Are the features of this shape features of English, or features of language more broadly? In Study 3 we apply this technique to a diverse set of written languages of different families to ask whether these structures vary cross-linguisticly. 
 
@@ -338,125 +340,47 @@ gridExtra::grid.arrange(spoken_plot1, spoken_plot2, ncol = 1)
 ```
 
 
-# Experiment 3: Large-scale data and linguistic features 
+# Study 3: Cross-linguistic variation in information
 
-We pulled corpora for $159$ diverse languages from Wikipedia, an online general knowledge repository with separate repositories for each of hundreds of languages. We filtered our selection of language corpora on Wikipedia to those which had at least $10,000$ articles. We used the Wikiextractor tool from GitHub [WIKIEXTRACTOR CITATION] to retrieve the dumps of entire Wikipedia archives, then lowercased, removed punctuation and split the corpora into sentences. We trained and tested a model on each language's Wikipedia corpus independently, constructing unigram and trigram surprisals for each language separately. We create frequency-based and contextual surprisal curves for each corpus. The distribution of sentence lengths in Wikipedia corpora tend to resemble the distribution of sentence lengths in the BNC (another written corpus). 
+## Data
 
-```{r dendro, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
-b %>% 
-    filter(source == "wikipedia", gram == "unigram") %>%
-    select(-source, -gram) %>%
-    slice(1:50) %>%
-    column_to_rownames("language") %>% 
-    dist() %>% 
-    hclust() %>%
-    plot()
-```
+```{r wiki-langs}
+n_langs <- tidy_b %>% 
+    filter(source == "wikipedia") %>% 
+    distinct(language) %>% 
+    count() %>%
+    pull()
 
-```{r wals-plot, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
-cosines %>%
-    left_join(wals) %>%
-    filter(complete.cases(.)) %>%
-    ggplot(aes(x = cosine, y = wals_dist, color = gram)) + 
-        geom_point(alpha = .5) + 
-        geom_smooth(method = "lm")
-```
-
-
-```{r swadesh-plot, echo = F, fig.height=2, fig.width=3.5, fig.cap="CHILDES context-based trigram curves", eval = F}
-cosines %>%
-    left_join(swadesh) %>%
-    filter(complete.cases(.)) %>%
-    ggplot(aes(x = cosine, y = ldn, color = gram)) + 
-        geom_point(alpha = .5) + 
-        geom_smooth(method = "lm")
-```
-
-See Figure [Diff languages plot] for examples of frequency-based languages from several different language families. We see that the frequency-based curve for German resembles the English curve we found in Experiments 1 and 2 with a three-step distribution, while the Japanese curve looks very different from all the other curves. The Slavic language curves (for Serbian, Russian and Slovak) resemble each other. 
-
-Regardless of the shape of their respective unigram curves, the trigram curves for all the languages look the same as the English curve. 
-
-
-```{r language-family, eval = FALSE}
-features <- read_csv(here("Data/final_features.csv")) %>%
-    pivot_longer(-language, names_to = "feature", values_to = "value")
-
-slopes <- read_csv(here("Data/5barycenters.csv"))
-iso_codes <- read_csv(here("Data/wiki/codes.csv"))
-families <- read_csv(here("Data/wiki/wals_dataset/language.csv"))
-
-FEATURE <- "x81a"
-
-scaled_b <- tidy_b %>%
-    group_by(language, gram) %>%
-    mutate(surprisal = scale(surprisal, scale = FALSE))
-
-## match up language curves with their language families
-family_curves <- features %>% 
-    filter(feature == FEATURE, !is.na(value)) %>%
-    left_join(iso_codes, by = "language") %>%
-    select(language, iso, value) %>% 
-    inner_join(scaled_b, by = "language") %>% 
-    inner_join(families %>% select(iso_code, family), by = c("iso" = "iso_code")) %>% 
-    distinct()## deduplicate--WALS has some duplicate entries but doesn't affect families
-
-## construct sample curves and bootstrap
-family_bootstraps <- family_curves %>% 
-  select(-iso, -source) %>%
-  group_by(value, gram, position) %>%
-  tidyboot_mean(surprisal, nboot = 10) %>%
-  ungroup()
-
-## plotting the sample curves
-family_bootstraps %>%
-  ggplot(aes(x = position, y = empirical_stat, group = value, color = value)) + 
-    geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper),
-                  position = position_dodge(.25)) +
-    geom_line() + 
-    facet_wrap(~ gram) + 
-    xlab("Word position") + 
-    ylab("Average Information") + 
-    theme(axis.text.x = element_blank()) #+ 
-    #scale_color_manual(values = c("#8b0000"))
-
-# ## why do the unigram curves look so flat in comparison?
-# family_slopes %>% 
-#   filter(gram == "Unigram") %>% 
-#   group_by(family)
-```
-
-```{r diff-languages-plot, fig.height=3, fig.width = 3.5, fig.pos = "tb", fig.cap="Characteristic curves for a sample of languages from Wikipedia"}
 families <- read_csv(here("Data/Paper/families.csv"))
 
 scaled_b <- tidy_b %>%
     group_by(language, gram) %>%
     mutate(surprisal = scale(surprisal, scale = FALSE))
 
-scaled_b %>%
-    left_join(families, by = c("language")) %>%
-    filter(language %in% c("Afrikaans", "Czech", 
-                           "Japanese", "Tamil", "Kannada",
-                           "Hebrew", "Somali", "Maltese")) %>%
-    ggplot(aes(x = position, y = surprisal, color = language, label = language,
-               group = interaction(language, family))) +
-    facet_grid(gram ~ family, scales = "free_y") +
-    geom_point() + 
-    geom_line() +
-    scale_color_ptol() + 
-    geom_dl(method = "smart.grid", cex = .5) + 
-    theme_few(base_size = 9) +
-    theme(legend.position = "none")
+families_b <- scaled_b %>%
+    left_join(families, by = c("language")) 
+
+n_fams <- families_b %>%
+    ungroup() %>%
+    distinct(family) %>%
+    filter(!is.na(family), family != "other") %>%
+    count() %>%
+    pull()
 ```
 
-To compare languages more rigorously, we used two databases of language similarity features. To target lexical differences between languages, we used the $40$-item Swadesh list [@swadesh1955], retrieved from the ASJP database [@wichmann2016]. The Swadesh list is a well-known method for comparing lexical similarity between languages, by quantifying the similarity between the words on the list for pairs of languages, and is often used to compare genetic relationships between languages. We computed the average normalized Levenshtein distance, a string edit distance measure [LDN; @holman2008] between each pair of our Wikipedia languages. 
 
-We split the WALS features by type of feature: the nominative categories features describe aspects of morphology such as case systems and definite/indefinite articles; word order describes SVO as well as head-modifier word order; nominative syntax describes noun behavior such as possessives and adjectives acting as nouns; clauses describes phrasal and broader sentence syntax; and verb categories describe tense, mood and aspect as well as morphology on the verb. 
+To study cross-linguistic variation in the struture of information across sentences, we constructed a corpus of Wikipedia articles from all languages with at least 10,000 articles. This resulted a set of `r n_langs` languages from `n_fams` families. To examine the relationships between information curves and linguistic similarity, we used two meausures of linguistic distance. 
 
-As our surprisal metric is a lexical measure, we expect the Levenshtein distance to be high. To describe more structural relationships, we used the World Atlas of Language Structures [WALS; @2013] to describe the morphology, syntax, phonology, etymology and semantics--in short the structures in each language. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. We use a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis [MIMCA; @audigier2017] to fill in the missing features. 
+To target lexical differences between languages, we used the 40-item Swadesh word list consisting of basic concepts appearing in all langauges [@swadesh1955; @wichmann2016]. The more similar two languages' words are, the more similar the two languages are. For each pair of languages, We computed the average normalized Levenshtein distance, a string edit distance measure. 
 
-We see that only word order shows a significant correlation with the shape of the frequency-based information curves in the wikipedia corpora. The rest of the features show virtually no correlation with the wikipedia corpora. For the context-based information curves, all categories of WALS features show correlations. However, across all languages, the context-based information curves are flat after the first word or two. 
+To  understand the relationship between information curves and typological features, we used the World Atlas of Language Structures, a collection of morphological, syntactic, phonological, and other features of linguistic structure [WALS; @2013]. As WALS is a compiled database from dozens of papers from different authors, most features for most languages are fairly sparse. We use a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis to fill in the missing features [MIMCA; @audigier2017]. 
 
-WHAT ABOUT THE SWADESH LIST? 
+## Data processing
+
+All processing was identical to Studies 1 and 2 except for the lengths of utterances chosen for analyses. To accomodate the variety of lengths across language corpora, we analyzed sentences of lengths 5 to 30.
+
+## Results and Discussion
+
 
 ```{r cor_data}
 cor_data <- left_join(cosines, wals, by = c("language1", "language2")) %>%
@@ -493,10 +417,45 @@ type_cor_data <- left_join(cosines, wals_types,
                                     "word order", "nominative categories")),
            gram = factor(gram, levels = c("unigram", "trigram")))
 
+swadesh_stats_uni <- filter(cor_data, measure == "swadesh_cor", 
+                            gram == "unigram")
+
+swadesh_stats_tri <- filter(cor_data, measure == "swadesh_cor", 
+                            gram == "trigram")
+
+wals_stats_uni <- filter(cor_data, measure == "wals_cor", 
+                            gram == "unigram")
+
+wals_stats_tri <- filter(cor_data, measure == "wals_cor", 
+                            gram == "trigram")
+
 ```
 
 
-```{r type_cors, fig.height = 5, fig.cap="Correlations between Information curve shapes and WALS features."}
+Unlike the striking consistency across multiple English corpora, we found significant variability in the structure of information curves across languages estimated under the unigram. Fig. \ref{fig:diff-languages} shows a sample of languages from several language families. Despite this variability, the shapes of information curves estimated under the trigram model were more similar cross-linguistically and to the shapes found in English: Sentences began with highly informative words (presumably due to lack of context) and then rapidly approached a uniform level of information. Consistent with this characterization, pairwise similarities in languages' information curves estimated under the unigram model were more correlated with their Swadesh distances ($r =$ `r swadesh_stats_uni$estimate`, $t =$ `r swadesh_stats_uni$statistic`, $p$ `r papaja::printp(swadesh_stats_uni$p.value)`) than their distances estimated under the trigram model ($r =$ `r swadesh_stats_tri$estimate`, $t =$ `r swadesh_stats_tri$statistic`, $p =$ `r papaja::printp(swadesh_stats_tri$p.value)`). 
+
+```{r diff-languages, fig.height=3, fig.width = 3.5, fig.pos = "tb", fig.cap="Characteristic curves for a sample of languages from Wikipedia"}
+families_b %>%
+    filter(language %in% c("Afrikaans", "Czech", 
+                           "Japanese", "Tamil", "Kannada",
+                           "Hebrew", "Somali", "Maltese")) %>%
+    ggplot(aes(x = position, y = surprisal, color = language, label = language,
+               group = interaction(language, family))) +
+    facet_grid(gram ~ family, scales = "free_y") +
+    geom_point() + 
+    geom_line() +
+    scale_color_ptol() + 
+    geom_dl(method = list(dl.trans(x = x + 1.25), "first.points", cex = .6)) + 
+    theme_few(base_size = 9) +
+    labs(y = "normalized surprisal") +
+    theme(legend.position = "none")
+```
+
+While the trigram information curves have a more consistent qualitative shape, there are differences between languages. The pairwise similarities between languages' trigram information curves were more correlated with the number of WALS features they shared ($r =$ `r wals_stats_tri$estimate`, $t =$ `r wals_stats_tri$statistic`, $p$ `r papaja::printp(wals_stats_tri$p.value)`) than their similarities estimated under the trigram model ($r =$ `r wals_stats_uni$estimate`, $t =$ `r wals_stats_uni$statistic`,$p =$ `r papaja::printp(wals_stats_uni$p.value)`).
+
+To understand which typological features contribute to these similarities, we split the WALS features by type: the nominative categories features describe aspects of morphology such as case systems and definite/indefinite articles; word order describes the relationship of the subject, verb, and object to each-other as well as head-modifier word order; nominative syntax describes noun behavior such as possessives and adjectives acting as nouns; clauses describes phrasal and broader sentence syntax; and verb categories describe tense, mood and aspect as well as morphology on the verb. Fig. \ref{fig:type_cors} shows the correlation between the similarity of information curves under both the unigram and trigram models and the number of features of each of these types two-languages shared. Under the unigram model, word order features appear to predict information curve similarity. In contrast, under the trigram model, all features types except for nominative syntax are reliably correlated with information curve similarity.
+
+```{r type_cors, fig.height = 3.5, fig.cap="Correlation between info curve and feature similarity"}
 type_annotations <- tibble(type = c("phonology", "phonology"),
                           estimate = c(-.02, .1),
                           gram = c("unigram", "trigram")) %>%
@@ -513,7 +472,7 @@ ggplot(type_cor_data, aes(x = type, y = estimate, color = gram)) +
     theme_few() +
     theme(legend.position = "none", aspect.ratio = 1,
           axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) + 
-    labs(x = "", y = "correlation between information and WALS") + 
+    labs(x = "", y = "info curve and WALS corr.") + 
     geom_text(aes(label = gram), data = type_annotations)
 ```
 
