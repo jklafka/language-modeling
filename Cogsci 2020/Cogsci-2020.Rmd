@@ -1,5 +1,5 @@
 ---
-title: "Languages are optimally informative codes: Cross-lingusitic variation and consistency in information structure"
+title: "Broad consistency but cross-lingusitic variation in the distribution of information in sentences"
 bibliography: library.bib
 csl: apa6.csl
 document-params: "10pt, letterpaper"
@@ -378,7 +378,7 @@ Finally, to understand the relationship between information curves and typologic
 
 All processing was identical to Studies 1 and 2 except for the lengths of utterances chosen for analyses. To accomodate the variety of lengths across language corpora, we analyzed sentences of lengths 5 to 30.
 
-For each pair of languages, we derived three pairwise similarity measures. To estimate the pairwise similarity of two languages information structures, we first centered each language's 5-point curve (since surprisal is highly correlate with corpus size), and then computed the cosine similarity between the two centered curves. To estimate Swadesh similarity, we computed the average normalized Levenshtein distance between each of the 40 words. Finally, to compare typological similarity, we added the number of features two languages shared.
+For each pair of languages, we derived three pairwise similarity measures. To estimate the information structure similarity, we first centered each language's 5-point curve (since surprisal is highly correlate with corpus size), and then computed the cosine similarity between the two centered curves. To estimate Swadesh similarity, we computed the average normalized Levenshtein distance between each of the 40 words. Finally, to compare typological similarity, we added the number of features two languages shared.
 
 ## Results and Discussion
 ```{r cor_data}
@@ -474,14 +474,11 @@ ggplot(type_cor_data, aes(x = type, y = estimate, color = gram)) +
     geom_text(aes(label = gram), data = type_annotations)
 ```
 
+Taken together, these results suggest three broad conclusions. First, aspects of the history of languages--encoded in their lexicostatistics--structure the shapes of information in typical sentences. When each word in a sentence is considered alone, languages vary quite dramatically in how information is distributed across sentences. Second, a diverse set of typological features of languages are related to how information is structured for listeners who bring predictive processing to language. These features appear to a small but reliable proportion of the variation in how uniformly information is distributed across utterances. Finally, despite this variation, two words of predictive context radically transform the structure of information in utterances, leading to significantly more uniformative in all languages irrespective of their typological structure. These analyses suggest that top-down constraints from language do play an important role in structuring speakers' utterances, but the speakers have tremendous power to choose efficient utterances within these constraints.
 
 # Conclusion
 
-In this paper we have proposed a novel method for quantifying information structure in any language. Our method derives the unique distribution of information based on word frequency in the language, irrespective of whether the language in question is spoken or written. This information structure characterizes the earliest utterances in child speech all the way to complex sentences in knowledge base entries by adult writers. The shape of the information distribution in a language is correlated with the canonical word order in a language, but is mainly derived from the individual choices speakers make in communication in a language. 
-
-In communication, due to predictive processing, the variation in these unique frequency-based distributions are washed out. Instead, a uniform distribution of information emerges across languages, which may allow listeners to decode information quickly and at a nearly constant rate. Once they have enough context, listeners optimally decode information. 
-
-We average over the surprisal sequences of each length, which obscures most of the variation in information curve shapes. This may also mean that there's more bottom-up processing. 
+In this paper we have proposed a novel method for quantifying how information is typically distributed across the words of a sentence. We showed that English--whether written or spoken, whether produced by adults or children--has a prototypical structure. We then showed that this structure varies cross-lingusitically in predictable ways, but also shares broad similarities. These results add to a growing body of research using information theory to ask about the structure of language. While much of this work has considered the choices speakers make to structure their utternces within the constraints imposed by their linguistic code, our work adds to this research program by investigating these constraints themselves. These results represent a small first step towards answering the question of how much these constraints shape speakers' productions, and how speakers interact with them.
 
 # References 
 

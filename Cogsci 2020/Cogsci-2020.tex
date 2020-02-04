@@ -69,9 +69,9 @@ Optimal coding theories of language predict that speakers should keep
 the amount of information in their utterances relatively uniform under
 the constraints imposed by their language. But how much of a role do
 these constraints provide, and does it vary across languages? We find a
-consistent non-uniform shape that characterizes both spoken and written
-sentences of English that is tempered by predictive context. We then
-show that other languages are also characterized by consistent but
+consistent non-uniform shape which characterizes both spoken and written
+sentences of English but is tempered by predictive context. We then show
+that other languages are also characterized by consistent but
 non-English shaped curves related to their typological features, but
 that sufficient context produces more uniform shapes across languages.
 Thus, producers of language appear to structure their utterances in
@@ -159,30 +159,27 @@ predictions of the Uniform Information Density hypothesis.
 \section{Study 1: Information in Written
 English}\label{study-1-information-in-written-english}}
 
-The Uniform Information Density Hypothesis predicts that people should
-structure their utterances so that the amount of information in each
-unit of language remains nearly constant. An influentual early test of
-this idea was performed by Genzel \& Charniak (2002), who analyzed the
-amount of information in successive sentences of the same text. They
-found that the amount of information increased across sentences when
-each was considered in isolation. They reasoned that since all prior
-sentences provide the context for reading each new sentences, the amount
-of total information (context + paragraph) was overall constant for
-human readers.
+An influentual early test of the Uniform Information Density hypothesis
+was performed by Genzel \& Charniak (2002), who analyzed the amount of
+information in successive sentences of the same text. They found that
+the amount of information increased across sentences when each was
+considered in isolation. They reasoned that since all prior sentences
+provide the context for reading each new sentences, the amount of total
+information (context + paragraph) was overall constant for human
+readers.
 
 Yu et al. (2016) applied this same logic to analysis of the information
 in individual sentences, computing the entropy of each successive word
-in an utterance. Surprisingly, they found found a distinctive three-step
+in an utterance. Surprisingly, they found found a distinctive
 distribution for information in a corpus of written English. The first
 word of each sentence tended to contain little information; words in the
 middle of sentences each contained roughly the same amount of
-information, but the final word of each sentence contained much more
-information than any other word. They found the same distribution across
-sentence lengths, from sentences with \(15\) words to sentences with
-\(45\) words. They took this as evidence against the Uniform Information
-Density Hypothesis as, unlike Genzel and Charniak's (2002) results,
-information plateaud in the middle of sentences rather than increasing
-as it did at the beginnings and ends.
+information as each other, but the final word of each sentence contained
+much more information than any other word. They found the same
+distribution across sentence lengths, from sentences with \(15\) words
+to sentences with \(45\) words. They took this as evidence against the
+Uniform Information Density Hypothesis as, unlike Genzel and Charniak's
+(2002) results, information plateaud in the middle of sentences.
 
 We replicate their analysis here, bringing it more in line with Genzel
 and Charniak's (2002) methods. While Yu et al. (2016) considered only
@@ -193,7 +190,7 @@ trigram model that considers the surprisal of each word having read the
 prior two words. We take this trigram model as a better proxy for human
 reader's processing of these sentences. Finally, we also develop a
 method for averaging the curves for sentences of different lengths
-together to provide a single typical information curve signature.
+together to provide a single typical information structure.
 
 \hypertarget{data}{%
 \subsection{Data}\label{data}}
@@ -237,8 +234,7 @@ computed the lexical surprisal of each word under two different models
 (Levy, 2008; Shannon, 1948). Intuitively, the surprisal of a word is a
 measure of how unexpected it would be to read that word, and thus how
 much information it contains. First, following Yu et al. (2016), we
-estimated a unigram model which considers each word independently,
-asking how unexpected that word would be in the absence of any context:
+estimated a unigram model which considers each word independently:
 \(\text{surprisal}(\text{word}) = -\log P(\text{word})\). This unigram
 surprisal measure is a direct transformation of the word's frequency and
 thus less frequent words are more surprising.
@@ -251,8 +247,7 @@ encodes the idea that words that are low frequency in isolation (e.g.
 ``meatballs'') may become much less surprising in certain contexts (e.g.
 ``spaghetti and meatballs'') but more surprising in others (e.g.
 ``coffee with meatballs''). In principle, we would like to encode the
-surprisal of a word given all of the prior sentential context
-(\(\text{surprisal}(w_{i}) = -P(w_i|w_{i-1}w_{i-2}...w_{1})\). However,
+surprisal of a word given all of the prior sentential context However,
 the difficulty of correctly estimating these probabilities from a corpus
 grows combinatorically with the number of prior words, and in practice
 trigram models perform well as an approximation (see e.g. Chen \&
@@ -274,13 +269,10 @@ low-frequency trigrams (e.g.~if the word ``meatballs'' appears only once
 in the corpus following exactly the words ``spaghetti and'', it is
 perfectly predictable from its prior two words). To avoid this
 underestimation, we used modified Kneser-Ney smoothing: this method
-discounts all ngram frequency counts--reducing the impact of rare ngrams
-on probability calculations--and interpolates lower-order ngrams into
-the calcuations. These lower-order ngrams are weighted according to the
-number of distinct contexts they occur as a continuation (e.g.
-``Francisco'' may be a common word in a corpus, but likely only occurs
-after ``San'' as in ``San Francisco'', so it receives a lower weighting;
-see Chen \& Goodman, 1999).
+discounts all ngram frequency counts and interpolates lower-order ngrams
+into the calcuations. These lower-order ngrams are weighted according to
+the number of distinct contexts they occur as a continuation (see Chen
+\& Goodman, 1999).
 
 \hypertarget{averaging-curves}{%
 \subsubsection{Averaging curves}\label{averaging-curves}}
@@ -290,12 +282,8 @@ corpus, we needed to aggregate sentences that varied dramatically in
 length (Fig \ref{bnc-plots}(A)). We used Dynamic Time Warping Barycenter
 Averaging (DBA), an algorithm for finding the average of sequences that
 share and underlying pattern but vary in length (Petitjean, Ketterlin,
-\& Gançarski, 2011). DBA is an extension of standard Dynamic Time
-Warping, which searches for an invariant template in shifted and
-stretched instances of that template {[}e.g.~all instances of the vowel
-`a' in acoustic recordings of a speaker's productions even if the
-instances vary in their duration and intensity{]}. DBA inverts this
-idea, discovering a latent invariant template from a set of sequences.
+\& Gançarski, 2011). DBA inverts standard dynamic time warping,
+discovering a latent invariant template from a set of sequences.
 
 We used DBA to discover the short sequence of surprisal values that
 characterized the surprisal curves common to sentences of varying
@@ -338,31 +326,26 @@ still observable, but much less pronounced. Finally, the first word of
 each sentence was now much more surpising than the rest of the words in
 the sentence (although still less surprising than the first word under
 the unigram model). This is because the model had only the start of
-sentence token \(\left<s\right>\) to use as context, but knowing that
-the word is the start of an utterance provides some constraints on the
-likley word.
+sentence token \(\left<s\right>\) to use as context.
 
 Together, these results suggest that Yu et al. (2016) overestimated the
 non-uniformity of information in sentences. Because readers of English
 beginning a new sentence have read the previous sentence, they can rely
 on this context to process the first word (while the model cannot;
 Genzel \& Charniak, 2002). Thus, the trigram model likely overestimates
-the information for humans reading the first word, which is likely to be
-closer in information to words in the middle of the sentence. Second,
-the information in the final two words is closer to uniform with the
-rest of the sentence than under the trigram model. Nonetheless, the
-final words of utterances do consistently contain more information than
-the other words.
+the information for humans reading the first word. Second, the
+information in the final two words is closer to uniform with the rest of
+the sentence than under the trigram model. Nonetheless, the final words
+of utterances do consistently contain more information than the other
+words.
 
-Finally, Fig. \ref{fig:bnc_plots}B shows the results produced by Dynamic
-Time Warping Barycenter Averaging (DBA) on all of the sentences of
-varying lengths in the Bristish National Corpus. The algorithm correctly
-recovers both the initial and final rise in information under the
-unigram model, and the initial fall and smaller final rise in the
-trigram model. We take this as evidence that (1) these shapes are
-characteristic not just of sentences of length 15, 30, and 45, but of
-all lengths, and (2) that DBA effectively recovers the characteristic
-structure of utterances of varying lengths.
+Finally, Fig. \ref{fig:bnc_plots}B shows the barycenter produced by DBA.
+The algorithm correctly recovers both the initial and final rise in
+information under the unigram model, and the initial fall and smaller
+final rise in the trigram model. We take this as evidence that (1) these
+shapes are characteristic not just of sentences of length 15, 30, and
+45, but of all lengths, and (2) that DBA effectively recovers the
+characteristic structure of utterances of varying lengths.
 
 In sum, the results of Study 1 suggest that sentences of written English
 have a characteristic non-uniform information structure, with
@@ -372,32 +355,31 @@ structure remains even when each word is considered in context. Is this
 structure unique to written English, or does it characterize spoken
 English as well? In Study 2, we apply this same analysis to two corpora
 of spoken English--the first of adults speaking to other adults, and the
-second of adults and children speaking to each-other.
+second of adults and children speaking to each other.
 
 \hypertarget{study-2-information-in-spoken-english}{%
 \section{Study 2: Information in Spoken
 English}\label{study-2-information-in-spoken-english}}
 
 Spoken language is different from written language in several respects.
-First, because spoken language isrequires a speaker to produce it, the
-speed at which it can be processed is constrained by the speed at which
-it is produced. Second, speech occurs in a multimodal environment,
-providing listeners information from a variety of sources beyond the
-words conveyed (e.g.~prosody, gesture, world context). Finally, the both
-words and sentence structures tend to be simpler in spoken language than
-written language as they must be produced and processed in real-time
-(Christiansen \& Chater, 2016). Thus, sentences of spoken English may
-have different information curves than sentences of written English.
+First, the speed at which it can be processed is constrained by the
+speed at which it is produced. Second, speech occurs in a multimodal
+environment, providing listeners information from a variety of sources
+beyond the words conveyed (e.g.~prosody, gesture, world context).
+Finally, the both words and sentence structures tend to be simpler in
+spoken language than written language as they must be produced and
+processed in real-time (Christiansen \& Chater, 2016). Thus, sentences
+of spoken English may have different information curves than sentences
+of written English.
 
 The language young children hear is further different from the language
 adults speak to each other. Child-directed speech tends to simpler than
 adult-directed speech on a number of dimensions including the lengths
 and prosodic contours of utterances, the diversity of words, and the
 complexity of syntactic structures (Fernald, 1989; Snow, 1972). The
-speech produced by young children is even more different from
-adult-adult speech, replete with simplifications and modifications
-imposed by their developing knowledge of both the lexicon and grammar
-(Clark, 2009).
+speech produced by young children is even more distinct from adult-adult
+speech, replete with simplifications and modifications imposed by their
+developing knowledge of both the lexicon and grammar (Clark, 2009).
 
 In Study 2, we ask whether spoken English--produced both by adults and
 children-- has the same information structure as written English.
@@ -440,14 +422,14 @@ the trigram model, the first parts words of sentences contained the most
 information, information was relatively constant in the middle of
 utterances, and then rose slightly again at the ends.
 
-Unfortunately, we we cannot compare the amount of information in each
-word across corpora--surprisal is highly correlated with corpus size
-(e.g.~there is less information in adults' speech in Santa Babara than
-in children's speech in CHILDES). However, we can compare the shapes of
-these curves both to each-other and to the written English sentences in
-Study 1 \ref{fig:bnc_plots}B. All of these curves appeared to share
-their important qualitative features, including the sharp rise at the
-end under the unigram model and the attenuation of this rise under the
+Unfortunately, we cannot compare amount of information across
+corpora--surprisal is highly correlated with corpus size (e.g.~there is
+less information in adults' speech in Santa Babara than in children's
+speech in CHILDES). However, we can compare the shapes of these curves
+both to each-other and to the written English sentences in Study 1
+\ref{fig:bnc_plots}B. All of these curves appeared to share their
+important qualitative features, including the sharp rise at the end
+under the unigram model and the attenuation of this rise under the
 trigram model. There are small differences--such as the flatter shape in
 the middle of written sentences than spoken utterances, but this
 difference is pronounced in the utterances of the Santa Barbara corpus
@@ -509,14 +491,13 @@ of utterances chosen for analyses. To accomodate the variety of lengths
 across language corpora, we analyzed sentences of lengths 5 to 30.
 
 For each pair of languages, we derived three pairwise similarity
-measures. To estimate the pairwise similarity of two languages
-information structures, we first centered each language's 5-point curve
-(since surprisal is highly correlate with corpus size), and then
-computed the cosine similarity between the two centered curves. To
-estimate Swadesh similarity, we computed the average normalized
-Levenshtein distance between each of the 40 words. Finally, to compare
-typological similarity, we added the number of features two languages
-shared.
+measures. To estimate the information structure similarity, we first
+centered each language's 5-point curve (since surprisal is highly
+correlate with corpus size), and then computed the cosine similarity
+between the two centered curves. To estimate Swadesh similarity, we
+computed the average normalized Levenshtein distance between each of the
+40 words. Finally, to compare typological similarity, we added the
+number of features two languages shared.
 
 \hypertarget{results-and-discussion-2}{%
 \subsection{Results and Discussion}\label{results-and-discussion-2}}
@@ -571,29 +552,41 @@ are reliably correlated with information curve similarity.
 \end{figure}
 \end{CodeChunk}
 
+Taken together, these results suggest three broad conclusions. First,
+aspects of the history of languages--encoded in their
+lexicostatistics--structure the shapes of information in typical
+sentences. When each word in a sentence is considered alone, languages
+vary quite dramatically in how information is distributed across
+sentences. Second, a diverse set of typological features of languages
+are related to how information is structured for listeners who bring
+predictive processing to language. These features appear to a small but
+reliable proportion of the variation in how uniformly information is
+distributed across utterances. Finally, despite this variation, two
+words of predictive context radically transform the structure of
+information in utterances, leading to significantly more uniformative in
+all languages irrespective of their typological structure. These
+analyses suggest that top-down constraints from language do play an
+important role in structuring speakers' utterances, but the speakers
+have tremendous power to choose efficient utterances within these
+constraints.
+
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
 
-In this paper we have proposed a novel method for quantifying
-information structure in any language. Our method derives the unique
-distribution of information based on word frequency in the language,
-irrespective of whether the language in question is spoken or written.
-This information structure characterizes the earliest utterances in
-child speech all the way to complex sentences in knowledge base entries
-by adult writers. The shape of the information distribution in a
-language is correlated with the canonical word order in a language, but
-is mainly derived from the individual choices speakers make in
-communication in a language.
-
-In communication, due to predictive processing, the variation in these
-unique frequency-based distributions are washed out. Instead, a uniform
-distribution of information emerges across languages, which may allow
-listeners to decode information quickly and at a nearly constant rate.
-Once they have enough context, listeners optimally decode information.
-
-We average over the surprisal sequences of each length, which obscures
-most of the variation in information curve shapes. This may also mean
-that there's more bottom-up processing.
+In this paper we have proposed a novel method for quantifying how
+information is typically distributed across the words of a sentence. We
+showed that English--whether written or spoken, whether produced by
+adults or children--has a prototypical structure. We then showed that
+this structure varies cross-lingusitically in predictable ways, but also
+shares broad similarities. These results add to a growing body of
+research using information theory to ask about the structure of
+language. While much of this work has considered the choices speakers
+make to structure their utternces within the constraints imposed by
+their linguistic code, our work adds to this research program by
+investigating these constraints themselves. These results represent a
+small first step towards answering the question of how much these
+constraints shape speakers' productions, and how speakers interact with
+them.
 
 \hypertarget{references}{%
 \section{References}\label{references}}
