@@ -425,7 +425,7 @@ for the selection of sentences for analysis. Because the utterances in
 both the Santa Barbara Corpus and CHILDES were significantly shorter
 than the sentences in the British National Corpus, we analyzed all
 utterances of at least 5 and most 15 words (see Fig.
-\ref{fig:spoken_figs}(A)). Models were estimated separately for each of
+\ref{fig:spoken_figs}A). Models were estimated separately for each of
 the 3 corpora.
 
 \hypertarget{results-and-discussion-1}{%
@@ -479,21 +479,19 @@ information}\label{study-3-cross-linguistic-variation-in-information}}
 \hypertarget{data-2}{%
 \subsection{Data}\label{data-2}}
 
-To study cross-linguistic variation in the struture of information
-across sentences, we constructed a corpus of Wikipedia articles from all
-languages with at least 10,000 articles. This resulted a set of 152
-languages from \texttt{n\_fams} families. To examine the relationships
+In order to measures cross-linguistic variation in the struture of
+information across sentences, we constructed a corpus of Wikipedia
+articles from all languages with at least 10,000 articles. This resulted
+a set of 152 languages from 16 families. To examine the relationships
 between information curves and linguistic similarity, we used two
-meausures of linguistic distance.
+measures of linguistic distance.
 
 To target lexical differences between languages, we used the 40-item
 Swadesh word list consisting of basic concepts appearing in all
 langauges (Swadesh, 1955; Wichmann et al., 2016). The more similar two
-languages' words are, the more similar the two languages are. For each
-pair of languages, We computed the average normalized Levenshtein
-distance, a string edit distance measure.
+languages' words are, the more similar the two languages are.
 
-To understand the relationship between information curves and
+Finally, to understand the relationship between information curves and
 typological features, we used the World Atlas of Language Structures, a
 collection of morphological, syntactic, phonological, and other features
 of linguistic structure (WALS; Dryer \& Haspelmath, 2013). As WALS is a
@@ -510,23 +508,33 @@ All processing was identical to Studies 1 and 2 except for the lengths
 of utterances chosen for analyses. To accomodate the variety of lengths
 across language corpora, we analyzed sentences of lengths 5 to 30.
 
+For each pair of languages, we derived three pairwise similarity
+measures. To estimate the pairwise similarity of two languages
+information structures, we first centered each language's 5-point curve
+(since surprisal is highly correlate with corpus size), and then
+computed the cosine similarity between the two centered curves. To
+estimate Swadesh similarity, we computed the average normalized
+Levenshtein distance between each of the 40 words. Finally, to compare
+typological similarity, we added the number of features two languages
+shared.
+
 \hypertarget{results-and-discussion-2}{%
 \subsection{Results and Discussion}\label{results-and-discussion-2}}
 
 Unlike the striking consistency across multiple English corpora, we
 found significant variability in the structure of information curves
 across languages estimated under the unigram. Fig.
-\ref{fig:diff-languages} shows a sample of languages from several
-language families. Despite this variability, the shapes of information
-curves estimated under the trigram model were more similar
-cross-linguistically and to the shapes found in English: Sentences began
-with highly informative words (presumably due to lack of context) and
-then rapidly approached a uniform level of information. Consistent with
-this characterization, pairwise similarities in languages' information
-curves estimated under the unigram model were more correlated with their
-Swadesh distances (\(r =\) -0.11, \(t =\) -10.27, \(p\) \textless{}
-.001) than their distances estimated under the trigram model (\(r =\)
-0.03, \(t =\) 2.33, \(p =\) .020).
+\ref{fig:diff-languages} shows centered information curves for a sample
+of languages from several language families. Despite this variability,
+the shapes of information curves estimated under the trigram model were
+more similar cross-linguistically and to the shapes found in English:
+Sentences began with highly informative words (presumably due to lack of
+context) and then rapidly approached a uniform level of information.
+Consistent with this characterization, pairwise similarities in
+languages' information curves estimated under the unigram model were
+more correlated with their Swadesh distances (\(r =\) -0.11, \(t =\)
+-10.27, \(p\) \textless{} .001) than their distances estimated under the
+trigram model (\(r =\) 0.03, \(t =\) 2.33, \(p =\) .020).
 
 \begin{CodeChunk}
 \begin{figure}[tb]
@@ -562,15 +570,6 @@ are reliably correlated with information curve similarity.
 \includegraphics{figs/type_cors-1} \caption[Correlation between info curve and feature similarity]{Correlation between info curve and feature similarity}\label{fig:type_cors}
 \end{figure}
 \end{CodeChunk}
-
-By considering data from \(159\) diverse languages, we see that the
-frequency-based information curves display unique information
-distributions for each language. A small part of this cross-linguistic
-variation is explicable due to top-down features of the language in
-question, such as canonical word order. The majority of the variation
-for each language does not derive from top-down features, but we suspect
-instead arises from bottom-up choices made by the speakers in each
-language.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
