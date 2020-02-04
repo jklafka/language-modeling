@@ -287,13 +287,13 @@ discovering a latent invariant template from a set of sequences.
 We used DBA to discover the short sequence of surprisal values that
 characterized the surprisal curves common to sentences of varying
 sentence lengths. We first averaged individual sentences of the same
-length together, and then applied the DBA algorithm to this set of
+length together and then applied the DBA algorithm to this set of
 average sequences. DBA requires a parameter specifying the length of the
-template sequence. We chose 5 as the length of the template sequence
-based on our inspection of the curves from the British National Corpus
-as well as the curves we found in subsequent studies. However, the
-results of this and the following studies were robust to other choices
-of this length parameter (7 and 10).
+template sequence. We chose a 5-length template sequence based on our
+inspection of the curves from the British National Corpus as well as the
+curves we found in subsequent studies. However, the results of this and
+the following studies were robust to other choices of this length
+parameter (7 and 10).
 
 \hypertarget{results-and-discussion}{%
 \subsection{Results and Discussion}\label{results-and-discussion}}
@@ -319,13 +319,13 @@ final word (Fig. \ref{fig:bnc_plots}A).
 
 In comparison, under the trigram model we observed 3 major changes.
 First, each word contained significantly less information. This is to be
-expected as the knowing two prior words makes it much easier to predict
-the next word. Second, the fall and peak at the ends of utterances was
-still observable, but much less pronounced. Finally, the first word of
-each sentence was now much more surpising than the rest of the words in
-the sentence (although still less surprising than the first word under
-the unigram model). This is because the model had only the start of
-sentence token \(\left<s\right>\) to use as context.
+expected as knowing two prior words makes it easier to predict the next
+word. Second, the fall and peak at the ends of utterances was still
+observable, but much less pronounced. Finally, the first word of each
+sentence was now much more surpising than the rest of the words in the
+sentence (although still less surprising than the first word under the
+unigram model). This is because the model had only the start of sentence
+token \(\left<s\right>\) to use as context.
 
 Together, these results suggest that Yu et al. (2016) overestimated the
 non-uniformity of information in sentences. Because readers of English
@@ -378,9 +378,7 @@ environment, providing listeners information from a variety of sources
 beyond the words conveyed (e.g.~prosody, gesture, world context).
 Finally, the both words and sentence structures tend to be simpler in
 spoken language than written language as they must be produced and
-processed in real-time (Christiansen \& Chater, 2016). Thus, sentences
-of spoken English may have different information curves than sentences
-of written English.
+processed in real-time (Christiansen \& Chater, 2016).
 
 The language young children hear is further different from the language
 adults speak to each other. Child-directed speech tends to simpler than
@@ -460,22 +458,21 @@ information}\label{study-3-cross-linguistic-variation-in-information}}
 \hypertarget{data-2}{%
 \subsection{Data}\label{data-2}}
 
-In order to measures cross-linguistic variation in the struture of
-information across sentences, we constructed a corpus of Wikipedia
-articles from all languages with at least 10,000 articles. This resulted
-a set of 152 languages from 16 families. To examine the relationships
-between information curves and linguistic similarity, we used two
-measures of linguistic distance.
+To measures cross-linguistic variation in the structure of information
+across sentences, we constructed a corpus of Wikipedia articles from all
+languages with at least 10,000 articles. This resulted a set of 152
+languages from 16 families. We then used two measures of lexical
+similarity to investigate cross-linguistic variation in information
+curves.
 
 To target lexical differences between languages, we used the 40-item
 Swadesh word list consisting of basic concepts appearing in all
 langauges (Swadesh, 1955; Wichmann et al., 2016). The more similar two
-languages' words are, the more similar the two languages are.
-
-Finally, to understand the relationship between information curves and
-typological features, we used the World Atlas of Language Structures, a
-collection of morphological, syntactic, phonological, and other features
-of linguistic structure (WALS; Dryer \& Haspelmath, 2013). As WALS is a
+languages' words are, the more similar the two languages are. To
+understand the relationship between information curves and typological
+features, we used the World Atlas of Language Structures, a collection
+of morphological, syntactic, phonological, and other features of
+linguistic structure (WALS; Dryer \& Haspelmath, 2013). As WALS is a
 compiled database from dozens of papers from different authors, most
 features for most languages are fairly sparse. We use a iterative
 imputation algorithm for categorical data Multiple Imputation Multiple
@@ -558,16 +555,16 @@ sentences. When each word in a sentence is considered alone, languages
 vary quite dramatically in how information is distributed across
 sentences. Second, a diverse set of typological features of languages
 are related to how information is structured for listeners who bring
-predictive processing to language. These features appear to a small but
-reliable proportion of the variation in how uniformly information is
-distributed across utterances. Finally, despite this variation, two
-words of predictive context radically transform the structure of
-information in utterances, leading to significantly more uniformative in
-all languages irrespective of their typological structure. These
-analyses suggest that top-down constraints from language do play an
-important role in structuring speakers' utterances, but the speakers
-have tremendous power to choose efficient utterances within these
-constraints.
+predictive processing to language. These features appear to explain a
+small but reliable proportion of the variation in how uniformly
+information is distributed across utterances. Finally, despite this
+variation, two words of predictive context radically transform the
+structure of information in utterances, leading to significantly more
+uniformative in all languages irrespective of their typological
+structure. These analyses suggest that top-down constraints from
+language do play an important role in structuring speakers' utterances,
+but the speakers have tremendous power to choose efficient utterances
+within these constraints.
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
@@ -575,17 +572,17 @@ constraints.
 In this paper we have proposed a novel method for quantifying how
 information is typically distributed across the words of a sentence. We
 showed that English--whether written or spoken, whether produced by
-adults or children--has a prototypical structure. We then showed that
-this structure varies cross-lingusitically in predictable ways, but also
-shares broad similarities. These results add to a growing body of
-research using information theory to ask about the structure of
-language. While much of this work has considered the choices speakers
-make to structure their utternces within the constraints imposed by
-their linguistic code, our work adds to this research program by
-investigating these constraints themselves. These results represent a
-small first step towards answering the question of how much these
-constraints shape speakers' productions, and how speakers interact with
-them.
+adults or children--has a prototypical information structure. We then
+showed that this information structure varies cross-lingusitically in
+predictable ways, but also shares broad similarities. These results add
+to a growing body of research using information theory to explore the
+structure of language. While much of this work has considered the
+choices speakers make to structure their utterances within the
+constraints imposed by their linguistic codes, our work adds to this
+research program by investigating these constraints themselves. These
+results represent a small first step towards answering the question of
+how much these constraints shape speakers' productions, and how speakers
+interact with them.
 
 \hypertarget{references}{%
 \section{References}\label{references}}
