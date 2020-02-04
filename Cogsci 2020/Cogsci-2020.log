@@ -1,18 +1,14 @@
-<<<<<<< HEAD
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  3 FEB 2020 20:55
-=======
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.20)  3 FEB 2020 20:17
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.20)  3 FEB 2020 22:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **Cogsci-2020.tex
 (./Cogsci-2020.tex
-LaTeX2e <2018-12-01>
+LaTeX2e <2019-10-01> patch level 3
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
-Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
+Document Class: article 2019/10/25 v1.4k Standard LaTeX document class
 (/usr/local/texlive/2019/texmf-dist/tex/latex/base/size10.clo
-File: size10.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
+File: size10.clo 2019/10/25 v1.4k Standard LaTeX file (size option)
 )
 \c@part=\count80
 \c@section=\count81
@@ -70,10 +66,10 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \@float@everytoks=\toks15
 \@floatcapt=\box28
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/caption/caption.sty
-Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
+Package: caption 2020/01/03 v3.4h Customizing captions (AR)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
-Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
-Package caption3 Info: TeX engine: e-TeX on input line 64.
+Package: caption3 2020/01/03 v1.8h caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 61.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks16
@@ -85,12 +81,13 @@ Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \caption@indent=\dimen107
 \caption@parindent=\dimen108
 \caption@hangindent=\dimen109
+Package caption Info: Standard document class detected.
 )
 \c@caption@flags=\count89
-\c@ContinuedFloat=\count90
+\c@continuedfloat=\count90
 Package caption Info: float package is loaded.
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2018/12/01 v2.17b AMS math features
+Package: amsmath 2019/11/16 v2.17d AMS math features
 \@mathmargin=\skip44
 For additional information on amsmath, use the `?' option.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsmath/amstext.sty
@@ -106,20 +103,20 @@ Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 Package: amsopn 2016/03/08 v2.02 operator names
 )
 \inf@bad=\count91
-LaTeX Info: Redefining \frac on input line 223.
+LaTeX Info: Redefining \frac on input line 227.
 \uproot@=\count92
 \leftroot@=\count93
-LaTeX Info: Redefining \overline on input line 385.
+LaTeX Info: Redefining \overline on input line 389.
 \classnum@=\count94
 \DOTSCASE@=\count95
-LaTeX Info: Redefining \ldots on input line 482.
-LaTeX Info: Redefining \dots on input line 485.
-LaTeX Info: Redefining \cdots on input line 606.
+LaTeX Info: Redefining \ldots on input line 486.
+LaTeX Info: Redefining \dots on input line 489.
+LaTeX Info: Redefining \cdots on input line 610.
 \Mathstrutbox@=\box29
 \strutbox@=\box30
 \big@size=\dimen112
-LaTeX Font Info:    Redeclaring font encoding OML on input line 729.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
+LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
 \macc@depth=\count96
 \c@MaxMatrixCols=\count97
 \dotsspace@=\muskip10
@@ -140,134 +137,143 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
 \multlinegap=\skip45
 \multlinetaggap=\skip46
 \mathdisplay@stack=\toks21
-LaTeX Info: Redefining \[ on input line 2844.
-LaTeX Info: Redefining \] on input line 2845.
+LaTeX Info: Redefining \[ on input line 2858.
+LaTeX Info: Redefining \] on input line 2859.
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup6
 \symAMSb=\mathgroup7
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 )) (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
-(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
-
-(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
-Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
-Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
-Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
-Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
-Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
-Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
-Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
-Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-Package: pdftexcmds 2018/09/10 v0.29 Utility functions of pdfTeX for LuaTeX (HO
+Package: hyperref 2019/11/10 v7.00c Hypertext links for LaTeX
+(/usr/local/texlive/2019/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2019/12/15 v1.24 LaTeX kernel commands for general use (HO)
+) (/usr/local/texlive/2019/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2019/11/07 v1.0c TeX engine tests
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
 )
-Package pdftexcmds Info: LuaTeX not detected.
+(/usr/local/texlive/2019/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
-)
-Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
-Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
-)
-Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
+) (/usr/local/texlive/2019/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+) (/usr/local/texlive/2019/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+) (/usr/local/texlive/2019/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2019/12/15 v1.9 Color options for hyperref/bookmark (HO)
+(/usr/local/texlive/2019/texmf-dist/tex/latex/hycolor/xcolor-patch.sty
+Package: xcolor-patch 2019/12/15 xcolor patch
+(/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/hopatch.sty
 Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
-Package: xcolor-patch 2016/05/16 xcolor patch
-Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
-Package atveryend Info: \enddocument detected (standard20110627).
-Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
-Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
-Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
-) (/usr/local/texlive/2019/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/auxhook.sty
-Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+))) (/usr/local/texlive/2019/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
 )
 \@linkdim=\dimen119
 \Hy@linkcounter=\count103
 \Hy@pagecounter=\count104
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
+File: pd1enc.def 2019/11/10 v7.00c Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
+) (/usr/local/texlive/2019/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+) (/usr/local/texlive/2019/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
 \Hy@SavedSpaceFactor=\count105
 (/usr/local/texlive/2019/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
-Package hyperref Info: Hyper figures OFF on input line 4519.
-Package hyperref Info: Link nesting OFF on input line 4524.
-Package hyperref Info: Hyper index ON on input line 4527.
-Package hyperref Info: Plain pages OFF on input line 4534.
-Package hyperref Info: Backreferencing OFF on input line 4539.
+Package hyperref Info: Hyper figures OFF on input line 4535.
+Package hyperref Info: Link nesting OFF on input line 4540.
+Package hyperref Info: Hyper index ON on input line 4543.
+Package hyperref Info: Plain pages OFF on input line 4550.
+Package hyperref Info: Backreferencing OFF on input line 4555.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4772.
+Package hyperref Info: Bookmarks ON on input line 4788.
 \c@Hy@tempcnt=\count106
 (/usr/local/texlive/2019/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-LaTeX Info: Redefining \url on input line 5125.
+LaTeX Info: Redefining \url on input line 5147.
 \XeTeXLinkMargin=\dimen120
+(/usr/local/texlive/2019/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+(/usr/local/texlive/2019/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
 \Fld@menulength=\count107
 \Field@Width=\dimen121
 \Fld@charsize=\dimen122
-Package hyperref Info: Hyper figures OFF on input line 6380.
-Package hyperref Info: Link nesting OFF on input line 6385.
-Package hyperref Info: Hyper index ON on input line 6388.
-Package hyperref Info: backreferencing OFF on input line 6395.
-Package hyperref Info: Link coloring OFF on input line 6400.
-Package hyperref Info: Link coloring with OCG OFF on input line 6405.
-Package hyperref Info: PDF/A mode OFF on input line 6410.
-LaTeX Info: Redefining \ref on input line 6450.
-LaTeX Info: Redefining \pageref on input line 6454.
+Package hyperref Info: Hyper figures OFF on input line 6418.
+Package hyperref Info: Link nesting OFF on input line 6423.
+Package hyperref Info: Hyper index ON on input line 6426.
+Package hyperref Info: backreferencing OFF on input line 6433.
+Package hyperref Info: Link coloring OFF on input line 6438.
+Package hyperref Info: Link coloring with OCG OFF on input line 6443.
+Package hyperref Info: PDF/A mode OFF on input line 6448.
+LaTeX Info: Redefining \ref on input line 6488.
+LaTeX Info: Redefining \pageref on input line 6492.
+(/usr/local/texlive/2019/texmf-dist/tex/generic/atbegshi/atbegshi.sty
+Package: atbegshi 2019/12/05 v1.19 At begin shipout hook (HO)
+)
 \Hy@abspage=\count108
 \c@Item=\count109
 \c@Hfootnote=\count110
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2018/11/30 v6.88e Hyperref driver for pdfTeX
+File: hpdftex.def 2019/11/10 v7.00c Hyperref driver for pdfTeX
+(/usr/local/texlive/2019/texmf-dist/tex/latex/atveryend/atveryend.sty
+Package: atveryend 2019-12-11 v1.11 Hooks at the very end of document (HO)
+Package atveryend Info: \enddocument detected (standard20110627).
+)
 \Fld@listcount=\count111
 \c@bookmark@seq@number=\count112
-(/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+
+(/usr/local/texlive/2019/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
-82.
+86.
 )
 \Hy@SectionHShift=\skip47
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+Package: graphics 2019/11/01 v1.3d Standard LaTeX Graphics (DPC,SPQR)
 (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: pdftex.def on input line 99.
+Package graphics Info: Driver file: pdftex.def on input line 105.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen123
 \Gin@req@width=\dimen124
 ) (/usr/local/texlive/2019/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
-Package: fancyvrb 2019/01/15
-Style option: `fancyvrb' v3.2a <2019/01/15> (tvz)
+Package: fancyvrb 2020/01/13 v3.5 verbatim text (tvz,hv)
 \FV@CodeLineNo=\count113
 \FV@InFile=\read1
 \FV@TabBox=\box31
@@ -298,8 +304,8 @@ LaTeX Font Info:    ... okay on input line 63.
 LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
 LaTeX Font Info:    ... okay on input line 63.
 LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 63.
-LaTeX Font Info:    Try loading font information for OMS+pzccm on input line 63
-.
+LaTeX Font Info:    Trying to load font information for OMS+pzccm on input line
+ 63.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/omspzccm.fd
 File: omspzccm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/pzccm.
 )
@@ -316,9 +322,13 @@ Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box32
 Package hyperref Info: Link coloring OFF on input line 63.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
-(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
+(/usr/local/texlive/2019/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/usr/local/texlive/2019/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count117
 )
@@ -342,17 +352,10 @@ LaTeX Info: Redefining \nameref on input line 63.
 \MPnumerator=\count122
 \makeMPintoPDFobject=\count123
 \everyMPtoPDFconversion=\toks23
-) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
-Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
-(/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/grfext.sty
-Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
-)
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2019-12-09 v2.10 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
-38.
-Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 456.
+85.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
@@ -365,18 +368,18 @@ LaTeX Info: Redefining \BHBI on input line 130.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
-LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 66
-.
+LaTeX Font Info:    Trying to load font information for OT1+ptmcm on input line
+ 66.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/ot1ptmcm.fd
 File: ot1ptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 66
-.
+LaTeX Font Info:    Trying to load font information for OML+ptmcm on input line
+ 66.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/omlptmcm.fd
 File: omlptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+psycm on input line 66
-.
+LaTeX Font Info:    Trying to load font information for OMX+psycm on input line
+ 66.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/omxpsycm.fd
 File: omxpsycm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/psycm.
 )
@@ -386,11 +389,13 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
-LaTeX Font Info:    Try loading font information for U+msa on input line 66.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 66.
+
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 66.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 66.
+
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
@@ -409,127 +414,73 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 
 
 ]
-<figs/bnc-lengths-1.pdf, id=73, 163.61125pt x 117.43875pt>
+<figs/bnc-lengths-1.pdf, id=73, 164.615pt x 116.435pt>
 File: figs/bnc-lengths-1.pdf Graphic file (type pdf)
 <use figs/bnc-lengths-1.pdf>
 Package pdftex.def Info: figs/bnc-lengths-1.pdf  used on input line 204.
-(pdftex.def)             Requested size: 163.61084pt x 117.43845pt.
+(pdftex.def)             Requested size: 164.6146pt x 116.43471pt.
 
-LaTeX Warning: Reference `bnc_plots' on page 2 undefined on input line 263.
+LaTeX Warning: Reference `bnc_plots' on page 2 undefined on input line 262.
 
 
-<<<<<<< HEAD
 Underfull \vbox (badness 10000) has occurred while \output is active []
-=======
-LaTeX Warning: Reference `bnc_plots' on page 3 undefined on input line 281.
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
 
 [2 <./figs/bnc-lengths-1.pdf>]
 <figs/bnc_plots-1.pdf, id=98, 140.525pt x 237.88875pt>
 File: figs/bnc_plots-1.pdf Graphic file (type pdf)
 <use figs/bnc_plots-1.pdf>
-<<<<<<< HEAD
-Package pdftex.def Info: figs/bnc_plots-1.pdf  used on input line 286.
+Package pdftex.def Info: figs/bnc_plots-1.pdf  used on input line 285.
 (pdftex.def)             Requested size: 140.52464pt x 237.88815pt.
+<figs/spoken_figs-1.pdf, id=101, 344.28625pt x 240.9pt>
+File: figs/spoken_figs-1.pdf Graphic file (type pdf)
+<use figs/spoken_figs-1.pdf>
+Package pdftex.def Info: figs/spoken_figs-1.pdf  used on input line 334.
+(pdftex.def)             Requested size: 344.2854pt x 240.8994pt.
 [3 <./figs/bnc_plots-1.pdf>]
-<figs/spoken_figs-1.pdf, id=119, 357.335pt x 242.9075pt>
-File: figs/spoken_figs-1.pdf Graphic file (type pdf)
-<use figs/spoken_figs-1.pdf>
-Package pdftex.def Info: figs/spoken_figs-1.pdf  used on input line 420.
-(pdftex.def)             Requested size: 357.33412pt x 242.90689pt.
-LaTeX Font Info:    Try loading font information for OML+ptm on input line 488.
+Underfull \hbox (badness 1067) in paragraph at lines 434--440
+\OT1/ptm/m/n/10 for-ma-tion across sen-tences, we con-structed a cor-pus of
+ []
 
-=======
-Package pdftex.def Info: figs/bnc_plots-1.pdf  used on input line 304.
-(pdftex.def)             Requested size: 163.61084pt x 274.02307pt.
-<figs/spoken_figs-1.pdf, id=104, 415.5525pt x 277.035pt>
-File: figs/spoken_figs-1.pdf Graphic file (type pdf)
-<use figs/spoken_figs-1.pdf>
-Package pdftex.def Info: figs/spoken_figs-1.pdf  used on input line 352.
-(pdftex.def)             Requested size: 415.55148pt x 277.03432pt.
-[3 <./figs/bnc_plots-1.pdf>] [4 <./figs/spoken_figs-1.pdf>]
-LaTeX Font Info:    Trying to load font information for OML+ptm on input line 5
-13.
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
+[4 <./figs/spoken_figs-1.pdf>]
+<figs/diff-languages-1.pdf, id=136, 243.91125pt x 161.60374pt>
+File: figs/diff-languages-1.pdf Graphic file (type pdf)
+<use figs/diff-languages-1.pdf>
+Package pdftex.def Info: figs/diff-languages-1.pdf  used on input line 460.
+(pdftex.def)             Requested size: 243.91064pt x 161.60335pt.
+LaTeX Font Info:    Trying to load font information for OML+ptm on input line 4
+92.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/omlptm.fd
 File: omlptm.fd 
 )
 LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <10> not available
-<<<<<<< HEAD
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 488.
-<figs/diff-languages-1.pdf, id=121, 243.91125pt x 161.60374pt>
-File: figs/diff-languages-1.pdf Graphic file (type pdf)
-<use figs/diff-languages-1.pdf>
-Package pdftex.def Info: figs/diff-languages-1.pdf  used on input line 493.
-(pdftex.def)             Requested size: 243.91064pt x 161.60335pt.
-[4]
-<figs/type_cors-1.pdf, id=135, 174.6525pt x 189.70876pt>
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 492.
+<figs/type_cors-1.pdf, id=138, 174.6525pt x 189.70876pt>
 File: figs/type_cors-1.pdf Graphic file (type pdf)
 <use figs/type_cors-1.pdf>
-Package pdftex.def Info: figs/type_cors-1.pdf  used on input line 518.
+Package pdftex.def Info: figs/type_cors-1.pdf  used on input line 499.
 (pdftex.def)             Requested size: 174.65207pt x 189.70828pt.
-
-Underfull \vbox (badness 3568) has occurred while \output is active []
-
-[5 <./figs/spoken_figs-1.pdf> <./figs/diff-languages-1.pdf> <./figs/type_cors-1
-.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 683.
+[5 <./figs/diff-languages-1.pdf> <./figs/type_cors-1.pdf>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 687.
 [6]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 683.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 687.
 (./Cogsci-2020.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 683.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 683.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 687.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 687.
 Package rerunfilecheck Info: File `Cogsci-2020.out' has not changed.
-(rerunfilecheck)             Checksum: 693963AD7A55F873BE3F9D79F03409C6;953.
+(rerunfilecheck)             Checksum: 149682EDA3F99C6FC5D52663DE5DA325;953.
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 683.
-=======
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 513.
-<figs/diff-languages-1.pdf, id=140, 243.91125pt x 161.60374pt>
-File: figs/diff-languages-1.pdf Graphic file (type pdf)
-<use figs/diff-languages-1.pdf>
-Package pdftex.def Info: figs/diff-languages-1.pdf  used on input line 519.
-(pdftex.def)             Requested size: 243.91064pt x 161.60335pt.
-[5 <./figs/diff-languages-1.pdf>]
-<figs/type_cors-1.pdf, id=159, 196.735pt x 225.84375pt>
-File: figs/type_cors-1.pdf Graphic file (type pdf)
-<use figs/type_cors-1.pdf>
-Package pdftex.def Info: figs/type_cors-1.pdf  used on input line 548.
-(pdftex.def)             Requested size: 196.7345pt x 225.84319pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-[6 <./figs/type_cors-1.pdf>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 725.
-[7
-
-]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 725.
-(./Cogsci-2020.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 725.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 725.
-Package rerunfilecheck Info: File `Cogsci-2020.out' has not changed.
-(rerunfilecheck)             Checksum: 361FFEB9CC1B816947995DB4AE6AA298;1002.
-
-LaTeX Warning: There were undefined references.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 725.
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 687.
  ) 
 Here is how much of TeX's memory you used:
- 8249 strings out of 492616
- 122899 string characters out of 6129482
- 220379 words of memory out of 5000000
- 11987 multiletter control sequences out of 15000+600000
+ 8631 strings out of 492162
+ 129450 string characters out of 6125292
+ 220287 words of memory out of 5000000
+ 12752 multiletter control sequences out of 15000+600000
  33385 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
-<<<<<<< HEAD
- 36i,11n,39p,565b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
-=======
  41i,11n,42p,565b,323s stack positions out of 5000i,500n,10000p,200000b,80000s
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/te
 xlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texl
@@ -538,11 +489,7 @@ ve/2019/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2019/
 texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2019/texmf-dist
 /fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/typ
 e1/urw/times/utmri8a.pfb>
-<<<<<<< HEAD
-Output written on Cogsci-2020.pdf (6 pages, 147033 bytes).
-=======
-Output written on Cogsci-2020.pdf (7 pages, 148485 bytes).
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
+Output written on Cogsci-2020.pdf (6 pages, 146047 bytes).
 PDF statistics:
  236 PDF objects out of 1000 (max. 8388607)
  203 compressed objects within 3 object streams

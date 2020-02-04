@@ -243,9 +243,8 @@ Corpus using the KenLM toolkit (Heafield, Pouzyrevsky, Clark, \& Koehn,
 ``\(\left<s\right>\)'' and end of sentence word ``\(\left</s\right>\)''.
 Trigram estimates did not cross sentence boundaries, so for example the
 surprisal of the second word in an utterances was estimated as
-(\(\text{surprisal}(w_{2}) = -P(w_2|w_{i},\left<s\right>)\).
-
-Naïve trigram models will underestimate the surprisal of words in
+(\(\text{surprisal}(w_{2}) = -P(w_2|w_{i},\left<s\right>)\). Naïve
+trigram models will underestimate the surprisal of words in
 low-frequency trigrams (e.g.~if the word ``meatballs'' appears only once
 in the corpus following exactly the words ``spaghetti and'', it is
 perfectly predictable from its prior two words). To avoid this
@@ -260,11 +259,7 @@ Chen \& Goodman, 1999).
 
 To develop a characteristic information curve for sentences in the
 corpus, we needed to aggregate sentences that varied dramatically in
-<<<<<<< HEAD
-length (Fig \ref{bnc_plots}(A)). We used Dynamic Time Warping Barycenter
-=======
 length (Fig \ref{bnc_plots}A). We used Dynamic Time Warping Barycenter
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
 Averaging (DBA), an algorithm for finding the average of sequences that
 share and underlying pattern but vary in length (Petitjean, Ketterlin,
 \& Gançarski, 2011). DBA inverts standard dynamic time warping,
@@ -298,14 +293,13 @@ parameter (7 and 10).
 We began by replicating Yu et al.'s (2016) analyses, examining the
 surprisal of words in sentence of length 15, 30, and 45 estimated by our
 unigram model. In line with their computations, we found a reliably
-non-linear shape in sentences of all three lengths, with the information
-in each word rising for the first two words, plateauing in the middle of
+non-linear shape in sentences of all 3 lengths, with the information in
+each word rising for the first two words, plateauing in the middle of
 sentences, dipping in pen-ultimate position, and rising steeply on the
 final word (Fig. \ref{fig:bnc_plots}A).
 
 In comparison, under the trigram model we observed 3 major changes.
 First, each word contained significantly less information. This is to be
-<<<<<<< HEAD
 expected as the knowing two prior words makes it much easier to predict
 the next word. Second, the fall and peak at the ends of utterances was
 still observable, but much less pronounced. Finally, the first word of
@@ -313,16 +307,6 @@ each sentence was now much more surprising than the rest of the words in
 the sentence, because the model had only the start of sentence token
 \(\left<s\right>\) to use as context. Thus, the trigram model likely
 overestimates the information for humans reading the first word.
-=======
-expected as knowing two prior words makes it easier to predict the next
-word. Second, the fall and peak at the ends of utterances was still
-observable, but much less pronounced. Finally, the first word of each
-sentence was now much more surpising than the rest of the words in the
-sentence (although still less surprising than the first word under the
-unigram model). This is because the model had only the start of sentence
-token \(\left<s\right>\) to use as context.
-
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
 Together, these results suggest that Yu et al. (2016) overestimated the
 non-uniformity of information in sentences. Nonetheless, the final words
 of utterances do consistently contain more information than the other
@@ -332,7 +316,6 @@ Fig. \ref{fig:bnc_plots}B shows the barycenter produced by DBA. The
 algorithm correctly recovers both the initial and final rise in
 information under the unigram model, and the initial fall and smaller
 final rise in the trigram model. We take this as evidence that (1) these
-<<<<<<< HEAD
 shapes are characteristic of all lengths, and (2) that DBA effectively
 recovers characteristic information structure. In sum, the results of
 Study 1 suggest that sentences of written English have a characteristic
@@ -344,10 +327,6 @@ English, or does it characterize spoken English as well? In Study 2, we
 apply this same analysis to two corpora of spoken English--the first of
 adults speaking to other adults, and the second of adults and children
 speaking to each other.
-=======
-shapes are characteristic not just of sentences of length 15, 30, and
-45, but of all lengths, and (2) that DBA effectively recovers the
-characteristic structure of utterances of varying lengths.
 
 \begin{CodeChunk}
 \begin{figure*}[tb]
@@ -360,29 +339,20 @@ characteristic structure of utterances of varying lengths.
 \end{figure*}
 \end{CodeChunk}
 
-In sum, the results of Study 1 suggest that sentences of written English
-have a characteristic non-uniform information structure, with
-information rising at the ends of sentences. This structure is more
-pronounced when each word is considered in isolation, but some of the
-structure remains even when each word is considered in context. Is this
-structure unique to written English, or does it characterize spoken
-English as well? In Study 2, we apply this same analysis to two corpora
-of spoken English--the first of adults speaking to other adults, and the
-second of adults and children speaking to each other.
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
-
 \hypertarget{study-2-information-in-spoken-english}{%
 \section{Study 2: Information in Spoken
 English}\label{study-2-information-in-spoken-english}}
 
 Spoken language is different from written language in several respects.
-First, the speed at which it can be processed is constrained by the
+First, the speed at which it can be processed is con- strained by the
 speed at which it is produced. Second, speech occurs in a multimodal
-environment, providing listeners information from a variety of sources
-beyond the words conveyed (e.g.~prosody, gesture, world context).
+environment, providing listeners in- formation from a variety of sources
+beyond the words con- veyed (e.g.~prosody, gesture, world context).
 Finally, the both words and sentence structures tend to be simpler in
 spoken language than written language as they must be produced and
-processed in real-time (Christiansen \& Chater, 2016).
+processed in real-time (Christiansen \& Chater, 2016). Thus, sentences
+of spoken English may have different information curves than sentences
+of written English.
 
 The language young children hear is further different from the language
 adults speak to each other. Child-directed speech tends to simpler than
@@ -392,8 +362,8 @@ complexity of syntactic structures (Snow, 1972). The speech produced by
 young children is even more distinct from adult-adult speech, replete
 with simplifications and modifications imposed by their developing
 knowledge of both the lexicon and grammar (Clark, 2009). In Study 2, we
-ask whether spoken English from both adults and children has the same
-information structure as written English.
+ask whether spoken English--produced both by adults and children-- has
+the same information structure as written English.
 
 \hypertarget{data-1}{%
 \subsection{Data}\label{data-1}}
@@ -461,25 +431,7 @@ information}\label{study-3-cross-linguistic-variation-in-information}}
 \hypertarget{data-2}{%
 \subsection{Data}\label{data-2}}
 
-<<<<<<< HEAD
-In order to measures cross-linguistic variation in the structure of
-information across sentences, we constructed a corpus of Wikipedia
-articles from all languages with at least 10,000 articles. This resulted
-a set of 152 languages from 16 families. To examine the relationships
-between information curves and linguistic similarity, we used two
-measures of linguistic distance.
-
-To target lexical differences between languages, we used the 40-item
-Swadesh word list consisting of basic concepts appearing in all
-languages (Swadesh, 1955; Wichmann et al., 2016). The more similar two
-languages' words are, the more similar the two languages are.
-
-Finally, to understand the relationship between information curves and
-typological features, we used the World Atlas of Language Structures, a
-collection of morphological, syntactic, phonological, and other features
-of linguistic structure (WALS; Dryer \& Haspelmath, 2013). As WALS is a
-=======
-To measures cross-linguistic variation in the structure of information
+To measure cross-linguistic variation in the structure of information
 across sentences, we constructed a corpus of Wikipedia articles from all
 languages with at least 10,000 articles. This resulted a set of 152
 languages from 16 families. We then used two measures of lexical
@@ -494,7 +446,6 @@ understand the relationship between information curves and typological
 features, we used the World Atlas of Language Structures, a collection
 of morphological, syntactic, phonological, and other features of
 linguistic structure (WALS; Dryer \& Haspelmath, 2013). As WALS is a
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
 compiled database from dozens of papers from different authors, most
 features for most languages are fairly sparse. We use a iterative
 imputation algorithm for categorical data Multiple Imputation Multiple
@@ -503,6 +454,12 @@ Audigier, Husson, \& Josse, 2017).
 
 \hypertarget{data-processing-1}{%
 \subsection{Data processing}\label{data-processing-1}}
+
+\begin{CodeChunk}
+\begin{figure}[tb]
+\includegraphics{figs/diff-languages-1} \caption[Characteristic information curves (centered) for a sample of languages from Wikipedia]{Characteristic information curves (centered) for a sample of languages from Wikipedia}\label{fig:diff-languages}
+\end{figure}
+\end{CodeChunk}
 
 All processing was identical to Studies 1 and 2 except for the lengths
 of utterances chosen for analyses. To accommodate the variety of lengths
@@ -538,7 +495,12 @@ distances estimated under the trigram model (\(r =\) 0.03, \(t =\) 2.33,
 
 \begin{CodeChunk}
 \begin{figure}[tb]
-\includegraphics{figs/diff-languages-1} \caption[Characteristic information curves (centered) for a sample of languages from Wikipedia]{Characteristic information curves (centered) for a sample of languages from Wikipedia}\label{fig:diff-languages}
+
+{\centering \includegraphics{figs/type_cors-1} 
+
+}
+
+\caption[Pairwise correlations between languages' centered information curves and the number of linguistic features they share of each type]{Pairwise correlations between languages' centered information curves and the number of linguistic features they share of each type. Error bars indicate 95\% CIs.}\label{fig:type_cors}
 \end{figure}
 \end{CodeChunk}
 
@@ -561,12 +523,6 @@ information curve similarity. In contrast, under the trigram model, all
 features types except for nominative syntax are reliably correlated with
 information curve similarity.
 
-\begin{CodeChunk}
-\begin{figure}[tb]
-\includegraphics{figs/type_cors-1} \caption[Pairwise correlations between languages' centered information curves and the number of linguistic features they share of each type]{Pairwise correlations between languages' centered information curves and the number of linguistic features they share of each type. Error bars indicate 95\% CIs.}\label{fig:type_cors}
-\end{figure}
-\end{CodeChunk}
-
 Taken together, these results suggest three broad conclusions. First,
 aspects of the history of languages--encoded in their
 lexicostatistics--structure the shapes of information in typical
@@ -579,19 +535,11 @@ small but reliable proportion of the variation in how uniformly
 information is distributed across utterances. Finally, despite this
 variation, two words of predictive context radically transform the
 structure of information in utterances, leading to significantly more
-<<<<<<< HEAD
 uniformity in all languages irrespective of their typological structure.
 These analyses suggest that top-down constraints from language do play
 an important role in structuring speakers' utterances, but the speakers
 have tremendous power to choose efficient utterances within these
 constraints.
-=======
-uniformative in all languages irrespective of their typological
-structure. These analyses suggest that top-down constraints from
-language do play an important role in structuring speakers' utterances,
-but the speakers have tremendous power to choose efficient utterances
-within these constraints.
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
 
 \hypertarget{conclusion}{%
 \section{Conclusion}\label{conclusion}}
@@ -600,11 +548,7 @@ In this paper we have proposed a novel method for quantifying how
 information is typically distributed across the words of a sentence. We
 showed that English--whether written or spoken, whether produced by
 adults or children--has a prototypical information structure. We then
-<<<<<<< HEAD
 showed that this information structure varies cross-linguistically in
-=======
-showed that this information structure varies cross-lingusitically in
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
 predictable ways, but also shares broad similarities. These results add
 to a growing body of research using information theory to explore the
 structure of language. While much of this work has considered the

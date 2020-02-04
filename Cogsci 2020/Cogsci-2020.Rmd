@@ -165,9 +165,7 @@ Second, we estimated a trigram model in which the surprisal of a given word ($w_
 
 ### Model details
 
-We estimated the surprisal for each word type in the British National Corpus using the KenLM toolkit [@heafield2013]. Each utterance was padded with a special start-of-sentence word "$\left<s\right>$" and end of sentence word "$\left</s\right>$". Trigram estimates did not cross sentence boundaries, so for example the surprisal of the second word in an utterances was estimated as ($\text{surprisal}(w_{2}) = -P(w_2|w_{i},\left<s\right>)$. 
-
-Naïve trigram models will underestimate the surprisal of words in low-frequency trigrams (e.g. if the word "meatballs" appears only once in the corpus following exactly the words "spaghetti and", it is perfectly predictable from its prior two words). To avoid this underestimation, we used modified Kneser-Ney smoothing: this method discounts all ngram frequency counts and interpolates lower-order ngrams into the calculations. These lower-order ngrams are weighted according to the number of distinct contexts they occur as a continuation [see @chen1999]. 
+We estimated the surprisal for each word type in the British National Corpus using the KenLM toolkit [@heafield2013]. Each utterance was padded with a special start-of-sentence word "$\left<s\right>$" and end of sentence word "$\left</s\right>$". Trigram estimates did not cross sentence boundaries, so for example the surprisal of the second word in an utterances was estimated as ($\text{surprisal}(w_{2}) = -P(w_2|w_{i},\left<s\right>)$. Naïve trigram models will underestimate the surprisal of words in low-frequency trigrams (e.g. if the word "meatballs" appears only once in the corpus following exactly the words "spaghetti and", it is perfectly predictable from its prior two words). To avoid this underestimation, we used modified Kneser-Ney smoothing: this method discounts all ngram frequency counts and interpolates lower-order ngrams into the calculations. These lower-order ngrams are weighted according to the number of distinct contexts they occur as a continuation [see @chen1999]. 
 
 ### Averaging curves
 
@@ -179,7 +177,6 @@ We used DBA to discover the short sequence of surprisal values that characterize
 
 ```{r bnc_raw_full, eval = F}
 bnc_unigram_surprisals <- read_csv(here("Surprisals/adult/unigram/bnc.csv"))
-bnc_trigram_surprisals <- read_csv(here("Surprisals/adult/trigram/bnc.csv"))
 
 bnc_subset_unigram <- bnc_unigram_surprisals %>%
     filter(length %in% c(15, 30, 45)) %>%
@@ -249,36 +246,10 @@ gridExtra::grid.arrange(bnc_plot1, bnc_plot2, ncol = 1)
 
 We began by replicating Yu et al.'s [-@yu2016] analyses, examining the surprisal of words in sentence of length 15, 30, and 45 estimated by our unigram model. In line with their computations, we found a reliably non-linear shape in sentences of all 3 lengths, with the information in each word rising for the first two words, plateauing in the middle of sentences, dipping in pen-ultimate position, and rising steeply on the final word (Fig. \ref{fig:bnc_plots}A). 
 
-
 In comparison, under the trigram model we observed 3 major changes. First, each word contained significantly less information. This is to be expected as the knowing two prior words makes it much easier to predict the next word. Second, the fall and peak at the ends of utterances was still observable, but much less pronounced. Finally, the first word of each sentence was now much more surprising than the rest of the words in the sentence, because the model had only the start of sentence token $\left<s\right>$ to use as context. Thus, the trigram model likely overestimates the information for humans reading the first word. Together, these results suggest that @yu2016 overestimated the non-uniformity of information in sentences. Nonetheless, the final words of utterances do consistently contain more information than the other words.
 
 Fig. \ref{fig:bnc_plots}B shows the barycenter produced by DBA. The algorithm correctly recovers both the initial and final rise in information under the unigram model, and the initial fall and smaller final rise in the trigram model. We take this as evidence that (1) these shapes are characteristic of all lengths, and (2) that DBA effectively recovers characteristic information structure. In sum, the results of Study 1 suggest that sentences of written English have a characteristic non-uniform information structure, with information rising at the ends of sentences. This structure is more pronounced when each word is considered in isolation, but some of the structure remains even when each word is considered in context. Is this structure unique to written English, or does it characterize spoken English as well? In Study 2, we apply this same analysis to two corpora of spoken English--the first of adults speaking to other adults, and the second of adults and children speaking to each other.
 
-# Study 2: Information in Spoken English
-
-Spoken language is different from written language in several respects. First, the speed at which it can be processed is constrained by the speed at which it is produced. Second, speech occurs in a multimodal environment, providing listeners information from a variety of sources beyond the words conveyed (e.g. prosody, gesture, world context). Finally, the both words and sentence structures tend to be simpler in spoken language than written language as they must be produced and processed in real-time [@christiansen2016]. Thus, sentences of spoken English may have different information curves than sentences of written English.
-
-The language young children hear is further different from the language adults speak to each other. Child-directed speech tends to simpler than adult-directed speech on a number of dimensions including the lengths and prosodic contours of utterances, the diversity of words, and the complexity of syntactic structures [@snow1972]. The speech produced by young children is even more distinct from adult-adult speech, replete with simplifications and modifications imposed by their developing knowledge of both the lexicon and grammar [@clark2009]. In Study 2, we ask whether spoken English from both adults and children has the same information structure as written English.
-
-## Data
-
-To estimate the information in utterances of adult-adult spoken English, we used the Santa Barbara Corpus of Spoken American English, $\sim$ 250,000 word corpus of recordings of naturally occurring spoken interactions from diverse regions of the United States [@sbc]. For parent-child interactions, we used all of the North American English corpora in the Child Language Data Exchange System (CHILDES) hosted hosted childes-db [@macwhinney2000; @sanchez2019]. We selected for analyses all $\sim$ 1 million utterances produced by children (mostly under the age of five), and $\sim$ 1.7 million utterances produced by the parents of these children.
-
-## Data Processing
-
-All pre-processing and modeling details were identical to Study 1 except for the selection of sentences for analysis. Because the utterances in both the Santa Barbara Corpus and CHILDES were significantly shorter than the sentences in the British National Corpus, we analyzed all utterances of at least 5 and most 15 words (see Fig. \ref{fig:spoken_figs}A). Models were estimated separately for each of the 3 corpora.
-
-## Results and Discussion
-
-The information curves found in adults-adult utterances were quite similar to those of parent-child utterances and child-parent utterances (Fig. \ref{fig:spoken_figs}B). Under the unigram model, information rose steeply in the beginnings of utterances, was relatively flatter in the middle of utterances, and the rose even more steeply at the ends. Under the trigram model, the first parts words of sentences contained the most information, information was relatively constant in the middle of utterances, and then rose slightly again at the ends. 
-
-Unfortunately, we cannot compare amount of information across corpora--surprisal is highly correlated with corpus size (e.g. there is less information in adults' speech in Santa Barbara than in children's speech in CHILDES). However, we can compare the shapes of these curves both to each-other and to the written English sentences in Study 1 \ref{fig:bnc_plots}B. All of these curves appeared to share their important qualitative features, including the sharp rise at the end under the unigram model and the attenuation of this rise under the trigram model. There are small differences--such as the flatter shape in the middle of written sentences than spoken utterances, but this difference is pronounced in the utterances of the Santa Barbara corpus relative to utterances of parents in CHILDES, suggesting that it may be partly a function of corpus size. 
-
-Thus, English--both written and spoken, both produced by adults and by children-appears to have a characteristic shape. Are the features of this shape features of English, or features of language more broadly? In Study 3 we apply this technique to a diverse set of written languages of different families to ask whether these structures vary cross-linguistically. 
-=======
-Finally, Fig. \ref{fig:bnc_plots}B shows the barycenter produced by DBA. The algorithm correctly recovers both the initial and final rise in information under the unigram model, and the initial fall and smaller final rise in the trigram model. We take this as evidence that (1) these shapes are characteristic not just of sentences of length 15, 30, and 45, but of all lengths, and (2) that DBA effectively recovers the characteristic structure of utterances of varying lengths.
-
->>>>>>> e095d6b2e3e39c232a469973ee306be68fa7ecc3
 
 ```{r spoken_figs, fig.env = "figure*", fig.pos = "tb", fig.height = 3.5, fig.width = 7, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "(A) The distribution of sentence lengths in the spoken English corpora: Adults in Santa Barbara, and parents and children in CHILDES. We analyzed sentences of length 5-15 (colored). (B) Charateristic surprisal curves for these corpora."}
 SPOKEN_MIN <- 5
@@ -335,17 +306,11 @@ gridExtra::grid.arrange(spoken_plot1, spoken_plot2, ncol = 1)
 #cowplot::plot_grid(spoken_plot1, spoken_plot2, axis = 'b', nrow = 1)
 ```
 
-
-In sum, the results of Study 1 suggest that sentences of written English have a characteristic non-uniform information structure, with information rising at the ends of sentences. This structure is more pronounced when each word is considered in isolation, but some of the structure remains even when each word is considered in context. Is this structure unique to written English, or does it characterize spoken English as well? In Study 2, we apply this same analysis to two corpora of spoken English--the first of adults speaking to other adults, and the second of adults and children speaking to each other.
-
 # Study 2: Information in Spoken English
 
+Spoken language is different from written language in several respects. First, the speed at which it can be processed is con- strained by the speed at which it is produced. Second, speech occurs in a multimodal environment, providing listeners in- formation from a variety of sources beyond the words con- veyed (e.g. prosody, gesture, world context). Finally, the both words and sentence structures tend to be simpler in spoken language than written language as they must be produced and processed in real-time [@christiansen2016]. Thus, sentences of spoken English may have different information curves than sentences of written English.
 
-Spoken language is different from written language in several respects. First, the speed at which it can be processed is constrained by the speed at which it is produced. Second, speech occurs in a multimodal environment, providing listeners information from a variety of sources beyond the words conveyed (e.g. prosody, gesture, world context). Finally, the both words and sentence structures tend to be simpler in spoken language than written language as they must be produced and processed in real-time [@christiansen2016]. 
-
-The language young children hear is further different from the language adults speak to each other. Child-directed speech tends to simpler than adult-directed speech on a number of dimensions including the lengths and prosodic contours of utterances, the diversity of words, and the complexity of syntactic structures [@snow1972]. The speech produced by young children is even more distinct from adult-adult speech, replete with simplifications and modifications imposed by their developing knowledge of both the lexicon and grammar [@clark2009].
-
-In Study 2, we ask whether spoken English--produced both by adults and children-- has the same information structure as written English.
+The language young children hear is further different from the language adults speak to each other. Child-directed speech tends to simpler than adult-directed speech on a number of dimensions including the lengths and prosodic contours of utterances, the diversity of words, and the complexity of syntactic structures [@snow1972]. The speech produced by young children is even more distinct from adult-adult speech, replete with simplifications and modifications imposed by their developing knowledge of both the lexicon and grammar [@clark2009]. In Study 2, we ask whether spoken English--produced both by adults and children-- has the same information structure as written English.
 
 ## Data
 
@@ -359,9 +324,9 @@ All pre-processing and modeling details were identical to Study 1 except for the
 
 The information curves found in adults-adult utterances were quite similar to those of parent-child utterances and child-parent utterances (Fig. \ref{fig:spoken_figs}B). Under the unigram model, information rose steeply in the beginnings of utterances, was relatively flatter in the middle of utterances, and the rose even more steeply at the ends. Under the trigram model, the first parts words of sentences contained the most information, information was relatively constant in the middle of utterances, and then rose slightly again at the ends. 
 
-Unfortunately, we cannot compare amount of information across corpora--surprisal is highly correlated with corpus size (e.g. there is less information in adults' speech in Santa Babara than in children's speech in CHILDES). However, we can compare the shapes of these curves both to each-other and to the written English sentences in Study 1 \ref{fig:bnc_plots}B. All of these curves appeared to share their important qualitative features, including the sharp rise at the end under the unigram model and the attenuation of this rise under the trigram model. There are small differences--such as the flatter shape in the middle of written sentences than spoken utterances, but this difference is pronounced in the utterances of the Santa Barbara corpus relative to utterances of parents in CHILDES, suggesting that it may be partly a function of corpus size. 
+Unfortunately, we cannot compare amount of information across corpora--surprisal is highly correlated with corpus size (e.g. there is less information in adults' speech in Santa Barbara than in children's speech in CHILDES). However, we can compare the shapes of these curves both to each-other and to the written English sentences in Study 1 \ref{fig:bnc_plots}B. All of these curves appeared to share their important qualitative features, including the sharp rise at the end under the unigram model and the attenuation of this rise under the trigram model. There are small differences--such as the flatter shape in the middle of written sentences than spoken utterances, but this difference is pronounced in the utterances of the Santa Barbara corpus relative to utterances of parents in CHILDES, suggesting that it may be partly a function of corpus size. 
 
-Thus, English--both writen and spoken, both produced by adults and by children-appears to have a characteristic shape. Are the features of this shape features of English, or features of language more broadly? In Study 3 we apply this technique to a diverse set of written languages of different families to ask whether these structures vary cross-linguisticly. 
+Thus, English--both written and spoken, both produced by adults and by children-appears to have a characteristic shape. Are the features of this shape features of English, or features of language more broadly? In Study 3 we apply this technique to a diverse set of written languages of different families to ask whether these structures vary cross-linguistically. 
 
 # Study 3: Cross-linguistic variation in information
 
@@ -397,6 +362,26 @@ To measure cross-linguistic variation in the structure of information across sen
 To target lexical differences between languages, we used the 40-item Swadesh word list consisting of basic concepts appearing in all langauges [@swadesh1955; @wichmann2016]. The more similar two languages' words are, the more similar the two languages are. To understand the relationship between information curves and typological features, we used the World Atlas of Language Structures, a collection of morphological, syntactic, phonological, and other features of linguistic structure [WALS; @2013]. As WALS is a compiled database from dozens of papers from different authors, most features for most languages are fairly sparse. We use a iterative imputation algorithm for categorical data Multiple Imputation Multiple Correspondence Analysis to fill in the missing features [MIMCA; @audigier2017]. 
 
 ## Data processing
+
+
+```{r diff-languages, fig.height=3, fig.width = 3.5, fig.pos = "tb", fig.cap="Characteristic information curves (centered) for a sample of languages from Wikipedia"}
+families_b %>%
+    filter(language %in% c("Afrikaans", "Czech", 
+                           "Japanese", "Tamil", "Kannada",
+                           "Hebrew", "Somali", "Maltese")) %>%
+    ggplot(aes(x = position, y = surprisal, color = language, label = language,
+               group = interaction(language, family))) +
+    facet_grid(gram ~ family, scales = "free_y") +
+    geom_point() + 
+    geom_line() +
+    scale_color_ptol() + 
+    geom_dl(method = list(dl.trans(x = x + 1.25), "first.points", cex = .6)) + 
+    theme_few(base_size = 9) +
+    labs(y = "normalized surprisal") +
+    theme(legend.position = "none", aspect.ratio = 1.33)
+```
+
+
 
 All processing was identical to Studies 1 and 2 except for the lengths of utterances chosen for analyses. To accommodate the variety of lengths across language corpora, we analyzed sentences of lengths 5 to 30.
 
@@ -454,28 +439,7 @@ wals_stats_tri <- filter(cor_data, measure == "wals_cor",
 
 Unlike the striking consistency across multiple English corpora, we found significant variability in the structure of information curves across languages estimated under the unigram model. Fig. \ref{fig:diff-languages} shows centered information curves for a sample of languages from several language families. Despite this variability under the unigram model, the shapes of information curves estimated under the trigram model were more similar cross-linguistically and to the shapes found in English: Sentences began with highly informative words (presumably due to lack of context) and then rapidly approached a uniform level of information. Consistent with this characterization, pairwise similarities in languages' information curves estimated under the unigram model were more correlated with their Swadesh distances ($r =$ `r swadesh_stats_uni$estimate`, $t =$ `r swadesh_stats_uni$statistic`, $p$ `r papaja::printp(swadesh_stats_uni$p.value)`) than their distances estimated under the trigram model ($r =$ `r swadesh_stats_tri$estimate`, $t =$ `r swadesh_stats_tri$statistic`, $p =$ `r papaja::printp(swadesh_stats_tri$p.value)`). 
 
-```{r diff-languages, fig.height=3, fig.width = 3.5, fig.pos = "tb", fig.cap="Characteristic information curves (centered) for a sample of languages from Wikipedia"}
-families_b %>%
-    filter(language %in% c("Afrikaans", "Czech", 
-                           "Japanese", "Tamil", "Kannada",
-                           "Hebrew", "Somali", "Maltese")) %>%
-    ggplot(aes(x = position, y = surprisal, color = language, label = language,
-               group = interaction(language, family))) +
-    facet_grid(gram ~ family, scales = "free_y") +
-    geom_point() + 
-    geom_line() +
-    scale_color_ptol() + 
-    geom_dl(method = list(dl.trans(x = x + 1.25), "first.points", cex = .6)) + 
-    theme_few(base_size = 9) +
-    labs(y = "normalized surprisal") +
-    theme(legend.position = "none", aspect.ratio = 1.33)
-```
-
-While the trigram information curves have a more consistent qualitative shape, there are differences between languages. The pairwise similarities between languages' trigram information curves were more correlated with the number of WALS features they shared ($r =$ `r wals_stats_tri$estimate`, $t =$ `r wals_stats_tri$statistic`, $p$ `r papaja::printp(wals_stats_tri$p.value)`) than their similarities estimated under the trigram model ($r =$ `r wals_stats_uni$estimate`, $t =$ `r wals_stats_uni$statistic`,$p =$ `r papaja::printp(wals_stats_uni$p.value)`).
-
-To understand which typological features contribute to these similarities, we split the WALS features by type, with categories such as nominative categories and nominative syntax describing morphology while word order describes subject-verb-object and head-modifier word orders. Fig. \ref{fig:type_cors} shows the correlation between the similarity of information curves under both the unigram and trigram models and the number of features of each of these types two-languages shared. Under the unigram model, word order features appear to predict information curve similarity. In contrast, under the trigram model, all features types except for nominative syntax are reliably correlated with information curve similarity.
-
-```{r type_cors, fig.height = 3, fig.width=3.5, fig.cap="Pairwise correlations between languages' centered information curves and the number of linguistic features they share of each type. Error bars indicate 95\\% CIs."}
+```{r type_cors, fig.height = 3, fig.width=3.5, fig.pos = "tb", fig.align="center", fig.cap="Pairwise correlations between languages' centered information curves and the number of linguistic features they share of each type. Error bars indicate 95\\% CIs."}
 type_annotations <- tibble(type = c("phonology", "phonology"),
                           estimate = c(-.02, .1),
                           gram = c("unigram", "trigram")) %>%
@@ -495,6 +459,12 @@ ggplot(type_cor_data, aes(x = type, y = estimate, color = gram)) +
     labs(x = "", y = "correlation") + 
     geom_text(aes(label = gram), data = type_annotations)
 ```
+
+
+While the trigram information curves have a more consistent qualitative shape, there are differences between languages. The pairwise similarities between languages' trigram information curves were more correlated with the number of WALS features they shared ($r =$ `r wals_stats_tri$estimate`, $t =$ `r wals_stats_tri$statistic`, $p$ `r papaja::printp(wals_stats_tri$p.value)`) than their similarities estimated under the trigram model ($r =$ `r wals_stats_uni$estimate`, $t =$ `r wals_stats_uni$statistic`,$p =$ `r papaja::printp(wals_stats_uni$p.value)`).
+
+To understand which typological features contribute to these similarities, we split the WALS features by type, with categories such as nominative categories and nominative syntax describing morphology while word order describes subject-verb-object and head-modifier word orders. Fig. \ref{fig:type_cors} shows the correlation between the similarity of information curves under both the unigram and trigram models and the number of features of each of these types two-languages shared. Under the unigram model, word order features appear to predict information curve similarity. In contrast, under the trigram model, all features types except for nominative syntax are reliably correlated with information curve similarity.
+
 
 Taken together, these results suggest three broad conclusions. First, aspects of the history of languages--encoded in their lexicostatistics--structure the shapes of information in typical sentences. When each word in a sentence is considered alone, languages vary quite dramatically in how information is distributed across sentences. Second, a diverse set of typological features of languages are related to how information is structured for listeners who bring predictive processing to language. These features appear to explain a small but reliable proportion of the variation in how uniformly information is distributed across utterances. Finally, despite this variation, two words of predictive context radically transform the structure of information in utterances, leading to significantly more uniformity in all languages irrespective of their typological structure. These analyses suggest that top-down constraints from language do play an important role in structuring speakers' utterances, but the speakers have tremendous power to choose efficient utterances within these constraints.
 
