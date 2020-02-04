@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.20)  3 FEB 2020 18:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2020.1.20)  3 FEB 2020 19:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -297,30 +297,30 @@ Package color Info: Driver file: pdftex.def on input line 147.
 ) (./Cogsci-2020.aux)
 \openout1 = `Cogsci-2020.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 64.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 63.
 LaTeX Font Info:    Trying to load font information for OMS+pzccm on input line
- 64.
+ 63.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/omspzccm.fd
 File: omspzccm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/pzccm.
 )
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 64.
-LaTeX Font Info:    ... okay on input line 64.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box32
-Package hyperref Info: Link coloring OFF on input line 64.
+Package hyperref Info: Link coloring OFF on input line 63.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
 (/usr/local/texlive/2019/texmf-dist/tex/latex/refcount/refcount.sty
@@ -332,9 +332,9 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count117
 )
-LaTeX Info: Redefining \ref on input line 64.
-LaTeX Info: Redefining \pageref on input line 64.
-LaTeX Info: Redefining \nameref on input line 64.
+LaTeX Info: Redefining \ref on input line 63.
+LaTeX Info: Redefining \pageref on input line 63.
+LaTeX Info: Redefining \nameref on input line 63.
 (./Cogsci-2020.out) (./Cogsci-2020.out)
 \@outlinefile=\write4
 \openout4 = `Cogsci-2020.out'.
@@ -367,73 +367,81 @@ LaTeX Info: Redefining \BPBI on input line 129.
 LaTeX Info: Redefining \BHBI on input line 130.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 67.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
 LaTeX Font Info:    Trying to load font information for OT1+ptmcm on input line
- 67.
+ 66.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/ot1ptmcm.fd
 File: ot1ptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ptmcm.
 )
 LaTeX Font Info:    Trying to load font information for OML+ptmcm on input line
- 67.
+ 66.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/omlptmcm.fd
 File: omlptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ptmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+psycm on input line
- 67.
+ 66.
 (/usr/local/texlive/2019/texmf-dist/tex/latex/psnfss/omxpsycm.fd
 File: omxpsycm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/psycm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 67.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 67.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 67.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 67.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 66.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 67.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 66.
 
 (/usr/local/texlive/2019/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 67.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 66.
 
-Underfull \vbox (badness 10000) detected at line 67
+Underfull \vbox (badness 10000) detected at line 66
  []
 
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 83.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 80.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 89.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 85.
 [1{/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
 
 ]
-<figs/bnc-lengths-1.pdf, id=77, 189.70876pt x 170.6375pt>
+Underfull \vbox (badness 2326) has occurred while \output is active []
+
+<figs/bnc-lengths-1.pdf, id=77, 187.70125pt x 134.5025pt>
 File: figs/bnc-lengths-1.pdf Graphic file (type pdf)
 <use figs/bnc-lengths-1.pdf>
 Package pdftex.def Info: figs/bnc-lengths-1.pdf  used on input line 224.
-(pdftex.def)             Requested size: 189.70828pt x 170.63707pt.
+(pdftex.def)             Requested size: 187.70079pt x 134.50215pt.
 [2 <./figs/bnc-lengths-1.pdf>]
 
 LaTeX Warning: Reference `bnc-plots' on page 3 undefined on input line 290.
 
-<figs/bnc_plots-1.pdf, id=101, 188.705pt x 382.42876pt>
+<figs/bnc_plots-1.pdf, id=99, 163.61125pt x 274.02374pt>
 File: figs/bnc_plots-1.pdf Graphic file (type pdf)
 <use figs/bnc_plots-1.pdf>
 Package pdftex.def Info: figs/bnc_plots-1.pdf  used on input line 317.
-(pdftex.def)             Requested size: 188.70453pt x 382.42781pt.
+(pdftex.def)             Requested size: 163.61084pt x 274.02307pt.
+
+Underfull \vbox (badness 1199) has occurred while \output is active []
+
 [3 <./figs/bnc_plots-1.pdf>]
-<figs/spoken_figs-1.pdf, id=122, 399.4925pt x 313.17pt>
+<figs/spoken_figs-1.pdf, id=122, 415.5525pt x 277.035pt>
 File: figs/spoken_figs-1.pdf Graphic file (type pdf)
 <use figs/spoken_figs-1.pdf>
 Package pdftex.def Info: figs/spoken_figs-1.pdf  used on input line 467.
-(pdftex.def)             Requested size: 399.49152pt x 313.16922pt.
+(pdftex.def)             Requested size: 415.55148pt x 277.03432pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
 [4]
 LaTeX Font Info:    Trying to load font information for OML+ptm on input line 5
 27.
@@ -442,19 +450,20 @@ File: omlptm.fd
 )
 LaTeX Font Info:    Font shape `OML/ptm/m/n' in size <10> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 527.
-<figs/diff-languages-1.pdf, id=133, 243.91125pt x 204.765pt>
+<figs/diff-languages-1.pdf, id=134, 243.91125pt x 161.60374pt>
 File: figs/diff-languages-1.pdf Graphic file (type pdf)
 <use figs/diff-languages-1.pdf>
 Package pdftex.def Info: figs/diff-languages-1.pdf  used on input line 533.
-(pdftex.def)             Requested size: 243.91064pt x 204.76448pt.
-<figs/type_cors-1.pdf, id=135, 196.735pt x 225.84375pt>
+(pdftex.def)             Requested size: 243.91064pt x 161.60335pt.
+[5 <./figs/spoken_figs-1.pdf>]
+<figs/type_cors-1.pdf, id=152, 196.735pt x 225.84375pt>
 File: figs/type_cors-1.pdf Graphic file (type pdf)
 <use figs/type_cors-1.pdf>
 Package pdftex.def Info: figs/type_cors-1.pdf  used on input line 562.
 (pdftex.def)             Requested size: 196.7345pt x 225.84319pt.
-[5] [6 <./figs/spoken_figs-1.pdf>]
+[6 <./figs/diff-languages-1.pdf> <./figs/type_cors-1.pdf>]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 756.
-[7 <./figs/diff-languages-1.pdf> <./figs/type_cors-1.pdf>]
+[7]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 756.
 (./Cogsci-2020.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 756.
@@ -469,11 +478,11 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 756.
 Here is how much of TeX's memory you used:
  8643 strings out of 492162
  129616 string characters out of 6125292
- 221287 words of memory out of 5000000
+ 220287 words of memory out of 5000000
  12755 multiletter control sequences out of 15000+600000
  33385 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,11n,42p,565b,352s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,11n,42p,565b,323s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/te
 xlive/2019/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texl
@@ -482,7 +491,7 @@ ve/2019/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2019/
 texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2019/texmf-dist
 /fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2019/texmf-dist/fonts/typ
 e1/urw/times/utmri8a.pfb>
-Output written on Cogsci-2020.pdf (7 pages, 151766 bytes).
+Output written on Cogsci-2020.pdf (7 pages, 152057 bytes).
 PDF statistics:
  256 PDF objects out of 1000 (max. 8388607)
  222 compressed objects within 3 object streams

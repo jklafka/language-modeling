@@ -1,5 +1,5 @@
 ---
-title: "Communication tends towards optimal decoding regardless of language"
+title: "Broad consistency but cross-lingusitic variation in the distribution of information in sentences"
 bibliography: library.bib
 csl: apa6.csl
 document-params: "10pt, letterpaper"
@@ -10,7 +10,7 @@ author-information: >
         Department of Psychology \\ Carnegie Mellon University}
 
 abstract: >
-    What role does our language play in how we structure our utterances, and how does this affect communication? In this paper, we present a novel method of examining how speakers communicate to their listeners in a given language, surveying numerous diverse languages. For each language, we quantify the information structure speakers of that language tend to use, regardless of age and medium (spoken or written). How speakers structure information depends in part on the top-down features in their language such as word order, but largely derives from bottom-up choices made by speakers during real-time communication. For listeners, the effects of these information structures disappear with predictive processing: using context, listeners process utterances according to a more constant rate predicted by optimal coding. Thus, although speakers must obey constraints from their language in communication, listeners at the other end of the communication channel can minimize errors in noisy channel processing. 
+    Optimal coding theories of language predict that speakers should keep the amount of information in their utterances relatively uniform under the constraints imposed by their language. But how much of a role do these constraints provide, and does it vary across languages? We find a consistent non-uniform shape that characterizes both spoken and written sentences of English that is tempered by predictive context. We then show that other languages are also characterized by consistent but non-English shaped curves related to their typological features, but that sufficient context produces more uniform shapes across languages. Thus, producers of language appear to structure their utterances in similar near-uniform ways despite varying linguistic contraints.
     
 keywords: >
     information theory; efficient communication; language typology
@@ -146,7 +146,7 @@ bnc_kept <- lengths %>%
 
 We began with the XML version of the corpus, and used the \texttt{justTheWords.xsl} script provided along with the corpus to produce a text file with one sentence of the corpus on each line. Compound words (like "can't") were combined, and all words were converted to lowercase before analysis. This produced a corpus of just over six million utterance of varying lenghts. From these, we excluded utterances that were too short to allow for reasonable estimation of information shape (fewer than `r MIN` words), and utterances that were unusually long (more than `r MAX` words). This exclusion left us with `r bnc_kept`% of the utterances (Fig \ref{fig:bnc-lengths}.
 
-```{r bnc-lengths, echo = F, fig.height = 2.5, fig.align = "center", fig.cap="The distribution of sentence lengths in the British National Corpus. We analyzed sentences of length 5-45 (colored)."}
+```{r bnc-lengths, echo = F, fig.height = 2, fig.align = "center", fig.cap="The distribution of sentence lengths in the British National Corpus. We analyzed sentences of length 5-45 (colored)."}
 
 # raw length distribution
 lengths %>%
@@ -155,7 +155,7 @@ lengths %>%
     ggplot(aes(x = length, y = n, fill = group, color = group)) +
     geom_col() +
     labs(x = "sentence length", y = "frequency") +
-    theme(legend.position = "none", aspect.ratio = 1) + 
+    theme(legend.position = "none", aspect.ratio = 1/1.33) + 
     scale_fill_manual(values = c(ptol_pal()(1), "light gray")) +
     scale_color_manual(values = c(ptol_pal()(1), "light gray"))
 
@@ -208,7 +208,7 @@ write_csv(bind_rows(bnc_subset_unigram, bnc_subset_trigram),
 
 ```
 
-```{r bnc_plots, fig.height = 5.5, fig.width = 3, fig.pos = "tb", fig.align = "center", fig.cap = "(A) Surprisal by sentence position of length 15, 30, and 45 sentences in the British National Corpus under unigram and trigram surprisal models. Error bars indicate 95\\% confidence intervals (tiny due to sample size). (B) Characteristic information curves produced by the DBA algorithm averaging over all sentence lengths in each corpus. "}
+```{r bnc_plots, fig.height = 4, fig.pos = "tb", fig.align = "center", fig.cap = "(A) Surprisal by sentence position of length 15, 30, and 45 sentences in the British National Corpus under unigram and trigram surprisal models. Error bars indicate 95\\% confidence intervals (tiny due to sample size). (B) Characteristic information curves produced by the DBA algorithm averaging over all sentence lengths in each corpus. "}
 bnc_annotations <- tibble(position = c(12, 27, 42),
                           length = c(15, 30, 45),
                           gram = c("unigram", "unigram", "unigram"),
@@ -226,7 +226,7 @@ bnc_plot1 <- ggplot(bnc_surprisals, aes(x = position, y = mean, color = as.facto
     labs(x = "Sentence position", y = "Surprisal") + 
     labs(tag = "A") + 
     theme_few() +
-    theme(legend.position = "none", aspect.ratio = 1)
+    theme(legend.position = "none", aspect.ratio = 1/1.33)
 
 
 bnc_b_annotations <- tibble(position = c(2.5, 2.5),
@@ -245,7 +245,7 @@ bnc_plot2 <- tidy_non_wiki_b %>%
     scale_color_colorblind() + 
     labs(tag = "B") + 
     theme_few() +
-    theme(aspect.ratio = 1, legend.position = "none")
+    theme(aspect.ratio = 1/1.33, legend.position = "none")
 
 gridExtra::grid.arrange(bnc_plot1, bnc_plot2, ncol = 1)
 ```
@@ -284,7 +284,7 @@ Unfortunately, we we cannot compare the amount of information in each word acros
 
 Thus, English--both writen and spoken, both produced by adults and by children-appears to have a characteristic shape. Are the features of this shape features of English, or features of language more broadly? In Study 3 we apply this technique to a diverse set of written languages of different families to ask whether these structures vary cross-linguisticly. 
 
-```{r spoken_figs, fig.env = "figure*", fig.pos = "tb", fig.height = 4.5, fig.width = 7, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "(A) The distribution of sentence lengths in the spoken English corpora: Adults in Santa Barbara, and parents and children in CHILDES. We analyzed sentences of length 5-15 (colored). (B) Charateristic surprisal curves for these corpora."}
+```{r spoken_figs, fig.env = "figure*", fig.pos = "tb", fig.height = 4, fig.width = 7, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "(A) The distribution of sentence lengths in the spoken English corpora: Adults in Santa Barbara, and parents and children in CHILDES. We analyzed sentences of length 5-15 (colored). (B) Charateristic surprisal curves for these corpora."}
 SPOKEN_MIN <- 5
 SPOKEN_MAX <- 15
 
@@ -301,7 +301,7 @@ spoken_plot1 <- lengths %>%
     facet_wrap(~ corpus, scales = "free_y") +
     geom_col() +
     labs(x = "sentence length", y = "frequency") +
-    theme(legend.position = "none", aspect.ratio = 1) + 
+    theme(legend.position = "none", aspect.ratio = 1/1.33) + 
     scale_fill_manual(values = c(ptol_pal()(1), "light gray")) +
     scale_color_manual(values = c(ptol_pal()(1), "light gray")) + 
     labs(tag = "A")
@@ -332,7 +332,7 @@ spoken_plot2 <- tidy_non_wiki_b %>%
     xlab("barycenter coordinate") + 
     ylab("surprisal") + 
     scale_color_colorblind() + 
-    theme(legend.position = "none", aspect.ratio = 1) +
+    theme(legend.position = "none", aspect.ratio = 1/1.33) +
     labs(tag = "B")
 
 gridExtra::grid.arrange(spoken_plot1, spoken_plot2, ncol = 1)
@@ -448,7 +448,7 @@ families_b %>%
     geom_dl(method = list(dl.trans(x = x + 1.25), "first.points", cex = .6)) + 
     theme_few(base_size = 9) +
     labs(y = "normalized surprisal") +
-    theme(legend.position = "none")
+    theme(legend.position = "none", aspect.ratio = 1.33)
 ```
 
 While the trigram information curves have a more consistent qualitative shape, there are differences between languages. The pairwise similarities between languages' trigram information curves were more correlated with the number of WALS features they shared ($r =$ `r wals_stats_tri$estimate`, $t =$ `r wals_stats_tri$statistic`, $p$ `r papaja::printp(wals_stats_tri$p.value)`) than their similarities estimated under the trigram model ($r =$ `r wals_stats_uni$estimate`, $t =$ `r wals_stats_uni$statistic`,$p =$ `r papaja::printp(wals_stats_uni$p.value)`).

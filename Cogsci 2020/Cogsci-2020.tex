@@ -52,13 +52,12 @@
 % \textwidth 16cm
 % \textheight 21cm
 
-\title{Top-down language features predict little variation in information
-structure across languages and information structures are robust in each
-language}
+\title{Broad consistency but cross-lingusitic variation in the distribution of
+information in sentences}
 
 
 \author{Josef Klafka \and Daniel Yurovsky \\
-        \texttt{klafka@andrew.cmu.edu} and \texttt{yurovsky@cmu.edu} \\
+        \texttt{jklafka@andrew.cmu.edu} and \texttt{yurovsky@cmu.edu} \\
        Department of Psychology \\ Carnegie Mellon University}
 
 \begin{document}
@@ -66,37 +65,34 @@ language}
 \maketitle
 
 \begin{abstract}
-What role does communicative efficiency play in how we organize our
-utterances? In this paper, we present a novel method of examining how
-much information speakers in a given language communicate in each word,
-surveying numerous diverse languages. We find that speakers produce
-frequent and informative words at regular parts of their utterances,
-depending on language they use. The information distribution for each
-language is derived in part from the top-down features of the language,
-but largely derives from bottom-up choices made by speakers during
-communication. Each robust information distribution characterizes both
-spoken and written communication, and emerges in children's earliest
-utterances. However, in real-time communication, in-context word
-predictability allows listeners to process information at a constant,
-optimal rate, regardless of information distribution.
+Optimal coding theories of language predict that speakers should keep
+the amount of information in their utterances relatively uniform under
+the constraints imposed by their language. But how much of a role do
+these constraints provide, and does it vary across languages? We find a
+consistent non-uniform shape that characterizes both spoken and written
+sentences of English that is tempered by predictive context. We then
+show that other languages are also characterized by consistent but
+non-English shaped curves related to their typological features, but
+that sufficient context produces more uniform shapes across languages.
+Thus, producers of language appear to structure their utterances in
+similar near-uniform ways despite varying linguistic contraints.
 
 \textbf{Keywords:}
-information theory; communication; language modeling; computational
-modeling
+information theory; efficient communication; language typology
 \end{abstract}
 
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
 We use language for a variety of purposes like greeting friends, making
-records, and signaling group identity. But, these purposes all share a
-common goal: Transmitting information that changes the mental state of
-the listerner or reader (Austin, 1975). For this reason, language can be
-thought of as a code, one that allows speakers to turn their intended
-meaning into a message that can be transmitted to a listener or reader,
-and subsequently converted by the listener back into an approximation of
-the intended meaning (Shannon, 1948). How should we expect this code to
-be structured?
+records, and signaling group identity. These purposes all share a common
+goal: Transmitting information that changes the mental state of the
+listener (Austin, 1975). For this reason, language can be thought of as
+a code, one that allows speakers to turn their intended meaning into a
+message that can be transmitted to a listener, and subsequently
+converted by the listener back into an approximation of the intended
+meaning (Shannon, 1948). How should we expect this code to be
+structured?
 
 If language has evolved to be a code for information transmission, its
 structure should reflect this process of optimization (Anderson \&
@@ -115,44 +111,48 @@ utterances in real-time rather than at their conclusion (Kutas \&
 Federmeier, 2011; Pickering \& Garrod, 2013; Tanenhaus, Spivey-Knowlton,
 Eberhard, \& Sedivy, 1995). Since prediction errors can lead to severe
 processing costs and difficulty integrating new information on the part
-of listeners, speakers should seek to minimize prediction errors.
-However, the cost of producing more predictable utterances is using more
-words. Thus, the optimal strategy for speakers seeking to minimize their
-production costs is to produce utterances that are just at the
-prediction capacity of listeners without exceeding this capacity (Aylett
-\& Turk, 2004; Genzel \& Charniak, 2002). In other words, speakers
-should maintain a constant rate information of as close to the
+of listeners, speakers should seek to minimize the chance of prediction
+errors when choosing what to say. However, the cost of producing more
+predictable utterances and thus minimizing the likelihood of errors is
+using more words. Therefore the optimal strategy for speakers seeking to
+minimize their production costs is to produce utterances that are just
+at the prediction capacity of listeners without exceeding this capacity
+(Aylett \& Turk, 2004; Genzel \& Charniak, 2002). In other words,
+speakers should consistently transmit information as close to the
 listener's fastest decoding rate as possible.
 
 This Uniform Information Density hypothesis has found support at a
-variety of levels of language from the structure of individual words, to
+variety of levels of language from the structure of individual words to
 the syntactic structure of utterances (Jaeger \& Levy, 2007; Piantadosi,
 Tily, \& Gibson, 2011; see Gibson et al., 2019 for a review). Further,
-speakers make lexical choices that smooth out the information in their
-utterances (Jaeger \& Levy, 2007; Mahowald, Fedorenko, Piantadosi, \&
-Gibson, 2013). However, while speakers can control which of several
-near-synonyms they produce, or whether to produce an optional
-complementizer like ``that,'' they cannot control the grammatical
-properties of their native language like canonical word order that
-impose top-down constraints on the structure of utterances. While
-speakers may produce utterances as uniform in information density as
-their languages will allow, these top-down constraints may impose
-significant variation.
+speakers make online word choices that smooth out the information in
+their utterances (Jaeger \& Levy, 2007; Mahowald, Fedorenko, Piantadosi,
+\& Gibson, 2013). While speakers can make bottom-up choices such as
+controlling which of several near-synonyms they produce or whether to
+produce an optional complementizer like ``that,'' they cannot control
+the grammatical properties of their language. Properties like canonical
+word order impose top-down constraints on how speakers can structure
+what they say (e.g.~English speakers obey a subject-verb-object word
+order constraint). While speakers may produce utterances as uniform in
+information density as their languages will allow, these top-down
+constraints may create significant and unique variation across
+languages.
 
-How significant are these top-down constraints? Yu, Cong, Liang, \& Liu
-(2016) analyzed how the information in words of English sentences of a
-fixed length varies with their order in the sentence (e.g.~first word,
-second word, etc). They found a surprising three-step shape where
-information first rises, then plateus, and then sharply rises again at
-the ends of sentences. They argued that this non-linear shape may arise
-from top-down grammatical constraints on language. We build on these
-ideas, asking (1) Whether this shape depends on listener's predictive
-models, (2) Whether this shape varies across linguistic contexts, and
-(3) Whether this shape is broadly characteristic of a diverse set of
-languages or varies predictably from language to language. We find that
-languages are characterized by highly-reliable but cross-linguisticly
-variable structures that co-vary with typological features, but that
-predictive coding flattens these shapes across languages, in accord with
+How significant are a language's top-down constraints on speakers? Yu,
+Cong, Liang, \& Liu (2016) analyzed how the information in words of
+English sentences of a fixed length varies with their order in the
+sentence (e.g.~first word, second word, etc). They found a surprising
+three-step shape where information first rises, then plateaus, and then
+sharply rises again at the ends of sentences. They argued that this
+non-linear shape may arise from top-down grammatical constraints on
+language. We build on these ideas, asking (1) Whether this shape depends
+on listener's predictive models, (2) Whether this shape varies across
+linguistic contexts, and (3) Whether this shape is broadly
+characteristic of a diverse set of languages or varies predictably from
+language to language. We find that languages are characterized by
+highly-reliable but cross-linguistically variable information structures
+that co-vary with top-down linguistic features. Listeners' predictive
+coding flattens these shapes across languages, in accord with
 predictions of the Uniform Information Density hypothesis.
 
 \hypertarget{study-1-information-in-written-english}{%
@@ -161,14 +161,14 @@ English}\label{study-1-information-in-written-english}}
 
 The Uniform Information Density Hypothesis predicts that people should
 structure their utterances so that the amount of information in each
-unit of language remains nearly-constant. An influentual early test of
-this idea was performed by Genzel \& Charniak (2002) who analyzed the
-amount of information in successive paragraphs of the same text. They
-found that the amount of information increased across paragraphs when
+unit of language remains nearly constant. An influentual early test of
+this idea was performed by Genzel \& Charniak (2002), who analyzed the
+amount of information in successive sentences of the same text. They
+found that the amount of information increased across sentences when
 each was considered in isolation. They reasoned that since all prior
-paragraphs provide the context for reading each new paragraph, the
-amount of total information (context + paragraph) was constant for human
-readers.
+sentences provide the context for reading each new sentences, the amount
+of total information (context + paragraph) was overall constant for
+human readers.
 
 Yu et al. (2016) applied this same logic to analysis of the information
 in individual sentences, computing the entropy of each successive word
@@ -176,21 +176,21 @@ in an utterance. Surprisingly, they found found a distinctive three-step
 distribution for information in a corpus of written English. The first
 word of each sentence tended to contain little information; words in the
 middle of sentences each contained roughly the same amount of
-information, nut the final word of each sentence contained much more
+information, but the final word of each sentence contained much more
 information than any other word. They found the same distribution across
 sentence lengths, from sentences with \(15\) words to sentences with
 \(45\) words. They took this as evidence against the Uniform Information
 Density Hypothesis as, unlike Genzel and Charniak's (2002) results,
-information plateud in the middle of sentences rather than increasing as
-it did at the beginnings and ends.
+information plateaud in the middle of sentences rather than increasing
+as it did at the beginnings and ends.
 
 We replicate their analysis here, bringing it more in line with Genzel
 and Charniak's (2002) methods. While Yu et al. (2016) considered only
 the information in each word, we build two different models. The first,
-replicating their analysis, considers the surprisal of each word read in
-isolation. The second, following Genzel \& Charniak (2002), is a trigram
-model that considers the surprisal of each word having read the prior
-two words. We take this trigram model as a better proxy for human
+replicating their analysis, considers the information of each word read
+in isolation. The second, following Genzel \& Charniak (2002), is a
+trigram model that considers the surprisal of each word having read the
+prior two words. We take this trigram model as a better proxy for human
 reader's processing of these sentences. Finally, we also develop a
 method for averaging the curves for sentences of different lengths
 together to provide a single typical information curve signature.
@@ -207,7 +207,7 @@ consisting of spoken (10\%) and written (90\%) English from the late
 \hypertarget{pre-processing}{%
 \subsection{Pre-processing}\label{pre-processing}}
 
-We began the XML version of the corpus, and used the
+We began with the XML version of the corpus, and used the
 \texttt{justTheWords.xsl} script provided along with the corpus to
 produce a text file with one sentence of the corpus on each line.
 Compound words (like ``can't'') were combined, and all words were
@@ -254,7 +254,7 @@ encodes the idea that words that are low frequency in isolation (e.g.
 surprisal of a word given all of the prior sentential context
 (\(\text{surprisal}(w_{i}) = -P(w_i|w_{i-1}w_{i-2}...w_{1})\). However,
 the difficulty of correctly estimating these probabilities from a corpus
-grow combinatorically with the number of prior words, and in practice
+grows combinatorically with the number of prior words, and in practice
 trigram models perform well as an approximation (see e.g. Chen \&
 Goodman, 1999; Smith \& Levy, 2013).
 
@@ -273,10 +273,10 @@ Naïve trigram models will underestimate the surprisal of words in
 low-frequency trigrams (e.g.~if the word ``meatballs'' appears only once
 in the corpus following exactly the words ``spaghetti and'', it is
 perfectly predictable from its prior two words). To avoid this
-underestimation, we used modified Kneser-Ney smoothing which discounts
-all ngram frequency counts--reducing the impact of rare ngrams on
-probability calculations--and interpolates lower-order ngrams into the
-calcuations. These lower-order ngrams are weighted according to the
+underestimation, we used modified Kneser-Ney smoothing: this method
+discounts all ngram frequency counts--reducing the impact of rare ngrams
+on probability calculations--and interpolates lower-order ngrams into
+the calcuations. These lower-order ngrams are weighted according to the
 number of distinct contexts they occur as a continuation (e.g.
 ``Francisco'' may be a common word in a corpus, but likely only occurs
 after ``San'' as in ``San Francisco'', so it receives a lower weighting;
@@ -326,7 +326,7 @@ We began by replicating Yu et al.'s (2016) analyses, examining the
 surprisal of words in sentence of length 15, 30, and 45 estimated by our
 unigram model. In line with their computations, we found a reliably
 non-linear shape in sentences of all 3 lengths, with the information in
-each word rising for the first two words, platueing in the middle of
+each word rising for the first two words, plateauing in the middle of
 sentences, dipping in pen-ultimate position, and rising steeply on the
 final word (Fig. \ref{fig:bnc_plots}A).
 
@@ -390,7 +390,7 @@ written language as they must be produced and processed in real-time
 have different information curves than sentences of written English.
 
 The language young children hear is further different from the language
-adults speak to each-other. Child-directed speech tends to simpler than
+adults speak to each other. Child-directed speech tends to simpler than
 adult-directed speech on a number of dimensions including the lengths
 and prosodic contours of utterances, the diversity of words, and the
 complexity of syntactic structures (Fernald, 1989; Snow, 1972). The
@@ -425,7 +425,7 @@ for the selection of sentences for analysis. Because the utterances in
 both the Santa Barbara Corpus and CHILDES were significantly shorter
 than the sentences in the British National Corpus, we analyzed all
 utterances of at least 5 and most 15 words (see Fig.
-\ref{fig:spoken_figs}(A)). Models were estimated separtely for each of
+\ref{fig:spoken_figs}(A)). Models were estimated separately for each of
 the 3 corpora.
 
 \hypertarget{results-and-discussion-1}{%
@@ -445,7 +445,7 @@ word across corpora--surprisal is highly correlated with corpus size
 (e.g.~there is less information in adults' speech in Santa Babara than
 in children's speech in CHILDES). However, we can compare the shapes of
 these curves both to each-other and to the written English sentences in
-Study 1 \ref{fig:bnc_plots}(B). All of these curves appeared to share
+Study 1 \ref{fig:bnc_plots}B. All of these curves appeared to share
 their important qualitative features, including the sharp rise at the
 end under the unigram model and the attenuation of this rise under the
 trigram model. There are small differences--such as the flatter shape in
