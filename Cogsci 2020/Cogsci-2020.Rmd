@@ -175,7 +175,7 @@ Naïve trigram models will underestimate the surprisal of words in low-frequency
 
 ### Averaging curves
 
-To develop a characteristic information curve for sentences in the corpus, we needed to aggregate sentences that varied dramatically in length (Fig \ref{bnc-plots}(A)). We used Dynamic Time Warping Barycenter Averaging (DBA), an algorithm for finding the average of sequences that share and underlying pattern but vary in length [@petitjean2011]. DBA inverts standard dynamic time warping, discovering a latent invariant template from a set of sequences. 
+To develop a characteristic information curve for sentences in the corpus, we needed to aggregate sentences that varied dramatically in length (Fig \ref{bnc_plots}A). We used Dynamic Time Warping Barycenter Averaging (DBA), an algorithm for finding the average of sequences that share and underlying pattern but vary in length [@petitjean2011]. DBA inverts standard dynamic time warping, discovering a latent invariant template from a set of sequences. 
 
 We used DBA to discover the short sequence of surprisal values that characterized the surprisal curves common to sentences of varying sentence lengths. We first averaged individual sentences of the same length together and then applied the DBA algorithm to this set of average sequences. DBA requires a parameter specifying the length of the template sequence. We chose a 5-length template sequence based on our inspection of the curves from the British National Corpus as well as the curves we found in subsequent studies. However, the results of this and the following studies were robust to other choices of this length parameter (7 and 10).
 
