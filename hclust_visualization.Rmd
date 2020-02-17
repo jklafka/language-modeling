@@ -1,0 +1,68 @@
+---
+title: "hclust"
+author: "Josef Klafka and Dan Yurovsky"
+date: "2/14/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(tidyverse)
+require(here)
+require(ggforce)
+require(ggdendro)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r hclust}
+require(dtwclust) # for dba
+
+unigram_dtw <- read_csv(here("Data/Paper/dtw_distances.csv"))
+
+unigram_hclust <- unigram_dtw %>%
+  pivot_wider(names_from = "language2", values_from = "dtw_dist") %>%
+  # replace(is.na(.), 0) %>%
+  column_to_rownames("language1") %>%
+  as.dist() %>%
+  hclust() %>%
+  ggdendro::dendro_data(type = "rectangle")
+
+ggplot() + 
+  geom_segment(data=segment(unigram_hclust), 
+               aes(x=x, y=y, xend=xend, yend=yend)) +
+  geom_text(data=label(unigram_hclust), 
+            aes(x=x, y=y, label=label, hjust=1, angle = 90), size=3) +
+  # coord_flip() + 
+  # scale_y_reverse(expand=c(0.2, 0)) + 
+  ggforce::facet_zoom(xlim = c(0,20), ylim = c(-1, 2), zoom.size = .5, show.area = T) + 
+  ggforce::theme_no_axes()
+```
+
+Code for computing the Dynamic Time Warping distance between barycenters from Wikipedia languages. We assume the barycenters are length 5 here. The code creates a CSV mapping pairs of languages to their DTW distance: one column for the first language in the pair, one column for the second language and one column for the DTW distance. 
+```{r dtw distances}
+require(dtw)
+
+b <- read_csv(here("Data/5barycenters.csv"), 
+              col_names = c("1", "2", "3", "4", "5", 
+                            "language", "source", "gram"))
+
+unigram_dtw <- b %>%
+  filter(gram == "unigram", source == "wikipedia") %>% 
+  distinct(language, .keep_all = T) %>% #deduplication
+  select(-gram, -source) %>% 
+  pivot_longer(-language, names_to = "position", 
+                          values_to = "surprisal") %>%
+  group_by(language) %>%
+  mutate(surprisal = scale(surprisal, scale = FALSE)) %>%
+  pivot_wider(names_from = position, values_from = surprisal) %>%
+  column_to_rownames("language") %>% 
+  data.matrix() %>%
+  dtw::dtwDist(step.pattern = symmetric2) %>% 
+  as_tibble(rownames = "language1") %>% 
+  pivot_longer(-language1, names_to = "language2", 
+                          values_to = "dtw_dist") 
+  
+unigram_dtw %>% 
+  write_csv(here("Data/Paper/dtw_distances.csv"))
+```
+
