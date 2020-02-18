@@ -10,6 +10,7 @@ require(tidyverse)
 require(here)
 require(ggforce)
 require(ggdendro)
+require(grid)
 
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -18,6 +19,9 @@ knitr::opts_chunk$set(echo = TRUE)
 require(dtwclust) # for dba
 
 unigram_dtw <- read_csv(here("Data/Paper/dtw_distances.csv"))
+b <- read_csv(here("Data/5barycenters.csv"), 
+              col_names = c("1", "2", "3", "4", "5", 
+                            "language", "source", "gram"))
 
 unigram_hclust <- unigram_dtw %>%
   pivot_wider(names_from = "language2", values_from = "dtw_dist") %>%
@@ -27,7 +31,27 @@ unigram_hclust <- unigram_dtw %>%
   hclust() %>%
   ggdendro::dendro_data(type = "rectangle")
 
-ggplot() + 
+## turn this into a function that accepts (one? two?) language as argument. 
+## find coordinates, zoom in on them in the tree
+## then viewpoint the barycenter plot
+
+focused_languages <- c("Basque", "Hindi")
+
+# get barycenter between the two focused_languages
+focused_barycenter <- b %>% 
+  filter(language %in% focused_languages, gram == "unigram") %>%
+  select(`1`:`5`) %>%
+  data.matrix() %>%
+  dba() %>%
+  enframe() %>%
+  rename(position = name, surprisal = value)
+
+focused_plot <- focused_barycenter %>%
+  ggplot(aes(x = position, y = surprisal)) + 
+    geom_point() + 
+    geom_line()
+
+dendro_plot <- ggplot() + 
   geom_segment(data=segment(unigram_hclust), 
                aes(x=x, y=y, xend=xend, yend=yend)) +
   geom_text(data=label(unigram_hclust), 
@@ -35,7 +59,9 @@ ggplot() +
   # coord_flip() + 
   # scale_y_reverse(expand=c(0.2, 0)) + 
   ggforce::facet_zoom(xlim = c(0,20), ylim = c(-1, 2), zoom.size = .5, show.area = T) + 
-  ggforce::theme_no_axes()
+  ggforce::theme_no_axes() 
+
+viewport(dendro_plot)
 ```
 
 Code for computing the Dynamic Time Warping distance between barycenters from Wikipedia languages. We assume the barycenters are length 5 here. The code creates a CSV mapping pairs of languages to their DTW distance: one column for the first language in the pair, one column for the second language and one column for the DTW distance. 
