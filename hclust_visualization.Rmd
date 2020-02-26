@@ -51,7 +51,7 @@ focused_plot <- focused_barycenter %>%
     geom_point() + 
     geom_line()
 
-dendro_plot <- ggplot() + 
+ggplot() + 
   geom_segment(data=segment(unigram_hclust), 
                aes(x=x, y=y, xend=xend, yend=yend)) +
   geom_text(data=label(unigram_hclust), 
