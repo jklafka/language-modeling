@@ -27,10 +27,8 @@ declare -a all_languages=("Basque" "Alemannic" "Wolof" "Bosnian"
 	"Swedish" "Japanese" "Arabic" "Polish" "French" "Spanish"
 	"English" "Chinese")
 
-for j in {0..5}
-	do for i in "${all_languages[@]}"
+for i in "${all_languages[@]}"
 	  do
 	    echo "$i"
 	    python3 Scripts/dba.py wikipedia "$i" unigram
-	  done
-done
+		done

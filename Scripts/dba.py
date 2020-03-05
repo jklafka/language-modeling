@@ -1,4 +1,4 @@
-import csv, argparse
+import csv, argparse, random
 import numpy as np
 from tslearn.barycenters import dtw_barycenter_averaging
 
@@ -23,11 +23,14 @@ with open("Surprisals/" + args.corpus + '/' + args.gram + '/' + \
 
 ## get barycenter of info-curves as list
 X = [[float(item) for item in series if item != "NA"] for series in X]
-barycenter = dtw_barycenter_averaging(X, BARYCENTER_SIZE)\
-                .reshape(BARYCENTER_SIZE).tolist()
-barycenter += [args.language, args.corpus, args.gram]
+for _ in range(100):
+    barycenter = dtw_barycenter_averaging(X = X, \
+                    barycenter_size = BARYCENTER_SIZE, \
+                    init_barycenter = random.choice(X))\
+                    .reshape(BARYCENTER_SIZE).tolist()
+    barycenter += [args.language, args.corpus, args.gram]
 
-# output barycenter to
-with open(OUTPUT_FILE, 'a') as f:
-    writer = csv.writer(f)
-    writer.writerow(barycenter)
+    # output barycenter to
+    with open(OUTPUT_FILE, 'a') as f:
+        writer = csv.writer(f)
+        writer.writerow(barycenter)
