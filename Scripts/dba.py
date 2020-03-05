@@ -25,8 +25,7 @@ with open("Surprisals/" + args.corpus + '/' + args.gram + '/' + \
 X = [[float(item) for item in series if item != "NA"] for series in X]
 for _ in range(100):
     barycenter = dtw_barycenter_averaging(X = X, \
-                    barycenter_size = BARYCENTER_SIZE, \
-                    init_barycenter = random.choice(X))\
+                    barycenter_size = BARYCENTER_SIZE)\
                     .reshape(BARYCENTER_SIZE).tolist()
     barycenter += [args.language, args.corpus, args.gram]
 
