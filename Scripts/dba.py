@@ -2,8 +2,8 @@ import csv, argparse, random
 import numpy as np
 from tslearn.barycenters import dtw_barycenter_averaging
 
-BARYCENTER_SIZE = 5
-OUTPUT_FILE = "Data/5barycenters_bootstrap.csv"
+# BARYCENTER_SIZE = 5
+OUTPUT_FILE = "Data/5barycenters_em.csv"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("corpus", help="Type of corpus you're working with")
@@ -21,13 +21,15 @@ with open("Surprisals/" + args.corpus + '/' + args.gram + '/' + \
      for row in reader:
          X.append(row)
 
-## get barycenter of info-curves as list
-X = [[float(item) for item in series if item != "NA"] for series in X]
-for _ in range(100):
+# get barycenter of info-curves as list
+for BARYCENTER_SIZE in range(4, 10):
+    print(BARYCENTER_SIZE)
+    X = [[float(item) for item in series if item != "NA"] for series in X]
     barycenter = dtw_barycenter_averaging(X = X, \
-                    barycenter_size = BARYCENTER_SIZE)\
+                    barycenter_size = BARYCENTER_SIZE,
+                    verbose = True)\
                     .reshape(BARYCENTER_SIZE).tolist()
-    barycenter += [args.language, args.corpus, args.gram]
+    barycenter += [args.language, args.corpus, args.gram, BARYCENTER_SIZE]
 
     # output barycenter to
     with open(OUTPUT_FILE, 'a') as f:
