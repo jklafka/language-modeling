@@ -1,0 +1,53 @@
+---
+title: "Mutual Information"
+author: "Josef Klafka and Daniel Yurovsky"
+date: "3/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+require(tidyverse)
+require(here)
+require(janitor)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r read in data}
+data <- read_csv(here("Data/5barycenters.csv")) %>%
+  filter(source == "wikipedia") %>%
+  left_join(read_csv(here("Data/final_features.csv")), by = "language") %>%
+  clean_names()
+```
+
+## Our approach
+
+We compute pairwise mutual information between each coordinate of the barycenter and each WALS feature. We use the metric described in "Mutual Information between Discrete and Continuous Data Sets" by Brian C. Ross published in PLoS One. From now on, we refer to this metric as KNN-MI (k-nearest-neighbors mutual information).
+
+The metric is based on the k-nearest-neighbors algorithm in supervised machine learning. From the paper:
+
+"For each data point i our method computes a number $I_i$ based on its nearest-neighbors in the continuous variable $Y$. We first find the $k$th-closest neighbor to point $i$ among those $N_{x_i}$ data points whose value of the discrete variable equals $x_i$ using some distance metric of our choice. Define $d$ as the distance to this $k$th neighbor. We then count the number of neighbors $m_i$ in the full data set that lie within distance $d$ to point $i$ (including the kth neighbor itself). Based on $N_{x_i}$ and $m_i$ we compute
+
+$$I_i = \psi(N) - \psi(N_{x_i}) + \psi(k) - \psi(m_i)$$
+
+where $\psi(\cdot)$ is the digamma function. To estimate the [mutual information] from
+our data set, we average $I_i$ over all data points.
+
+$$I(X, Y) = \langle I_i \rangle = \psi(N) - \langle\psi(N_{x_i})\rangle + \psi(k) - \langle\psi(m_i)\rangle$$
+
+In our implementation $k$ is some fixed (low) integer of the user’s choice; larger k-values lead to lower sampling error but higher coarse-graining error."
+
+
+```{r compute KNN-MI for a single pair}
+single_feature <- data %>% 
+  filter(gram == "unigram") %>%
+  select(x1, x1a) %>% ## get a single feature, coordinate pair
+  ## what's the closest data point, get its distance
+  mutate(closest = single_feature %>% 
+           filter(x1a == .x$x1a) %>% 
+           summarize(min_distance = min(abs(.x$x1 - x1))) %>% 
+           pull(min_distance)) %>% 
+  ## find all the points within that distance
+  ## compute metric
+  ## average
+```
