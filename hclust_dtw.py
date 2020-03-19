@@ -14,7 +14,7 @@ barycenters = barycenters[barycenters["gram"] == "unigram"]
 # fetch languages
 languages = barycenters["language"].copy()
 # get the numerical barycenters
-centers = barycenters.loc[, 0:4].to_numpy()
+centers = barycenters.loc[:, '1':'5'].to_numpy()
 
 # linkage is the workhorse: it produces an array with pairwise clusters in the
 # first two columns, then the distance in the third column, then the number of
@@ -22,8 +22,10 @@ centers = barycenters.loc[, 0:4].to_numpy()
 Z = linkage(centers, method = "single", metric = dtw)
 
 expanded_centers = centers.copy()
+
 for row in Z:
-    new_center = dtw_barycenter_averaging(expanded_centers[row[0]], expanded_centers[row[1]])
-    expanded_centers = np.vstack((expanded_centers, new_center))
+    cluster = np.vstack([expanded_centers[int(row[0])], expanded_centers[int(row[1])]])
+    new_center = dtw_barycenter_averaging(cluster)
+    expanded_centers = np.vstack((expanded_centers, new_center.T))
 ## HOW TO MAP BETWEEN LOCATION ON CLUSTERING PLOT AND BARYCENTER OR LEAF NODE??
 ## INTERACTIVE PLOT??
