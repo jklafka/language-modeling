@@ -9,7 +9,7 @@ output: html_document
 require(tidyverse)
 require(here)
 require(janitor)
-library(widyr)
+require(widyr)
 
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -40,17 +40,21 @@ In our implementation $k$ is some fixed (low) integer of the user’s choice; la
 
 
 ```{r compute-pair, eval = F}
-k <- 1
+## for nearest neighbors
+k <- 3
 
+# get only the first coordinate of the unigram barycenter and WALS feature x103a
 single_feature <- data %>% 
   filter(gram == "unigram") %>%
-  select(x1, x103a) %>% ## get a single feature, coordinate pair
+  select(x1, x103a) %>% 
   mutate(point = 1:n()) 
 
+# how languages have each feature value
 single_feature_Nxs <- single_feature %>%
   group_by(x103a) %>%
   summarise(Nx = n()) 
 
+# pairwise distances between each 
 single_feature_all_dists <- single_feature %>%
   mutate(identity = 1) %>%
   pairwise_dist(point, identity, x1, method = "manhattan", upper = TRUE)
@@ -60,7 +64,7 @@ single_feature_group_dists <- single_feature %>%
   pairwise_dist(point, x103a, x1, method = "manhattan", upper = TRUE) %>%
   group_by(item1) %>%
   arrange(distance) %>%
-  slice(k) %>% # or whatever you want k to be
+  slice(k) %>% 
   ungroup() %>%
   select(-item2) %>%
   left_join(select(single_feature, point, x103a), 
@@ -89,7 +93,7 @@ single_feature_Is = single_feature_mi_data %>%
 
 All features
 ```{r compute-pair, eval = F}
-k <- 1
+k <- 3
 
 features <- data %>% 
   pivot_longer(cols = x1a:x120a, names_to = "feature", values_to = "feature_value") %>%
