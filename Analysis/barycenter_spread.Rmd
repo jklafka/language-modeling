@@ -11,7 +11,7 @@ In this script, we quantify the average pairwise distance between unigram and tr
 require(tidyverse)
 require(tidyboot)
 require(here)
-require(janitor)
+require(reshape2)
 
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -29,20 +29,28 @@ trigrams <- barycenters %>%
   filter(source == "wikipedia", gram == "trigram")
 ```
 
-For our first test, we use simple Euclidean distance to find the distances of the barycenters. The average unigram distance is $1.29$, with a upper confidence interval bound of $1.31$ and a lower confidence interval bound of $1.28$. Those values are $1.01$, $1.00$ and $1.02$ respectively for trigrams. 
+We use the dynamic time warping distance metric to quantify the differences between the barycenters. The average unigram distance is $3.04$, with a upper confidence interval bound of $3.08$ and a lower confidence interval bound of $3.01$. Those values are $2.50$, $2.52$ and $2.49$ respectively for trigrams. Qualitatively, there appears to be a large difference in means. 
 
 ```{r get distances}
+dist_measure <- "DTW"
+
 unigram_dist <- unigrams %>% 
   select(-source, -gram) %>%
-  dist(method = "euclidean") %>%
-  enframe() %>%
-  select(-name)
+  proxy::dist(method = dist_measure) %>%
+  as.matrix() %>%
+  melt(varnames = c("row", "col")) %>%
+  as_data_frame() %>%
+  filter(row > col) %>%
+  select(-row, -col)
 
 trigram_dist <- trigrams %>% 
   select(-source, -gram) %>%
-  dist(method = "euclidean") %>%
-  enframe() %>%
-  select(-name)
+  proxy::dist(method = dist_measure) %>%
+  as.matrix() %>%
+  melt(varnames = c("row", "col")) %>%
+  as_data_frame() %>%
+  filter(row > col) %>%
+  select(-row, -col)
 
 dists <- unigram_dist %>%
   mutate(gram = "unigram") %>%
@@ -51,16 +59,27 @@ dists <- unigram_dist %>%
 ## get nonparametric bootstrap over unigram and trigram distances
 boots <- unigram_dist %>% 
   tidyboot_mean(value) %>%
-  bind_rows(trigram_dist %>% tidyboot_mean(value))
+  mutate(gram = "unigram") %>%
+  bind_rows(trigram_dist %>% tidyboot_mean(value) %>% mutate(gram = "trigram"))
 ```
 
-A violin and boxplot to display the distribution of distances. Most Euclidean distances are clustered around $0.8$ for trigrams, and around $1$ for unigrams. 
+We run a one-sided t-test to see if the mean of the unigram distances is greater than the mean of the trigram distances to a statistically significant level. The p-value is $4.386501 x 10^{-157}$. 
+
+```{r run t-test for differences in distances}
+t.test(unigram_dist %>% pull(value), trigram_dist %>% pull(value), 
+       alternative = "greater", var.equal = F)$p.value
+```
+
+A violin and boxplot to display the distribution of distances. The violin plots for unigrams and trigrams actually appear similarly distributed, but unigrams has more large distance values (a fatter tail, in probability distribution terms) which allocates mass away from small distance values that dominate both trigrams and unigrams. 
 
 ```{r plot}
 dists %>%
   ggplot(aes(x = gram, y = value)) + 
     geom_violin(aes(fill = gram)) + 
-    geom_boxplot(width = 0.1)
+    geom_boxplot(width = 0.1) + 
+    coord_flip() +
+    ggtitle("Distribution of pairwise DTW distances between Wikipedia barycenters")
 ```
+
 
 
