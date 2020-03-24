@@ -1,0 +1,66 @@
+---
+title: "Average distance"
+author: "Josef Klafka and Daniel Yurovsky"
+date: "3/24/2020"
+output: html_document
+---
+
+In this script, we quantify the average pairwise distance between unigram and trigram barycenters. This simple summary statistic (computed along with a non-parametric bootstrap) will give evidence that the unigram barycenters have more variation than the trigram barycenters. 
+
+```{r setup, include=FALSE}
+require(tidyverse)
+require(tidyboot)
+require(here)
+require(janitor)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We read in the unigram and trigram barycenters. 
+
+```{r read in data}
+barycenters <- read_csv(here("Data/5barycenters.csv")) %>% 
+  select(-language)
+
+unigrams <- barycenters %>%
+  filter(source == "wikipedia", gram == "unigram")
+
+trigrams <- barycenters %>%
+  filter(source == "wikipedia", gram == "trigram")
+```
+
+For our first test, we use simple Euclidean distance to find the distances of the barycenters. The average unigram distance is $1.29$, with a upper confidence interval bound of $1.31$ and a lower confidence interval bound of $1.28$. Those values are $1.01$, $1.00$ and $1.02$ respectively for trigrams. 
+
+```{r get distances}
+unigram_dist <- unigrams %>% 
+  select(-source, -gram) %>%
+  dist(method = "euclidean") %>%
+  enframe() %>%
+  select(-name)
+
+trigram_dist <- trigrams %>% 
+  select(-source, -gram) %>%
+  dist(method = "euclidean") %>%
+  enframe() %>%
+  select(-name)
+
+dists <- unigram_dist %>%
+  mutate(gram = "unigram") %>%
+  bind_rows(trigram_dist %>% mutate(gram = "trigram"))
+
+## get nonparametric bootstrap over unigram and trigram distances
+boots <- unigram_dist %>% 
+  tidyboot_mean(value) %>%
+  bind_rows(trigram_dist %>% tidyboot_mean(value))
+```
+
+A violin and boxplot to display the distribution of distances. Most Euclidean distances are clustered around $0.8$ for trigrams, and around $1$ for unigrams. 
+
+```{r plot}
+dists %>%
+  ggplot(aes(x = gram, y = value)) + 
+    geom_violin(aes(fill = gram)) + 
+    geom_boxplot(width = 0.1)
+```
+
+
