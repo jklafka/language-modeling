@@ -15,9 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r read-data, message = FALSE}
-data <- read_csv(here("../Data/5barycenters.csv")) %>%
+data <- read_csv(here("Data/5barycenters.csv")) %>%
   filter(source == "wikipedia") %>%
-  left_join(read_csv(here("../Data/final_features.csv")), by = "language") %>%
+  left_join(read_csv(here("Data/final_features.csv")), by = "language") %>%
   clean_names()
 ```
 
@@ -38,6 +38,7 @@ $$I(X, Y) = \langle I_i \rangle = \psi(N) - \langle\psi(N_{x_i})\rangle + \psi(k
 
 In our implementation $k$ is some fixed (low) integer of the user’s choice; larger k-values lead to lower sampling error but higher coarse-graining error."
 
+## For one WALS feature and one barycenter coordinate
 
 ```{r compute-pair, eval = F}
 ## for nearest neighbors
@@ -59,6 +60,7 @@ single_feature_all_dists <- single_feature %>%
   mutate(identity = 1) %>%
   pairwise_dist(point, identity, x1, method = "manhattan", upper = TRUE)
 
+# compute the distance of the kth closest language for each coordinate with the same feature value
 single_feature_group_dists <- single_feature %>%
   ## what's the closest data point, get its distance
   pairwise_dist(point, x103a, x1, method = "manhattan", upper = TRUE) %>%
@@ -84,17 +86,23 @@ single_feature_mi_data <- single_feature_group_dists %>%
   left_join(single_feature_mis, by = "item1")
 
 
-single_feature_Is = single_feature_mi_data %>%
+single_feature_Is <- single_feature_mi_data %>%
   mutate_at(vars(N, k, Nx, mi), digamma) %>%
   mutate(Ii = N - Nx + k - mi) %>%
   summarise(I = mean(Ii))
 
 ```
 
-All features
-```{r compute-pair, eval = F}
+## For all features and all coordinates
+
+Without any adjustment, some of the mutual information measures produce negative mutual information. For the classic mutual information measure on two discrete or two continuous random variables, the measure is naturally non-negative. One random variable can only at worst give no information about the value of another random variable. Negative mutual information is otherwise only a property of multivariate mutual information. 
+
+To counteract this, we introduce a simple fix: any negative mutual information values for individual WALS feature values are replaced by $0$. 
+
+```{r compute all pairs, eval = F}
 k <- 3
 
+# get each feature for each language and each barycenter coordinate
 features <- data %>%
   pivot_longer(cols = x1a:x120a, names_to = "feature", values_to = "feature_value") %>%
   pivot_longer(cols = x1:x5, names_to = "position", values_to = "position_value") %>%
@@ -102,12 +110,16 @@ features <- data %>%
   mutate(point = 1:n(),
          identity = 1)
 
+# number of languages
 N <- max(pull(features, point))
 
+# number of languages with each value for each feature
 Nxs <- features %>%
   group_by(feature_value, add = TRUE) %>%
   summarise(Nx = n())
 
+# just for WALS feature 1A:
+# compute the distance of the kth closest language for each coordinate with the same feature value
 all_dists <- features %>%
   ungroup() %>%
   filter(feature == "x1a") %>%
@@ -118,6 +130,7 @@ all_dists <- features %>%
   select(-data) %>%
   unnest(cols = c(dist))
 
+# now repeat for all features, with k as set at the top of this section
 all_group_dists <- features %>%
   nest() %>%
   group_by(gram, feature, position) %>%
@@ -135,22 +148,30 @@ all_group_dists <- features %>%
             by = c("gram", "feature", "position", "item1" = "point")) %>%
   rename(min_dist = distance)
 
-
+# how many total points in that neighborhood
 mis <- all_dists %>%
   full_join(all_group_dists, by = c("gram", "position", "item1")) %>%
   filter(distance <= min_dist) %>%
   group_by(gram, position, feature, item1) %>%
   summarise(mi = n())
 
+# join the N, k and Nx information
 mi_data <- all_group_dists %>%
   mutate(N = N, k = k) %>%
   left_join(Nxs, by = c("gram", "feature", "position", "feature_value")) %>%
   left_join(mis, by = c("gram", "feature", "position", "item1"))
 
-
-Is = mi_data %>%
+# get the mutual information with the digamma formula
+Is <- mi_data %>%
   mutate_at(vars(N, k, Nx, mi), digamma) %>%
   mutate(Ii = N - Nx + k - mi) %>%
+  mutate(Ii = ifelse(Ii < 0, 0, Ii)) %>% # replace negative mutual information with 0
   group_by(gram, position, feature) %>%
   summarise(I = mean(Ii))
+
+# which features have the most mutual information?
+Is %>% 
+  ungroup() %>% 
+  filter(gram == "unigram", I > 0) %>% 
+  arrange(desc(I))
 ```
