@@ -54,7 +54,7 @@ trigram_dist <- trigrams %>%
 
 dists <- unigram_dist %>%
   mutate(gram = "unigram") %>%
-  bind_rows(trigram_dist %>% mutate(gram = "trigram"))
+  bind_rows(trigram_dist %>% mutate(gram = "trigram")) 
 
 ## get nonparametric bootstrap over unigram and trigram distances
 boots <- unigram_dist %>% 
@@ -70,16 +70,19 @@ t.test(unigram_dist %>% pull(value), trigram_dist %>% pull(value),
        alternative = "greater", var.equal = F)$p.value
 ```
 
-A violin and boxplot to display the distribution of distances. The violin plots for unigrams and trigrams actually appear similarly distributed, but unigrams has more large distance values (a fatter tail, in probability distribution terms) which allocates mass away from small distance values that dominate both trigrams and unigrams. 
+We log-scale the distances and graph them with violin and boxplot to display the distribution. The violin plots for unigrams and trigrams actually appear similarly distributed, but unigrams has more large distance values (a fatter tail, in probability distribution terms) which allocates mass away from small distance values that dominate both trigrams and unigrams. 
 
 ```{r plot}
 dists %>%
+  mutate(value = log(value)) %>%
   ggplot(aes(x = gram, y = value)) + 
     geom_violin(aes(fill = gram)) + 
     geom_boxplot(width = 0.1) + 
     coord_flip() +
-    ggtitle("Distribution of pairwise DTW distances between Wikipedia barycenters")
+    ggtitle("Distribution of pairwise DTW distances between Wikipedia barycenters") + 
+    ylab("Log-scaled dynamic time warping distance") + 
+    theme(legend.position = "none")
 ```
 
-
+Our observations fall prey to Galton's problem: the languages are not drawn randomly from the set of all languages without regard to language family or any other kind of genealogy. Indo-European languages (which are more similar to each other) are overrepresented. 
 
