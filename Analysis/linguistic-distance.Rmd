@@ -21,40 +21,40 @@ knitr::opts_chunk$set(echo = TRUE)
 Download and unzip the WALS data file from "https://wals.info/download" (the file is called wals_language.csv.zip) to get the originals for this data processing pipeline. Codes are created from the language_dict.json file in the top-level directory of the repository, filled out manually from here: "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Languages/List_of_ISO_639-3_language_codes_(2019)"
 ```{r get WALS features, echo = F, include = F}
 # get list of all languages we use in wikipedia dataset
-langs <- read_csv(here("Data/final_features.csv")) %>%
+langs <- read_csv(here("../Data/final_features.csv")) %>%
   pull(language)
 
 
 # get iso code and WALS code mappings
-languages <- read_csv(here("Data/wiki/wals_dataset/languages.csv")) %>% 
+languages <- read_csv(here("../Data/wiki/wals_dataset/languages.csv")) %>%
   select(ID, ISO639P3code) %>%
   rename(iso = ISO639P3code)
 
 # get iso code paired with all initial feature values and NAs
-values <- read_csv(here("Data/wiki/wals_dataset/values.csv")) %>%
-  select(Language_ID, Parameter_ID, Value) %>% 
-  pivot_wider(names_from = Parameter_ID, values_from = Value) %>% 
+values <- read_csv(here("../Data/wiki/wals_dataset/values.csv")) %>%
+  select(Language_ID, Parameter_ID, Value) %>%
+  pivot_wider(names_from = Parameter_ID, values_from = Value) %>%
   left_join(languages, by = c("Language_ID" = "ID")) %>%
   clean_names()
 
 # get wikipedia language name to iso code mappings
-iso_to_language <- read_csv(here("Data/wiki/codes.csv")) %>%
+iso_to_language <- read_csv(here("../Data/wiki/codes.csv")) %>%
   select(language, iso) %>%
   group_by(language) %>%
-  slice(1) %>% 
+  slice(1) %>%
   ungroup()
 
 # match up initial wals features with wikipedia language name mappings
-final_features <- values %>% 
-  inner_join(iso_to_language, by = "iso") %>% 
+final_features <- values %>%
+  inner_join(iso_to_language, by = "iso") %>%
   semi_join(langs, by = "language") %>%
   select(-language_id, -iso) %>%
-  distinct(language, .keep_all = TRUE) 
+  distinct(language, .keep_all = TRUE)
 
 # get all currently valued features
-wals_features <- read_csv(here("Data/Paper/wals_features.csv")) %>%
+wals_features <- read_csv(here("../Data/Paper/wals_features.csv")) %>%
   clean_names() %>%
-  bind_rows(final_features) %>% 
+  bind_rows(final_features) %>%
   select(language:x120a) %>%
   distinct(language, .keep_all=T) %>%
   remove_na
@@ -70,69 +70,69 @@ imputed_features <- imputed_wals[[1]][99]$`nboot=99` %>%
   bind_cols(wals_features %>% select(language))
 
 imputed_features %>%
-  write_csv(here("Data/final_features.csv"))
+  write_csv(here("../Data/final_features.csv"))
 ```
 
 ```{r cosines}
-#b <- read_csv(here("Data/final_barycenters.csv")) 
+#b <- read_csv(here("../Data/final_barycenters.csv"))
 
-b <- read_csv(here("Data/5barycenters.csv"), 
-              col_names = c("1", "2", "3", "4", "5", 
+b <- read_csv(here("../Data/5barycenters.csv"),
+              col_names = c("1", "2", "3", "4", "5",
                             "language", "source", "gram"))
 
 
 unigram_cosines <- b %>%
-  filter(gram == "unigram", source == "wikipedia") %>% 
-  distinct(language, .keep_all = T) %>% 
-  select(-gram, -source) %>% 
+  filter(gram == "unigram", source == "wikipedia") %>%
+  distinct(language, .keep_all = T) %>%
+  select(-gram, -source) %>%
   pivot_longer(-language, names_to = "position", values_to = "surprisal") %>%
   group_by(language) %>%
   mutate(surprisal = scale(surprisal, scale = FALSE)) %>%
   pivot_wider(names_from = position, values_from = surprisal) %>%
-  column_to_rownames("language") %>% 
+  column_to_rownames("language") %>%
   data.matrix() %>%
   t() %>%
   cosine() %>%
   as_tibble(rownames = "language1") %>%
   pivot_longer(-language1, names_to = "language2", values_to = "cosine")
 
-unigram_cosines %>% write_csv(here("Data/unigram_cosines.csv"))
+unigram_cosines %>% write_csv(here("../Data/unigram_cosines.csv"))
 
 trigram_cosines <- b %>%
-  filter(gram == "trigram", source == "wikipedia") %>% 
-  distinct(language, .keep_all = T) %>% 
-  select(-gram, -source) %>% 
+  filter(gram == "trigram", source == "wikipedia") %>%
+  distinct(language, .keep_all = T) %>%
+  select(-gram, -source) %>%
   pivot_longer(-language, names_to = "position", values_to = "surprisal") %>%
   group_by(language) %>%
   mutate(surprisal = scale(surprisal, scale = FALSE)) %>%
   pivot_wider(names_from = position, values_from = surprisal) %>%
-  column_to_rownames("language") %>% 
+  column_to_rownames("language") %>%
   data.matrix() %>%
   t() %>%
   cosine() %>%
   as_tibble(rownames = "language1") %>%
   pivot_longer(-language1, names_to = "language2", values_to = "cosine")
 
-trigram_cosines %>% write_csv(here("Data/trigram_cosines.csv"))
+trigram_cosines %>% write_csv(here("../Data/trigram_cosines.csv"))
 
 unigram_cosines %>%
   mutate(gram = "unigram") %>%
   bind_rows(mutate(trigram_cosines, gram = "trigram")) %>%
-  write_csv(here("Data/Paper/cosines.csv"))
+  write_csv(here("../Data/Paper/cosines.csv"))
 ```
 
 ```{r get data and preprocess}
-asjp_forms <- read_csv(here("Data/asjp_dataset/forms.csv"))
-asjp_langs <- read_csv(here("Data/asjp_dataset/languages.csv"))
-lang_forms <- asjp_forms %>% 
-  select(Language_ID, Parameter_ID, Form) %>% 
+asjp_forms <- read_csv(here("../Data/asjp_dataset/forms.csv"))
+asjp_langs <- read_csv(here("../Data/asjp_dataset/languages.csv"))
+lang_forms <- asjp_forms %>%
+  select(Language_ID, Parameter_ID, Form) %>%
   left_join(asjp_langs %>% select(ID, ISO639P3code), by = c("Language_ID" = "ID")) %>%
   left_join(iso_to_language, by = c("ISO639P3code" = "iso")) %>%
-  filter(complete.cases(.)) %>% 
+  filter(complete.cases(.)) %>%
   select(language, Parameter_ID, Form) %>%
   group_by(language, Parameter_ID) %>% ## taking off one at random for each language - fix
   slice(1) %>%
-  ungroup() 
+  ungroup()
 
 langs_pairwise <- expand.grid(language1 = langs,
                            language2 = langs) %>%
@@ -140,36 +140,36 @@ langs_pairwise <- expand.grid(language1 = langs,
 ```
 
 ```{r make wals distance space}
-feature_types <- read_csv(here("Data/feature_types.csv"))
+feature_types <- read_csv(here("../Data/feature_types.csv"))
 
-wals_features <- read_csv(here("Data/final_features.csv")) %>%
+wals_features <- read_csv(here("../Data/final_features.csv")) %>%
   pivot_longer(-language, names_to = "feature", values_to = "value") %>%
   mutate(feature = gsub("x", "", feature),
          feature = gsub("a", "A", feature)) %>%
   left_join(feature_types, by = "feature")
 
 wals_distance <- function(language1, language2) {
-  wals_features %>% 
+  wals_features %>%
     filter(language == language1) %>%
-    left_join(wals_features %>% filter(language == language2), by = "feature") %>% 
-    filter(complete.cases(.)) %>% 
+    left_join(wals_features %>% filter(language == language2), by = "feature") %>%
+    filter(complete.cases(.)) %>%
     mutate(wals_dist = ifelse(value.x == value.y, 1, 0)) %>%
-    group_by(language.x, language.y) %>% 
-    summarise(wals_dist = sum(wals_dist)) %>% 
-    rename(language1 = language.x, language2 = language.y) %>% 
+    group_by(language.x, language.y) %>%
+    summarise(wals_dist = sum(wals_dist)) %>%
+    rename(language1 = language.x, language2 = language.y) %>%
     ungroup()
 }
 
 wals_type_distance <- function(language1, language2) {
-  wals_features %>% 
+  wals_features %>%
     filter(language == language1) %>%
-    left_join(wals_features %>% filter(language == language2), 
-              by = c("feature", "type")) %>% 
-    filter(complete.cases(.)) %>% 
+    left_join(wals_features %>% filter(language == language2),
+              by = c("feature", "type")) %>%
+    filter(complete.cases(.)) %>%
     mutate(wals_dist = ifelse(value.x == value.y, 1, 0)) %>%
-    group_by(type, language.x, language.y) %>% 
-    summarise(wals_dist = sum(wals_dist)) %>% 
-    rename(language1 = language.x, language2 = language.y) %>% 
+    group_by(type, language.x, language.y) %>%
+    summarise(wals_dist = sum(wals_dist)) %>%
+    rename(language1 = language.x, language2 = language.y) %>%
     ungroup()
 }
 
@@ -177,110 +177,110 @@ langs_pairwise <- expand_grid(language1 = distinct(wals_features,language),
                               language2 = distinct(wals_features,language))
 
 wals_space <- map_dfr(1:nrow(langs_pairwise), ~wals_distance(langs_pairwise[.x,"language1"],
-                                          langs_pairwise[.x,"language2"])) 
-wals_space %>% 
-  write_csv(here("Data/Paper/wals_distances.csv"))
+                                          langs_pairwise[.x,"language2"]))
+wals_space %>%
+  write_csv(here("../Data/Paper/wals_distances.csv"))
 
 wals_type_space <- map_dfr(1:nrow(langs_pairwise), ~wals_type_distance(langs_pairwise[.x,"language1"],
-                                          langs_pairwise[.x,"language2"])) 
-wals_type_space %>% 
-  write_csv(here("Data/Paper/wals_type_distances.csv"))
+                                          langs_pairwise[.x,"language2"]))
+wals_type_space %>%
+  write_csv(here("../Data/Paper/wals_type_distances.csv"))
 
 ```
 
 ```{r make swadesh distance space}
 asjp_distance <- function(language1, language2) {
-  lang_forms %>% 
+  lang_forms %>%
     filter(language == language1) %>%
-    left_join(lang_forms %>% filter(language == language2), by = "Parameter_ID") %>% 
-    filter(complete.cases(.)) %>% 
+    left_join(lang_forms %>% filter(language == language2), by = "Parameter_ID") %>%
+    filter(complete.cases(.)) %>%
     mutate(ldn = stringdist(Form.x, Form.y) / max(str_length(c(Form.x, Form.y)))) %>%
-    group_by(language.x, language.y) %>% 
-    summarise(ldn = mean(ldn)) %>% 
-    rename(language1 = language.x, language2 = language.y) %>% 
+    group_by(language.x, language.y) %>%
+    summarise(ldn = mean(ldn)) %>%
+    rename(language1 = language.x, language2 = language.y) %>%
     ungroup()
 }
 
 swadesh_space <- map_dfr(1:nrow(langs_pairwise), ~asjp_distance(langs_pairwise[.x,"language1"],
-                                          langs_pairwise[.x,"language2"])) 
+                                          langs_pairwise[.x,"language2"]))
 ```
 
-Does word order covary with trigram information curve shape? 
+Does word order covary with trigram information curve shape?
 ```{r shape-feature covariance}
-boot_slopes <- features %>% 
-  inner_join(slopes %>% filter(gram == "Unigram"), by = "language") %>% 
-  filter(!is.na(x81a)) %>% 
-  select(language, x81a, slope1:slope5) %>% 
-  mutate(slope0 = runif(1, 0.9, 1.1)) %>% 
-  mutate(slope1 = slope1 + slope0) %>% 
-  mutate(slope2 = slope2 + slope1) %>% 
-  mutate(slope3 = slope3 + slope2) %>% 
-  mutate(slope4 = slope4 + slope3) %>% 
-  mutate(slope5 = slope5 + slope4) %>% 
+boot_slopes <- features %>%
+  inner_join(slopes %>% filter(gram == "Unigram"), by = "language") %>%
+  filter(!is.na(x81a)) %>%
+  select(language, x81a, slope1:slope5) %>%
+  mutate(slope0 = runif(1, 0.9, 1.1)) %>%
+  mutate(slope1 = slope1 + slope0) %>%
+  mutate(slope2 = slope2 + slope1) %>%
+  mutate(slope3 = slope3 + slope2) %>%
+  mutate(slope4 = slope4 + slope3) %>%
+  mutate(slope5 = slope5 + slope4) %>%
   pivot_longer(cols = slope1:slope0, names_to = "slope", values_to = "value") %>%
   group_by(x81a, slope) %>%
   tidyboot_mean(column = value) %>%
   ungroup()
 
-boot_slopes %>% 
+boot_slopes %>%
   mutate(slope = str_extract(slope, "\\d"), # turn slope into integer
          slope = as.integer(slope) + 1) %>%
-    ggplot(aes(x = slope, y = empirical_stat, group = x81a, color = x81a)) + 
-    geom_point() + 
-    # geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.25) + 
-    geom_line() + 
-    xlab("Word position") + 
-    ylab("Average Information") + 
-    theme(axis.text.x = element_blank()) + 
+    ggplot(aes(x = slope, y = empirical_stat, group = x81a, color = x81a)) +
+    geom_point() +
+    # geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.25) +
+    geom_line() +
+    xlab("Word position") +
+    ylab("Average Information") +
+    theme(axis.text.x = element_blank()) +
     scale_color_viridis(discrete = T, option = "C")
 ```
 
-Are information curve shapes consistent within language families? 
-language.csv is from "https://wals.info/download", in wals_language.csv.zip. It's the only file in the zip. 
+Are information curve shapes consistent within language families?
+language.csv is from "https://wals.info/download", in wals_language.csv.zip. It's the only file in the zip.
 ```{r language family}
-features <- read_csv(here("Data/final_features.csv"))
-slopes <- read_csv(here("Data/final_barycenters.csv"))
-iso_codes <- read_csv(here("Data/wiki/codes.csv"))
-families <- read_csv(here("Data/wiki/wals_dataset/language.csv"))
+features <- read_csv(here("../Data/final_features.csv"))
+slopes <- read_csv(here("../Data/final_barycenters.csv"))
+iso_codes <- read_csv(here("../Data/wiki/codes.csv"))
+families <- read_csv(here("../Data/wiki/wals_dataset/language.csv"))
 
 ## match up language curves with their language families
-family_slopes <- features %>% 
+family_slopes <- features %>%
   left_join(iso_codes) %>%
-  select(language, iso) %>% 
-  inner_join(slopes) %>% 
-  inner_join(families %>% select(iso_code, family), by = c("iso" = "iso_code")) %>% 
+  select(language, iso) %>%
+  inner_join(slopes) %>%
+  inner_join(families %>% select(iso_code, family), by = c("iso" = "iso_code")) %>%
   distinct() ## deduplicate--WALS has some duplicate entries but doesn't affect families
-# 
+#
 # family_slopes %>%
 #   select(language, family) %>%
 #   distinct() %>%
-#   write_csv(here("Data/paper/families.csv"))
-# 
+#   write_csv(here("../Data/paper/families.csv"))
+#
 ## construct sample curves and bootstrap
-family_bootstraps <- family_slopes %>% 
-  select(-iso, -source) %>% 
+family_bootstraps <- family_slopes %>%
+  select(-iso, -source) %>%
   pivot_longer(cols = `1`:`10`, names_to = "slope", values_to = "surprisal") %>%
   group_by(family, gram, slope) %>%
   tidyboot_mean(column = surprisal) %>%
   ungroup()
 
 ## plotting the sample curves
-family_bootstraps %>% 
+family_bootstraps %>%
   mutate(slope = str_extract(slope, "\\d"), # turn slope into integer
          slope = as.integer(slope) + 1) %>%
-  filter(gram == "trigram") %>% 
-  ggplot(aes(x = slope, y = empirical_stat, group = gram, color = gram)) + 
-    geom_point() + 
+  filter(gram == "trigram") %>%
+  ggplot(aes(x = slope, y = empirical_stat, group = gram, color = gram)) +
+    geom_point() +
     geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.25) +
-    geom_line() + 
-    facet_wrap(~family) + 
-    xlab("Word position") + 
-    ylab("Average Information") + 
-    theme(axis.text.x = element_blank()) + 
+    geom_line() +
+    facet_wrap(~family) +
+    xlab("Word position") +
+    ylab("Average Information") +
+    theme(axis.text.x = element_blank()) +
     scale_color_manual(values = c("#8b0000"))
 
 # ## why do the unigram curves look so flat in comparison?
-# family_slopes %>% 
-#   filter(gram == "Unigram") %>% 
+# family_slopes %>%
+#   filter(gram == "Unigram") %>%
 #   group_by(family)
 ```

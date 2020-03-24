@@ -15,9 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r read-data, message = FALSE}
-data <- read_csv(here("Data/5barycenters.csv")) %>%
+data <- read_csv(here("../Data/5barycenters.csv")) %>%
   filter(source == "wikipedia") %>%
-  left_join(read_csv(here("Data/final_features.csv")), by = "language") %>%
+  left_join(read_csv(here("../Data/final_features.csv")), by = "language") %>%
   clean_names()
 ```
 
@@ -44,17 +44,17 @@ In our implementation $k$ is some fixed (low) integer of the user’s choice; la
 k <- 3
 
 # get only the first coordinate of the unigram barycenter and WALS feature x103a
-single_feature <- data %>% 
+single_feature <- data %>%
   filter(gram == "unigram") %>%
-  select(x1, x103a) %>% 
-  mutate(point = 1:n()) 
+  select(x1, x103a) %>%
+  mutate(point = 1:n())
 
 # how languages have each feature value
 single_feature_Nxs <- single_feature %>%
   group_by(x103a) %>%
-  summarise(Nx = n()) 
+  summarise(Nx = n())
 
-# pairwise distances between each 
+# pairwise distances between each
 single_feature_all_dists <- single_feature %>%
   mutate(identity = 1) %>%
   pairwise_dist(point, identity, x1, method = "manhattan", upper = TRUE)
@@ -64,10 +64,10 @@ single_feature_group_dists <- single_feature %>%
   pairwise_dist(point, x103a, x1, method = "manhattan", upper = TRUE) %>%
   group_by(item1) %>%
   arrange(distance) %>%
-  slice(k) %>% 
+  slice(k) %>%
   ungroup() %>%
   select(-item2) %>%
-  left_join(select(single_feature, point, x103a), 
+  left_join(select(single_feature, point, x103a),
             by = c("item1" = "point")) %>%
   rename(min_dist = distance)
 
@@ -81,9 +81,9 @@ single_feature_mis <- single_feature_all_dists %>%
 single_feature_mi_data <- single_feature_group_dists %>%
   mutate(N = n(), k = k) %>%
   left_join(single_feature_Nxs, by = "x103a") %>%
-  left_join(single_feature_mis, by = "item1") 
-  
-  
+  left_join(single_feature_mis, by = "item1")
+
+
 single_feature_Is = single_feature_mi_data %>%
   mutate_at(vars(N, k, Nx, mi), digamma) %>%
   mutate(Ii = N - Nx + k - mi) %>%
@@ -95,15 +95,15 @@ All features
 ```{r compute-pair, eval = F}
 k <- 3
 
-features <- data %>% 
+features <- data %>%
   pivot_longer(cols = x1a:x120a, names_to = "feature", values_to = "feature_value") %>%
   pivot_longer(cols = x1:x5, names_to = "position", values_to = "position_value") %>%
   group_by(gram, feature, position) %>%
   mutate(point = 1:n(),
          identity = 1)
 
-N <- max(pull(features, point)) 
-  
+N <- max(pull(features, point))
+
 Nxs <- features %>%
   group_by(feature_value, add = TRUE) %>%
   summarise(Nx = n())
@@ -113,16 +113,16 @@ all_dists <- features %>%
   filter(feature == "x1a") %>%
   group_by(gram, position) %>%
   nest() %>%
-  mutate(dist = map(data, ~pairwise_dist(., point, identity, position_value, 
+  mutate(dist = map(data, ~pairwise_dist(., point, identity, position_value,
                                          method = "manhattan", upper = TRUE))) %>%
   select(-data) %>%
-  unnest(cols = c(dist)) 
+  unnest(cols = c(dist))
 
 all_group_dists <- features %>%
   nest() %>%
   group_by(gram, feature, position) %>%
-  mutate(dist = map(data, ~pairwise_dist(., point, feature_value, 
-                                         position_value, method = "manhattan", 
+  mutate(dist = map(data, ~pairwise_dist(., point, feature_value,
+                                         position_value, method = "manhattan",
                                          upper = TRUE))) %>%
   select(-data) %>%
   unnest(cols = c(dist)) %>%
@@ -146,11 +146,11 @@ mi_data <- all_group_dists %>%
   mutate(N = N, k = k) %>%
   left_join(Nxs, by = c("gram", "feature", "position", "feature_value")) %>%
   left_join(mis, by = c("gram", "feature", "position", "item1"))
-  
-  
+
+
 Is = mi_data %>%
   mutate_at(vars(N, k, Nx, mi), digamma) %>%
   mutate(Ii = N - Nx + k - mi) %>%
   group_by(gram, position, feature) %>%
-  summarise(I = mean(Ii)) 
+  summarise(I = mean(Ii))
 ```

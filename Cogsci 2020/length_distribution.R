@@ -9,7 +9,7 @@ corpus <- c("bnc", "sbc", "childes", "childes")
 compute_lengths <- function(source, corpus) {
   
   
-  data <- read_delim(here(glue("Data/{source}/{corpus}.txt")), 
+  data <- read_delim(here(glue("../Data/{source}/{corpus}.txt")), 
                     delim = '\n', col_names = c("text"))
   
   data %>% 

@@ -9,7 +9,7 @@ from scipy.cluster.hierarchy import linkage, dendrogram
 #     for line in reader
 
 # read in barycenters and filter to unigrams
-barycenters = pd.read_csv("Data/5barycenters.csv")
+barycenters = pd.read_csv("../Data/5barycenters.csv")
 barycenters = barycenters[barycenters["gram"] == "unigram"]
 # fetch languages
 languages = barycenters["language"].copy()
