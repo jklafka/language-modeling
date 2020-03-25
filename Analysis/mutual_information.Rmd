@@ -10,8 +10,15 @@ require(tidyverse)
 require(here)
 require(janitor)
 require(widyr)
+require(ggridges)
+library(ggthemes)
+library(lmerTest)
+library(broom)
+library(broom.mixed)
 
 knitr::opts_chunk$set(echo = TRUE)
+
+theme_set(theme_few() + theme(legend.position = "none"))
 ```
 
 ```{r read-data, message = FALSE}
@@ -164,10 +171,44 @@ mi_data <- all_group_dists %>%
 # get the mutual information with the digamma formula
 Is <- mi_data %>%
   mutate_at(vars(N, k, Nx, mi), digamma) %>%
-  mutate(Ii = N - Nx + k - mi) %>%
-  mutate(Ii = ifelse(Ii < 0, 0, Ii)) %>% # replace negative mutual information with 0
+  mutate(Ii = N - Nx + k - mi) %>% #,
+         #Ii = if_else(Ii > 0, Ii, 0)) %>% # replace negative mutual information with 0
   group_by(gram, position, feature) %>%
   summarise(I = mean(Ii))
+```
+
+```{r feature-types}
+tidy_Is <- Is %>%
+  ungroup() %>%
+  mutate(position = as.numeric(gsub("x", "", position)),
+         feature = gsub("x", "", feature),
+         feature = gsub("a", "A", feature))
+
+wals_types <- read_csv(here("Data/feature_types.csv"))
+
+type_Is <- left_join(tidy_Is, wals_types, by = c("feature"))
+
+ggplot(type_Is, aes(x = I, y = as.factor(position), color = position, fill = position)) + 
+  facet_grid(gram ~ type) + 
+  geom_density_ridges(aes(alpha = .1)) + 
+  geom_vline(aes(xintercept = 0), linetype = "dashed")
+
+type_model <- lmer(I ~ as.factor(position) * type + (1|feature),
+                   data = type_Is %>% filter(gram == "unigram")) %>%
+  tidy() %>%
+  filter(effect == "fixed") %>%
+  select(-group, -effect, -df)
+
+
+type_model <- lmer(I ~ type + as.factor(position) + (1|feature),
+                   data = type_Is %>% filter(gram == "trigram")) %>%
+  tidy() %>%
+  filter(effect == "fixed") %>%
+  select(-group, -effect, -df)
+
+```
+
+
 
 # which features have the most mutual information?
 Is %>% 
