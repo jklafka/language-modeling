@@ -1,9 +1,9 @@
 # @Author: Josef Klafka <academic>
 # @Date:   2020-03-27T13:34:11-04:00
 # @Email:  jlklafka@gmail.com
-# @Project: Noisy-nets
+# @Project: language-modeling
 # @Last modified by:   academic
-# @Last modified time: 2020-03-27T14:09:04-04:00
+# @Last modified time: 2020-03-27T16:30:43-04:00
 
 
 
@@ -17,9 +17,8 @@ from scipy.cluster.hierarchy import linkage, dendrogram
 
 # read in barycenters and filter to unigrams
 barycenters = pd.read_csv("../Data/5barycenters.csv")
-barycenters = barycenters[barycenters["gram"] == "unigram"]
-# fetch languages
-languages = barycenters["language"].copy()
+barycenters = barycenters[(barycenters["gram"] == "unigram") & \
+    (barycenters["source"] == "wikipedia")]
 # get the numerical barycenters
 centers = barycenters.loc[:, '1':'5'].to_numpy()
 
@@ -34,7 +33,11 @@ for row in Z:
     new_center = dtw_barycenter_averaging(cluster)
     expanded_centers = np.vstack((expanded_centers, new_center.T))
 
-## plot entire dendrogram
-plt.figure(figsize = (50, 20), dpi = 100)
-dendro = dendrogram(Z, labels = languages.to_numpy())
-plt.savefig("dendro.png")
+# save data to file
+np.savetxt("linkage.txt", Z)
+np.savetxt("expanded_centers.txt", expanded_centers)
+
+languages = barycenters["language"].tolist()
+with open("languages.txt", 'w') as language_file:
+    for language in languages:
+        language_file.write("%s\n" % language)
