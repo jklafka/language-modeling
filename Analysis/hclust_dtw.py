@@ -3,7 +3,7 @@
 # @Email:  jlklafka@gmail.com
 # @Project: language-modeling
 # @Last modified by:   academic
-# @Last modified time: 2020-03-27T16:30:43-04:00
+# @Last modified time: 2020-03-30T09:20:26-04:00
 
 
 
@@ -34,6 +34,7 @@ for row in Z:
     expanded_centers = np.vstack((expanded_centers, new_center.T))
 
 # save data to file
+##### FIX WRITING IN WEIRD SCIENTIFIC NOTATION
 np.savetxt("linkage.txt", Z)
 np.savetxt("expanded_centers.txt", expanded_centers)
 

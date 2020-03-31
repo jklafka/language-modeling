@@ -3,14 +3,25 @@
 # @Email:  jlklafka@gmail.com
 # @Project: Noisy-nets
 # @Last modified by:   academic
-# @Last modified time: 2020-03-27T16:17:16-04:00
+# @Last modified time: 2020-03-31T14:46:03-04:00
 
-Z = open("linkage.txt", 'r').read().splitlines()
-expanded_barycenters = open("expanded_centers.txt", 'r').read().splitlines()
+import plotly.graph_objects as go # for interactive features
+import plotly.figure_factory as ff
+import numpy as np
+import pandas as pd
+## cdist_dtw does pairwise dynamic time warping on rows in a matrix
+from tslearn.metrics import cdist_dtw
 
-# ## plot entire dendrogram
-# plt.figure(figsize = (50, 20), dpi = 100)
-# fig, ax_main = plt.subplots()
-# ## add dendro to axe as main plot
-# dendro = dendrogram(Z, labels = languages.to_numpy(), ax = ax_main)
-# plt.savefig("dendro.png")
+# read in barycenters
+barycenters = pd.read_csv("../Data/5barycenters.csv")
+barycenters = barycenters[(barycenters["gram"] == "unigram") & \
+    (barycenters["source"] == "wikipedia")]
+
+# get the numerical barycenters
+centers = barycenters.loc[:, '1':'5'].to_numpy()
+languages = barycenters["language"].tolist()
+
+figure = ff.create_dendrogram(centers, orientation = "left",
+                                    labels = languages, distfun = cdist_dtw)
+figure.update_layout(width = 800, height = 2000)
+figure.show()
