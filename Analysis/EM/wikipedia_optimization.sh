@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# the largest language corpora (over 1.5gb) are on the last two lines
+## This script takes in all wikipedia languages and prints out the marginal and
+## final cost in the DBA expectation-maximization process
 declare -a langs=("Basque" "Alemannic" "Wolof" "Bosnian"
 "Urdu" "Afrikaans" "Anglo-Saxon" "Slovak" "Silesian" "Acehnese" "Banyumasan"
 "Wu" "Bashkir" "Chuvash" "Gagauz" "Karachay-Balkar" "Sakha" "Tamil" "Telugu"
@@ -27,8 +28,9 @@ declare -a langs=("Basque" "Alemannic" "Wolof" "Bosnian"
 "Swedish" "Japanese" "Arabic" "Polish" "French" "Spanish"
 "English" "Chinese" "Swedish" "French" "English" "Chinese")
 
-for i in "${langs[@]}"
+for lang in "${langs[@]}"
   do
-    echo "$i"
-    sh Scripts/process.sh wikipedia "$i"
+    echo "$lang"
+    sh em_optimization.sh wikipedia "$lang" unigram
+    sh em_optimization.sh wikipedia "$lang" trigram
   done
