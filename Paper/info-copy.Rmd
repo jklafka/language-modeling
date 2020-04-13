@@ -395,64 +395,68 @@ Unfortunately, we cannot compare amount of information across corpora--surprisal
 
 Thus, English--both written and spoken, both produced by adults and by children-appears to have a characteristic shape. Are the features of this shape features of English, or features of language more broadly? In Study 3 we apply this technique to a diverse set of written languages of different families to ask whether these structures vary cross-linguistically. 
 
-# Language structures and large-scale data analysis: methods
+# Study 3: Language structures and large-scale data analysis
 
-To make a claim about how languages on a larger scale, we need to use larger corpora and a much larger number of languages. We pulled corpora for $159$ diverse languages from Wikipedia, each of which had at least $10,000$ articles on the knowledge base. We split each article into sentences; the variance in sentence lengths for Wikipedia was significantly larger than for the CHILDES corpora we used in the previous section. Most sentences in Wikipedia contained between $10$ and $30$ words, unlike the CHILDES corpora which mainly contained utterances with under $10$ words. We excluded the small fraction of utterances with more than $50$ words since they were small in number and, from manual inspection, uncharacteristic of typical written sentences. 
+## Data
 
-How do we quantitatively analyze information curves for more than $40$ difference sentence lengths for each language, adding up to several thousand information curves total? We used two different strategies, which yielded identical results upon analysis. Each strategy gave us a five-dimensional vector for each language in a Wikipedia “slope space”. For the first strategy, we split each sentence length by number of words into fifths, and computed surprisal values for the closest word position to each quintile. We then computed the slopes between the surprisal values at neighboring quintiles, yielding five slope values for each curve. For the second strategy, we split each sentence length by number of words into sections based on those areas of the information curves that had seemed most important in our CHILDES analysis: between the first and second word; between the second and third word; between the third word and third-to-last word; between the third-to-last word and the second to last word; and between the second-to-last word and the last word. We then computed surprisal values at each of these positions, and computed slopes between the surprisal values at each section, giving us another five slope values for each language summarizing the information curves. We computed frequency-based and trigram contextual information curves for each language, using the aggregation strategies described above. 
+```{r wiki-langs}
+n_langs <- tidy_b %>% 
+    filter(source == "wikipedia") %>% 
+    distinct(language) %>% 
+    count() %>%
+    pull()
 
-We include illustrations of these two strategies using the frequency-based curve from the British National Corpus in Figure \@ref(fig:treatments) 
+families <- read_csv(here("Data/Paper/families.csv"))
 
-```{r treatments, echo = F, fig.height =3, fig.width=6, fig.cap="Illustration of slope treatments for Wikipedia information curves: relative on top and absolute on bottom"}
-## relative treatment: every fifth in a different group
-relative <- bnc_results %>% 
-  filter(gram == "Unigram", length == 20) 
-relative$group <- rep(1:5, each = 4)
-relative <- relative %>%
-  mutate(group = as.factor(group))
+scaled_b <- tidy_b %>%
+    group_by(language, gram) %>%
+    mutate(surprisal = scale(surprisal, scale = FALSE))
 
-# rel_plot <- relative %>%
-#   ggplot(aes(x = position, y = empirical_stat, ymin = ci_lower, ymax = ci_upper, color = group)) + 
-#     geom_point() + 
-#     geom_pointrange() + 
-#     geom_line() +
-#     scale_x_continuous(breaks = c(1, seq(5, 30, 5))) + 
-#     xlab("Word position") + 
-#     ylab("Mean information")
+families_b <- scaled_b %>%
+    left_join(families, by = c("language")) 
 
-## absolute treatment: some qualitatively important sections
-absolute <- bnc_results %>% 
-  filter(gram == "Unigram", length == 20) 
-absolute$group <- c(1, 2, rep(3, 16), 4, 5) 
-absolute <- absolute %>%
-  mutate(group = as.factor(group))
-
-relative %>% 
-  mutate(treatment = "relative") %>% 
-  bind_rows(absolute %>% mutate(treatment = "absolute")) %>%
-  ggplot(aes(x = position, y = empirical_stat, 
-             ymin = ci_lower, ymax = ci_upper, color = group)) + 
-    geom_point() + 
-    geom_pointrange() + 
-    geom_line() +
-    facet_wrap(~treatment) + 
-    scale_x_continuous(breaks = c(1, seq(5, 30, 5))) + 
-    xlab("Word position") + 
-    ylab("Mean information")
-
-# grid.arrange(rel_plot, abs_plot, nrow = 2)
-
+n_fams <- families_b %>%
+    ungroup() %>%
+    distinct(family) %>%
+    filter(!is.na(family), family != "other") %>%
+    count() %>%
+    pull()
 ```
 
-To more rigorously described the typological differences between languages, we used data from the World Atlas of Language Structures [WALS; @wals]. The WALS database has data for $144$ typological features in $2569$ languages from across the world. These features describe aspects of morphology, syntax, phonology, etymology and semantics--in short the features describe the structures in each language. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. Even limiting ourselves to the $159$ language corpora we pulled from Wikipedia and $122$ features from WALS, there are nearly $20000$ individual possible data values, fewer than half of which were already computed for those languages in the WALS database. 
 
-To fill in the missing data for the features we selected using statistical imputation, we used Multiple Imputation Multiple Correspondence Analysis [MIMCA; @audigier2017]. MIMCA begins with mean imputation, converts the categorical WALS features into a numerical contingency table with dummy coding, then repeatedly performs principle components analysis and reconstructs the contingency table. Our final result from the MIMCA algorithm was a fully imputed table with $122$ feature values for each language. 
+To measure cross-linguistic variation in the structure of information across sentences, we constructed a corpus of Wikipedia articles from all languages with at least 10,000 articles. This resulted a set of `r n_langs` languages from `r n_fams` families. We then used two measures of lexical similarity to investigate cross-linguistic variation in information curves.
 
-However, the WALS features describe specific structural differences between languages, while our surprisal metric is word-based. To target lexical differences between languages, we computed the average normalized Levenshtein distance [LDN; @holman2008] over the $40$ item Swadesh list [@swadesh1955], retrieved from the ASJP database [@wichmann2016]. The Swadesh list is designed to include near-universal words that target basic cognitive concepts, and are useful in determining the genealogical similarities and differences between languages. The results of classifying languages using the Swadesh list and LDN are correlated with those using WALS features, but the Swadesh list and LDN do not suffer from the same sparsity problem as WALS [@holman2008]. 
+To target lexical differences between languages, we used the 40-item Swadesh word list [@swadesh1955], retrieved from the ASJP database [@wichmann2016]. The Swadesh list is designed to include near-universal words that target basic cognitive concepts, and are useful in determining the genealogical similarities and differences between languages. Qualitatively, the more similar two languages' words are, the more similar the two languages are. To quantify this intuition, we computed the average normalized Levenshtein distance [LDN; @holman2008] over all items on the Swadesh list between pairs of languages. 
 
-# Language structures and large-scale data analysis: results
+To more rigorously described the top-down typological similarites and differences between languages, we used data from the World Atlas of Language Structures [WALS; @wals]. The WALS database has data for $144$ typological features in thousands of languages from across the world. These features describe aspects of morphology, syntax, phonology, etymology and semantics--in short the features describe the structures in each language. 
 
-We ran a hierarchical clustering algorithm on the frequency-based information curves using the hclust package from the R stats core library [@team2013]. We used the complete linkage algorithm for hierarchical clustering, with distances between information curves between languages computed using cosine distance between their embeddings in the slope space. The complete linkage algorithm at every step pairs each language or cluster of languages with its closest neighboring language or cluster. A sample from the dendrogram is shown in Figure\ \@ref(fig:dendro). From a quick glance, the unigram information curves appear to reproduce some of the genealogical relationships between languages, although the dendrogram does not exactly replicate language genealogy for all $159$ languages. This suggests using a first-pass quantitative method that the information curves do correspond in some measure to language families, but language families do not explain all of the variation and relationships between frequency-based information curves. 
+We used Multiple Imputation Multiple Correspondence Analysis to fill in the missing data for the features we selected using statistical imputation [MIMCA; @audigier2017]. MIMCA begins with mean imputation, converts the categorical WALS features into a numerical contingency table with dummy coding, then repeatedly performs principle components analysis and reconstructs the contingency table. As WALS is a compiled database from dozens of papers from different authors, most of the features and languages are fairly sparse. Even limiting ourselves to the `r n_langs` language corpora we pulled from Wikipedia and $122$ features from WALS, there are tens of thousands of individual possible data values, fewer than half of which were already computed for those languages in the WALS database. 
+
+## Data processing
+```{r diff-languages, fig.height=3, fig.width = 3.5, fig.pos = "tb", fig.cap="Characteristic information curves (centered) for a sample of languages from Wikipedia"}
+families_b %>%
+    filter(language %in% c("Afrikaans", "Czech", 
+                           "Japanese", "Tamil", "Kannada",
+                           "Hebrew", "Somali", "Maltese")) %>%
+    ggplot(aes(x = position, y = surprisal, color = language, label = language,
+               group = interaction(language, family))) +
+    facet_grid(gram ~ family, scales = "free_y") +
+    geom_point() + 
+    geom_line() +
+    scale_color_ptol() + 
+    geom_dl(method = list(dl.trans(x = x + 1.25), "first.points", cex = .6)) + 
+    theme_few(base_size = 9) +
+    labs(y = "normalized surprisal") +
+    theme(legend.position = "none", aspect.ratio = 1.33)
+```
+
+All processing was identical to Studies 1 and 2 except for the lengths of utterances chosen for analyses. To accommodate the variety of lengths across language corpora, we analyzed sentences of lengths 5 to 45.
+
+For each pair of languages, we derived three pairwise similarity measures. To estimate the information structure similarity, we first centered each language's 5-point barycenter curve (since surprisal is highly correlate with corpus size), and then computed the cosine similarity between the two centered curves. To estimate Swadesh similarity, we computed the average normalized Levenshtein distance between each of the 40 words. Finally, to compare typological similarity, we summed the number of WALS features each pair of languages shared the same value for.
+
+## Results and Analysis
+
+We ran a hierarchical clustering algorithm on the frequency-based information curves using the hclust package from the R stats core library [@team2013]. We used the complete linkage algorithm for hierarchical clustering, with distances between information curves between languages computed using cosine distance between their embeddings in the slope space. The complete linkage algorithm at every step pairs each language or cluster of languages with its closest neighboring language or cluster. A sample from the dendrogram is shown in Figure\ \@ref(fig:dendro). From a quick glance, the unigram information curves appear to reproduce some of the genealogical relationships between languages, although the dendrogram does not exactly replicate language genealogy for all `r n_langs` languages. This suggests using a first-pass quantitative method that the information curves do correspond in some measure to language families, but language families do not explain all of the variation and relationships between frequency-based information curves. 
 
 ```{r dendro, fig.width=6, echo=F}
 wiki_curves %>%

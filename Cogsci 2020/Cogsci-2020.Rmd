@@ -44,28 +44,12 @@ library(widyr)
 
 ```{r preprocess-data}
 lengths <- read_csv(here("Data/Paper/lengths.csv"))
-# 
-# b <- read_csv(here("Data/final_barycenters.csv")) 
-# bnc <- read_csv(here("Surprisals/adult/unigram/bnc_compressed.csv"),
-#                 col_names = F) %>%
-#   mutate(id = 1:n()) %>%
-#   pivot_longer(-id, names_to = "position", values_to = "surprisal") %>%
-#   filter(complete.cases(.)) %>%
-#   mutate(position = str_extract(position, "\\d+"),
-#          position = as.numeric(position)) %>%
-#   group_by(id) %>%
-#   mutate(length = max(position)) %>%
-#   ungroup() %>%
-#   select(-id)
+
 bnc <- read_csv(here("Data/bnc_lengths.csv"))
 
 b <- read_csv(here("Data/5barycenters.csv"),
               col_names = c("1", "2", "3", "4", "5",
                             "language", "source", "gram"))
-
-# b <- read_csv(here("Data/7barycenters.csv"), 
-#               col_names = c("1", "2", "3", "4", "5", "6", "7", 
-#                             "language", "source", "gram"))
 
 tidy_b <- b %>%
      pivot_longer(-c(language, source, gram), 
@@ -84,8 +68,6 @@ tidy_non_wiki_b <- non_wiki_b %>%
      mutate(position = as.numeric(position),
             gram = factor(gram, levels = c("unigram", "trigram")))
 
-
-# wals <- read_csv(here("Data/final_features.csv"))
 wals <- read_csv(here("Data/Paper/wals_distances.csv"))
 wals_types <- read_csv(here("Data/Paper/wals_type_distances.csv"))
 swadesh <- read_csv(here("Data/Paper/swadesh_distances.csv"))
