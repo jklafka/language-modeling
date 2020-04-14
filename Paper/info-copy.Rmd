@@ -172,7 +172,28 @@ We used DBA to discover the short sequence of surprisal values that characterize
 
 ### Optimizing the size hyperparameter for barycenter averaging
 
-Discussion of optimizing the expectation-maximization approach the barycenters use here. 
+```{r plotting-barycenters, echo=F, fig.align="center", fig.cap="The final cost for the EM algorithm in fitting each size of barycenter}
+em_costs <- read_csv(here("Analysis/EM/em_costs.csv"))
+
+# non-parametric bootstrap and
+em_boot <- em_costs %>%
+  group_by(size, gram) %>%
+  tidyboot_mean(final_cost) %>%
+  ungroup() 
+
+em_boot %>%
+  ggplot(aes(x = size, y = empirical_stat, ymin = ci_lower, ymax = ci_upper,
+             color = gram)) + 
+    geom_pointrange() + 
+    geom_line()
+
+```
+
+We give the intuition for how we chose size X. How we find the barycenter produces a cost: the further the barycenter is from each data point, the higher the cost. We tried every size of barycenter in between 4 and 15 coordinates and found that `r barycenter_size` afforded the smallest size of the barycenter with the lowest cost. 
+
+<!-- 1. how deal with different grams? 2. many possible solutions -> use marginal cost? 3. pretty large confidence intervals across languages. use approach other than the mean? -->
+
+We use the implementation of DBA in the Python package tslearn [@tslearn], which fits the barycenter to a time-series dataset through the expectation-maximization algorithm [EM; @moon1996]. DBA in this implementation allows us to specify the size of the barycenter. In order to choose the optimal size for the barycenters, we computed the final cost from the EM algorithm for each barycenter size and chose the barycenter size which minimized the average final cost. Time costs were negligible for computing a larger barycenter. 
 
 ### Application to the corpus
 
