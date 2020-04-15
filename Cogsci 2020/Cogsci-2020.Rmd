@@ -45,11 +45,13 @@ library(widyr)
 ```{r preprocess-data}
 lengths <- read_csv(here("Data/Paper/lengths.csv"))
 
-bnc <- read_csv(here("Data/bnc_lengths.csv"))
+bnc <- read_csv(here("Data/length_counts.csv"))
 
 b <- read_csv(here("Data/5barycenters.csv"),
               col_names = c("1", "2", "3", "4", "5",
-                            "language", "source", "gram"))
+                            "language", "source", "gram")) %>%
+  filter(source == "wikipedia")
+  
 
 tidy_b <- b %>%
      pivot_longer(-c(language, source, gram), 
@@ -58,15 +60,17 @@ tidy_b <- b %>%
             gram = factor(gram, levels = c("unigram", "trigram")))
 
 
-non_wiki_b <- read_csv(here("Data/5barycenters_new.csv"),
+non_wiki_b <- read_csv(here("Data/5barycenters.csv"),
               col_names = c("1", "2", "3", "4", "5",
-                            "language", "source", "gram"))
+                            "language", "source", "gram")) %>%
+  filter(source != "wikipedia")
 
 tidy_non_wiki_b <- non_wiki_b %>%
      pivot_longer(-c(language, source, gram), 
                   names_to = "position", values_to = "surprisal") %>%
      mutate(position = as.numeric(position),
             gram = factor(gram, levels = c("unigram", "trigram")))
+
 
 wals <- read_csv(here("Data/Paper/wals_distances.csv"))
 wals_types <- read_csv(here("Data/Paper/wals_type_distances.csv"))
@@ -75,7 +79,6 @@ cosines <- read_csv(here("Data/Paper/cosines.csv"))
 
 bnc_surprisals <- read_csv(here("Data/Paper/bnc_subset.csv")) %>%
     mutate(gram = factor(gram, levels = c("unigram", "trigram")))
-
 ```
 
 ```{r theme}

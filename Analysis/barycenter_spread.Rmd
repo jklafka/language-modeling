@@ -57,6 +57,8 @@ dists <- unigram_dist %>%
   mutate(gram = "unigram") %>%
   bind_rows(trigram_dist %>% mutate(gram = "trigram")) 
 
+# dists %>% write_csv(here("Data/unigram_trigram_dists.csv"))
+
 ## get nonparametric bootstrap over unigram and trigram distances
 boots <- unigram_dist %>% 
   tidyboot_mean(value) %>%
