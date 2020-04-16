@@ -17,8 +17,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("gram", help="Unigram or trigram barycenters to cluster on")
 args = parser.parse_args()
 
-assert args.gram in ["unigram", "trigram"],
-    "Choose 'unigram' or 'trigram' barycenters"
+assert args.gram in ["unigram", "trigram"], "Choose 'unigram' or 'trigram' barycenters"
 
 # read in barycenters
 barycenters = pd.read_csv("../Data/5barycenters.csv")
