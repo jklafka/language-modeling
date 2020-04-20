@@ -1,5 +1,5 @@
 ---
-title             : "Speakers of diverse languages structure their utterances for efficient communication"
+title             : "Broad consistency but cross-linguistic variation in the structure of information in sentences"
 shorttitle        : "Cross-linguistic information structure"
 
 author: 
@@ -19,7 +19,7 @@ affiliation:
 
 
 abstract: |
-  Optimal coding theories of language predict that speakers should keep the amount of information in their utterances relatively uniform under the constraints imposed by their language. But how much of a role do these constraints provide, and does it vary across languages? We find a consistent non-uniform shape which characterizes both spoken and written sentences of English but is tempered by predictive context. We then show that other languages are also characterized by consistent but non-English shaped curves related to their typological features, but that sufficient context produces more uniform shapes across languages. Thus, producers of language appear to structure their utterances in similar near-uniform ways despite varying linguistic constraints.
+  Optimal coding theories of language predict that speakers should keep the amount of information in their utterances relatively uniform under the constraints imposed by their language. But how much do these constraints influence information structure, and how does this influence vary across languages? We find a consistent non-uniform shape which characterizes both spoken and written sentences of English but is tempered by predictive context. We then show that other languages are also characterized by consistent but non-English shaped curves related to their typological features, but that sufficient context produces more uniform shapes across languages. Thus, producers of language appear to structure their utterances in similar near-uniform ways despite varying linguistic constraints.
 
   
 keywords          : "information theory; communication; efficiency; syntax; typology; language development; computational modeling"
@@ -604,6 +604,10 @@ wals_stats_tri <- filter(cor_data, measure == "wals_cor",
 
 Unlike the striking consistency across multiple English corpora, we found significant variability in the structure of information curves across languages estimated under the unigram model. Fig. \ref{fig:diff-languages} shows centered information curves for a sample of languages from several language families. Despite this variability under the unigram model, the shapes of information curves estimated under the trigram model were more similar cross-linguistically and to the shapes found in English: Sentences began with highly informative words (presumably due to lack of context) and then rapidly approached a uniform level of information. Consistent with this characterization, pairwise similarities in languages' information curves estimated under the unigram model were more correlated with their Swadesh distances ($r =$ `r swadesh_stats_uni$estimate`, $t =$ `r swadesh_stats_uni$statistic`, $p$ `r papaja::printp(swadesh_stats_uni$p.value)`) than their distances estimated under the trigram model ($r =$ `r swadesh_stats_tri$estimate`, $t =$ `r swadesh_stats_tri$statistic`, $p =$ `r papaja::printp(swadesh_stats_tri$p.value)`). 
 
+### Correlations by type
+
+To understand which typological features contribute to these similarities, we split the WALS features by type, with categories such as nominative categories and nominative syntax describing morphology while word order describes subject-verb-object and head-modifier word orders. Fig. \ref{fig:type-cors} shows the correlation between the similarity of information curves under both the unigram and trigram models and the number of features of each of these types two-languages shared. Under the unigram model, word order features appear to predict information curve similarity. In contrast, under the trigram model, all features types except for nominative syntax are reliably correlated with information curve similarity.
+
 ```{r type-cors, fig.height = 3, fig.width=3.5, fig.pos = "tb", fig.align="center", fig.cap="Pairwise correlations between languages' centered information curves and the number of linguistic features they share of each type. Error bars indicate 95\\% CIs."}
 type_annotations <- tibble(type = c("phonology", "phonology"),
                           estimate = c(-.02, .1),
@@ -628,10 +632,6 @@ ggplot(type_cor_data, aes(x = type, y = estimate, color = gram)) +
 
 While the trigram information curves have a more consistent qualitative shape, there are differences between languages. The pairwise similarities between languages' trigram information curves were more correlated with the number of WALS features they shared ($r =$ `r wals_stats_tri$estimate`, $t =$ `r wals_stats_tri$statistic`, $p$ `r papaja::printp(wals_stats_tri$p.value)`) than their similarities estimated under the trigram model ($r =$ `r wals_stats_uni$estimate`, $t =$ `r wals_stats_uni$statistic`,$p =$ `r papaja::printp(wals_stats_uni$p.value)`).
 
-### Correlations by type
-
-To understand which typological features contribute to these similarities, we split the WALS features by type, with categories such as nominative categories and nominative syntax describing morphology while word order describes subject-verb-object and head-modifier word orders. Fig. \ref{fig:type-cors} shows the correlation between the similarity of information curves under both the unigram and trigram models and the number of features of each of these types two-languages shared. Under the unigram model, word order features appear to predict information curve similarity. In contrast, under the trigram model, all features types except for nominative syntax are reliably correlated with information curve similarity.
-
 ### Mutual information between WALS features and barycenters
 
 We use a final measure to quantify how much variation in WALS features explains variation in barycenters: mutual information between each coordinate of the barycenters and each WALS feature and feature group. We use the categorical-continuous measure derived and described in @ross2014. How much does knowing the value of each WALS feature tell you about the value of each one of the barycenter coordinates? We reduce to a pairwise measure. The algorithm uses a variant of the k-nearest-neighbors regression algorithm. It essentially asks: how many points with the same WALS label are in a neighborhood around each language's e.g. first coordinate? 
@@ -641,14 +641,23 @@ Discussion of results.
 Results and plot. 
 
 # Discussion
+Summary -> implications (context matters but not as much as you would think-> issues (averaging, Galton's problem with Indo-European languages, WALS is imperfect) -> future directions (individual speakers, across development, increased resources for each language, verify across more contexts [e.g. tweets]) -> Danke
 
 By considering the distribution of information at the level of utterances and sentences, we join together the information-theoretic work focusing on sub-word units and words, and that focusing on paragraphs. In doing so, we show that frequency and context-based metrics complement one another in studying efficiency and information in language. We directly link linguistic efficiency in a language to the genealogy and properties of that language. We provide evidence for a novel linguistic universal: low processing cost for listeners beyond the first words in utterances, driven by high average word predictability in conversation. With consideration to language acquisiton, we observe that children tend to distribute information in their utterances according to the their language's frequency-based information curve as soon as they form multi-word utterances. 
 
+Context matters for predicting the next word your interlocutor is going to say and thus promoting successful communication. What context and predictive processing reflect back on the structure of the language is less certain. Downstream effects may include turn-taking times or processing load in a given language. The typical information structure of a language doesn't change between spoken and written media while it does change across languages. This may help scaffold the language development process for young learners, as well as not being a roadblock in learning to read a language that you already speak, and explain some of the difficulty in learning to speak fluently in a second language. 
+
 Throughout this work we have averaged the surprisal values at each position. Averaging removes variation, which in turn may obscure trends in the data. As discussed in the methods section, the surprisal metric has historically been used for calculating the information and processing cost for individual utterances, and our use of the metric here is actually a step forward rather than a step back. Future work can investigate variation in how speakers distribute information in individual utterances. 
 
-Our Study 3 results from Wikipedia languages fall prey to Galton's problem: the languages are not drawn randomly from the set of all languages without regard to language family or any other kind of genealogy. Indo-European languages (which are more similar to each other) are overrepresented. 
+Our Study 3 results from Wikipedia languages fall prey to Galton's problem: the languages are not drawn randomly from the set of all languages without regard to language family or any other kind of genealogy. Indo-European languages (which are more similar to each other) are overrepresented. Some language families contain a significantly smaller number of languages, or languages such as Basque are language isolates. 
 
 The WALS database we used to investigate typological variation in the information curves is overall sparse. We imputed well over $50\%$ of the WALS features for most of our $159$ languages, although all of the languages had at least $20$ features evaluated in WALS. A large part of this is due to WALS being a collection of a number of different studies, instead of a systematic effort to catalogue variation across the world's languages. Additionally, WALS features are meant to describe specific microvariations in languages, not to provide a comprehensive typological representation of each language compared to each other language. This may be why the Swadesh list provided a higher correlation for describing the differences in information curves: @swadesh1955 intended the list to allow researchers to more comprehensively compared and constrast lexical differences between languages. For our Wikipedia analysis, we also reduce all of a language's variation down to a five-dimensional vector. These information curve representations show a surprising amount of variation despite the degree of compression. 
+
+Future work could verify the robustness of the shape within each language by investigating whether the frequency-based and contextual curves change shape when looking across speakers or when looking across developmental ages. Work could also investigate this in a wide variety of contexts: the BNC is intended to be representative of British English and includes a wide variety of document types, including pamphlets and emails. Future work could examine Tweets from Twitter or texts, which may have completely different structure from the spoken and written media of the same language. Resources continue to increase for both well-documented languages like English and Hindi but also for languages which have fewer speakers or are more marginalized. A future attempted replication of our results will have access to more text in more languages. 
+
+Building on our work with WALS and the Swadesh list, future work could also investigate more cross-linguistically interesting language structures in a more targeted single or pairwise way, examining what exact syntactic, phonological, morphological or semantic properties make a particular language's curve appear the way it does or why two related languages have differently-shaped curves. We have done this to some speculative, informal extent with English. 
+
+Why does context not make a bigger difference in the shape of the barycenters? 
 
 \newpage
 

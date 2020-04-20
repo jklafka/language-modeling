@@ -1,12 +1,3 @@
-# @Author: Josef Klafka <academic>
-# @Date:   2020-03-27T13:34:11-04:00
-# @Email:  jlklafka@gmail.com
-# @Project: language-modeling
-# @Last modified by:   academic
-# @Last modified time: 2020-03-30T09:20:26-04:00
-
-
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
