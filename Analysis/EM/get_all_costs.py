@@ -19,7 +19,7 @@ with open("../../Surprisals/" + args.corpus + '/' + args.gram + '/' + \
          X.append(row)
 
 # get barycenter for each size hyperparameter value as list
-for BARYCENTER_SIZE in range(4, 15):
+for BARYCENTER_SIZE in range(1, 15):
     X = [[float(item) for item in series if item != "NA"] for series in X]
     dtw_barycenter_averaging(X = X,
                     barycenter_size = BARYCENTER_SIZE,
