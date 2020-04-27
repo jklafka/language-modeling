@@ -182,14 +182,16 @@ em_costs <- read_csv(here("Analysis/EM/em_costs.csv"))
 # non-parametric bootstrap and
 em_boot <- em_costs %>%
   group_by(size, gram) %>%
-  tidyboot_mean(final_cost) %>%
+  tidyboot_mean(final_cost, na.rm = TRUE) %>%
   ungroup() 
 
 em_boot %>%
   ggplot(aes(x = size, y = empirical_mean, ymin = ci_lower, ymax = ci_upper,
              color = gram)) + 
-    geom_pointrange() + 
-    geom_line()
+    geom_pointrange(position = position_dodge(.25)) + 
+    geom_line() + 
+  scale_x_continuous(breaks = seq(1,15,1)) +
+  theme(legend.position = "bottom")
 
 barycenter_size <- 10
 ```
@@ -216,7 +218,7 @@ The roughly linear and monotonic function they found, shown in Fig \ref{fig:genz
 
 <!-- Make direct replication of the Genzel and Charniak results  -->
 
-```{r genzel, echo = F, fig.cap = "The results from the Genzel and Charniak paper"}
+```{r genzel, echo = F, fig.cap = "The results from the Genzel and Charniak paper", eval = FALSE}
 knitr::include_graphics("figs/genzel-plot.png")
 ```
 
