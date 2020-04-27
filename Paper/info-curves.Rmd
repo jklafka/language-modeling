@@ -206,17 +206,33 @@ Once we have fitted our language model, we can compute the surprisal of a contin
 
 # Study 1: The Shape of Information in Written English
 
-@genzel2002 performed an influential early test of the Uniform Information Density hypothesis. They analyzed the amount of information in successive sentences of the same text. They found that the amount of information increased across sentences when each was considered in isolation. They reasoned that since all prior sentences provide the context for reading each new sentences, the amount of total information that the reader decoded within each sentence was constant overall. 
+@genzel2002 performed an influential early test of the Uniform Information Density hypothesis and found a specific information curve shape in English that serves as a prior on our analyses here. They analyzed the amount of information in successive sentences in the Penn Treebank corpus [@marcus1993], and found that the amount of information increased across sentences when each was considered in isolation. They reasoned that since all prior sentences provide the context for reading each new sentences, the amount of total information that the reader decoded within each sentence was constant overall. 
+
+@genzel2002 used a conditional probability model given by the formula below, in which the probability of a sentence is given by the unigram probability of the first word, the conditional probability of the second word given the first, and the probability of the third word given the first two words, followed by a four-gram model in which each successive word for the rest of the sentence is predicted based on the three words which precede it. @genzel2002 then log-scaled the probability of the sentence, giving the cross-entropy between the model and the true word distribution. 
+
+$$P(S) = P(w_1) P(w_2 | w_1) P(w_3 | w_2, w_1) \cdot \prod\limits_{i=1}^n P(w_n | w_{n-3} w_{n-2}, w_{n-1})$$
+
+The roughly linear and monotonic function they found, shown in Fig \ref{fig:genzel}, serves as a prior on our results. UID would predict a result similar to Genzel and Charniak's [-@genzel2002] results: a smooth and monotonically increasing linear function of word position. Why this shape? Later sentences have context from previous sentences, building readers intuitions about which words will come next and increasing predictive power. In this environment, speakers can produce increasingly informative utterances, relying on their listeners' predictive processing to interpret more information words. 
+
+<!-- Make direct replication of the Genzel and Charniak results  -->
+
+```{r genzel, echo = F, fig.cap = "The results from the Genzel and Charniak paper"}
+knitr::include_graphics("figs/genzel-plot.png")
+```
 
 @yu2016 applied this same logic to each word within sentences, computing the entropy over each successive word position in an utterance. The entropy metric @yu2016 used is the average surprisal of all the words in a given word position, computed only within that position, and weighted by how many times each word occurs in that position. Their formula is given by $\text{H}(X) = -\sum_{w}P(w \in X) \log P(w)$, where $X$ is a word position (e.g. first words, fifth words, final words) and $w$ is a word occuring in position $X$. 
 
 The first word of each sentence tended to contain little information, while words in the middle of sentences each contained roughly the same amount of information as one another, and the final word of each sentence contained much more information than any other word. They found the same distribution across sentence lengths, from sentences with $15$ words to sentences with $45$ words. 
 
-UID would predict a result similar to Genzel and Charniak's [-@genzel2002] results: a smooth and monotonically increasing affine function of word position. @yu2016 interpreted their uneven information curve as evidence against the Uniform Information Density Hypothesis as, unlike Genzel and Charniak's [-@genzel2002] results, information plateaued in the middle of sentences. See Fig \ref{fig:bnc-yu}. 
+@yu2016 interpreted their uneven information curve as evidence against the Uniform Information Density Hypothesis as, unlike Genzel and Charniak's [-@genzel2002] results, information plateaued in the middle of sentences. See Fig \ref{fig:bnc-yu}. 
+
+<!-- Make direct replication of the Yu et al results -->
 
 ```{r bnc-yu, echo=FALSE, fig.cap="A caption", out.width = '100%'}
 knitr::include_graphics("figs/bnc-yu.png")
 ```
+
+There are several disadvantages to the @yu metric. First, although it is faster and less intensive to compute, it does not produce a model and instead consists of summary statistics on a single corpus. Second, these statistics cannot be compared across corpora, due to the entropy metric being extremely sensitive to the size of the corpus. Third, the entropy metric is difficult to interpret. Each measure based on sentence position depends on the length of the sentence in number of words, and speakers do not choose their utterance length as a hyperparameter before beginning production. Finally, the metric makes a naive independence assumption on the words in each sentence position. The final word does depend to some extent on each word that came before it. Although @genzel2002 made a similar simplifying Markov assumption, their model is able to capture local dependencies between words in production. 
 
 We replicate the analysis from @yu2016 here, and build an additional model to bring their analysis more in line with Genzel and Charniak's [-@genzel2002] methods. Finally, we also develop a method for averaging the curves for sentences of different lengths together to provide a single typical information structure.
 
@@ -291,7 +307,7 @@ write_csv(bind_rows(bnc_subset_unigram, bnc_subset_trigram),
 
 ```
 
-```{r bncplots, fig.height = 3.5, fig.width = 3.5, fig.pos = "tb", fig.align = "center", fig.cap = "(A) Surprisal by sentence position of length 15, 30, and 45 sentences in the British National Corpus under unigram and trigram surprisal models. Error bars indicate 95\\% confidence intervals (tiny due to sample size). (B) Characteristic information curves produced by the DBA algorithm averaging over all sentence lengths in each corpus. "}
+```{r bncplots, fig.height = 3.5, fig.pos = "tb", fig.align = "center", fig.cap = "(A) Surprisal by sentence position of length 15, 30, and 45 sentences in the British National Corpus under unigram and trigram surprisal models. Error bars indicate 95\\% confidence intervals (tiny due to sample size). (B) Characteristic information curves produced by the DBA algorithm averaging over all sentence lengths in each corpus. "}
 bnc_annotations <- tibble(position = c(12, 27, 42),
                           length = c(15, 30, 45),
                           gram = c("unigram", "unigram", "unigram"),
@@ -332,7 +348,6 @@ bnc_plot2 <- tidy_non_wiki_b %>%
 
 gridExtra::grid.arrange(bnc_plot1, bnc_plot2, ncol = 1)
 ```
-
 
 We began by replicating Yu et al.'s [-@yu2016] analyses, examining the surprisal of words in sentence of length 15, 30, and 45 estimated by our unigram model. In line with their computations, we found a reliably non-linear shape in sentences of all 3 lengths, with the information in each word rising for the first two words, plateauing in the middle of sentences, dipping in pen-ultimate position, and rising steeply on the final word (Fig. \ref{fig:bncplots}A). Qualitatively, we found the same shape in utterances of all other lengths we sampled, from utterances with 5 words to utterances with 44 words. 
 
@@ -397,6 +412,54 @@ spoken_plot2 <- tidy_non_wiki_b %>%
 
 gridExtra::grid.arrange(spoken_plot1, spoken_plot2, ncol = 1)
 #cowplot::plot_grid(spoken_plot1, spoken_plot2, axis = 'b', nrow = 1)
+```
+
+```{r leap_plots}
+bnc_b_annotations <- tibble(position = c(2.5, 2.5),
+                          gram = c("unigram","trigram"),
+                          surprisal = c(3.5, 2))
+
+tidy_non_wiki_b %>% 
+    filter(gram %in% c("unigram", "trigram"), language %in% c("bnc")) %>% 
+    ggplot(aes(x = position, y = surprisal, color = gram)) + 
+      facet_wrap(~ language) + 
+      geom_point(size = .75) + 
+      geom_line() + 
+      geom_text(aes(label = gram), data = bnc_b_annotations) +
+      scale_x_continuous(breaks = 1:5) + 
+      xlab("Coordinate") + 
+      ylab("Surprisal") + 
+      scale_color_colorblind() + 
+      theme_few() +
+      theme(aspect.ratio = 1/1.33, legend.position = "none")
+
+
+spoken_annotations <- tibble(position = c(2.5, 2.5),
+                          gram = c("unigram","trigram"),
+                          surprisal = c(3.25, 1.75),
+                          plot_person = c("adults", "adults")) %>%
+    mutate(plot_person = factor(plot_person, levels = c("adults", "parents",
+                                              "children")))
+tidy_non_wiki_b %>% 
+    filter(gram %in% c("unigram", "trigram"), 
+           language %in% c("sbc", "Eng-NA")) %>% 
+    mutate(plot_person = case_when(language == "sbc" ~ "adults",
+                                   source == "adult" ~ "parents",
+                                   T ~ "children"),
+           plot_person = factor(plot_person, levels = c("adults", "parents",
+                                              "children"))) %>%
+    ggplot(aes(x = position, y = surprisal, color = gram)) + 
+    facet_wrap(~ plot_person) + 
+    geom_point(size = .75) + 
+    geom_line() + 
+    geom_text(aes(label = gram), data = spoken_annotations) +
+    scale_x_continuous(breaks = 1:5) + 
+    xlab("barycenter coordinate") + 
+    ylab("surprisal") + 
+    scale_color_colorblind() + 
+    theme(legend.position = "none", aspect.ratio = 1/1.33) 
+
+
 ```
 
 # Study 2: Information in Spoken English
@@ -474,7 +537,7 @@ families_b %>%
     scale_color_ptol() + 
     geom_dl(method = list(dl.trans(x = x + 1.25), "first.points", cex = .6)) + 
     theme_few(base_size = 9) +
-    labs(y = "normalized surprisal") +
+    labs(x = "Barycenter coordinate", y = "Mean information") +
     theme(legend.position = "none", aspect.ratio = 1.33)
 ```
 
@@ -494,7 +557,7 @@ We ran a hierarchical clustering algorithm on the frequency-based information cu
 b %>%
   filter(gram == "unigram") %>%
   select(-gram, -source) %>% 
-  sample_n(25) %>%
+  # sample_n(25) %>%
   column_to_rownames("language") %>%
   dist() %>% 
   hclust() %>%

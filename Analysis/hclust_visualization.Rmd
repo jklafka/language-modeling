@@ -18,8 +18,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r hclust}
 require(dtwclust) # for dba
 
-unigram_dtw <- read_csv(here("../Data/Paper/dtw_distances.csv"))
-b <- read_csv(here("../Data/5barycenters.csv"),
+unigram_dtw <- read_csv(here("Data/Paper/dtw_distances.csv"))
+b <- read_csv(here("Data/5barycenters.csv"),
               col_names = c("1", "2", "3", "4", "5",
                             "language", "source", "gram"))
 
@@ -51,7 +51,7 @@ focused_plot <- focused_barycenter %>%
     geom_point() +
     geom_line()
 
-ggplot() +
+dendro_plot <- ggplot() +
   geom_segment(data=segment(unigram_hclust),
                aes(x=x, y=y, xend=xend, yend=yend)) +
   geom_text(data=label(unigram_hclust),
