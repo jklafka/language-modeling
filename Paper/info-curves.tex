@@ -1,39 +1,49 @@
-\documentclass[man,floatsintext]{apa6}
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  english,
+  man,floatsintext]{apa6}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-\else % if luatex or xelatex
-  \ifxetex
-    \usepackage{mathspec}
-  \else
-    \usepackage{fontspec}
-  \fi
-  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
-% use upquote if available, for straight quotes in verbatim environments
+% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% use microtype if available
-\IfFileExists{microtype.sty}{%
-\usepackage{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage{hyperref}
-\hypersetup{unicode=true,
-            pdftitle={Broad consistency but cross-linguistic variation in the structure of information in sentences},
-            pdfauthor={Josef Klafka~\& Daniel Yurovsky},
-            pdfkeywords={information theory; communication; efficiency; syntax; typology; language development; computational modeling},
-            pdfborder={0 0 0},
-            breaklinks=true}
-\urlstyle{same}  % don't use monospace font for urls
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Broad consistency but cross-linguistic variation in the structure of information in sentences},
+  pdflang={en-EN},
+  pdfkeywords={information theory; communication; efficiency; syntax; typology; language development; computational modeling},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
 \usepackage{graphicx}
-% grffile has become a legacy package: https://ctan.org/pkg/grffile
-\IfFileExists{grffile.sty}{%
-\usepackage{grffile}
-}{}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
 \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -42,72 +52,93 @@
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-\IfFileExists{parskip.sty}{%
-\usepackage{parskip}
-}{% else
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{0}
-% Redefines (sub)paragraphs to behave more like sections
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
 \ifx\paragraph\undefined\else
-\let\oldparagraph\paragraph
-\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
 \fi
 \ifx\subparagraph\undefined\else
-\let\oldsubparagraph\subparagraph
-\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
-
-%%% Use protect on footnotes to avoid problems with footnotes in titles
-\let\rmarkdownfootnote\footnote%
-\def\footnote{\protect\rmarkdownfootnote}
-
-
-  \title{Broad consistency but cross-linguistic variation in the structure of information in sentences}
-    \author{Josef Klafka\textsuperscript{1}~\& Daniel Yurovsky\textsuperscript{1,2}}
-    \date{}
-  
-\shorttitle{Cross-linguistic information structure}
-\affiliation{
-\vspace{0.5cm}
-\textsuperscript{1} Carnegie Mellon University\\\textsuperscript{2} University of Chicago}
-\keywords{information theory; communication; efficiency; syntax; typology; language development; computational modeling}
-\usepackage{csquotes}
+% Manuscript styling
 \usepackage{upgreek}
 \captionsetup{font=singlespacing,justification=justified}
 
+% Table formatting
 \usepackage{longtable}
 \usepackage{lscape}
-\usepackage{multirow}
-\usepackage{tabularx}
-\usepackage[flushleft]{threeparttable}
-\usepackage{threeparttablex}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
 
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\begin{center}\begin{threeparttable}}
+%   {\end{threeparttable}\end{center}\end{landscape}}
 \newenvironment{lltable}{\begin{landscape}\begin{center}\begin{ThreePartTable}}{\end{ThreePartTable}\end{center}\end{landscape}}
 
+% Enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
 \makeatletter
 \newcommand\LastLTentrywidth{1em}
 \newlength\longtablewidth
 \setlength{\longtablewidth}{1in}
 \newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
 
+% \setlength{\parindent}{0.5in}
+% \setlength{\parskip}{0pt plus 0pt minus 0pt}
 
+% \usepackage{etoolbox}
+\makeatletter
+\patchcmd{\HyOrg@maketitle}
+  {\section{\normalfont\normalsize\abstractname}}
+  {\section*{\normalfont\normalsize\abstractname}}
+  {}{\typeout{Failed to patch abstract.}}
+\makeatother
+\shorttitle{Cross-linguistic information structure}
+\author{Josef Klafka\textsuperscript{1}\ \& Daniel Yurovsky\textsuperscript{1,2}}
+\affiliation{
+\vspace{0.5cm}
+\textsuperscript{1} Carnegie Mellon University\\\textsuperscript{2} University of Chicago}
+\authornote{
+
+Correspondence concerning this article should be addressed to Josef Klafka, 5000 Forbes Ave. E-mail: jklafka@andrew.cmu.edu}
+\keywords{information theory; communication; efficiency; syntax; typology; language development; computational modeling}
 \usepackage{lineno}
 
 \linenumbers
+\usepackage{csquotes}
+\ifxetex
+  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
+  \usepackage{polyglossia}
+  \setmainlanguage[]{english}
+\else
+  \usepackage[shorthands=off,main=english]{babel}
+\fi
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newenvironment{cslreferences}%
+  {\setlength{\parindent}{0pt}%
+  \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces}%
+  {\par}
 
-\authornote{
+\title{Broad consistency but cross-linguistic variation in the structure of information in sentences}
 
-Correspondence concerning this article should be addressed to Josef Klafka, 5000 Forbes Ave. E-mail: \href{mailto:jklafka@andrew.cmu.edu}{\nolinkurl{jklafka@andrew.cmu.edu}}}
+\date{}
 
 \abstract{
 Optimal coding theories of language predict that speakers should keep the amount of information in their utterances relatively uniform under the constraints imposed by their language. But how much do these constraints influence information structure, and how does this influence vary across languages? We find a consistent non-uniform shape which characterizes both spoken and written sentences of English but is tempered by predictive context. We then show that other languages are also characterized by consistent but non-English shaped curves related to their typological features, but that sufficient context produces more uniform shapes across languages. Thus, producers of language appear to structure their utterances in similar near-uniform ways despite varying linguistic constraints.
-
-
 }
 
 \begin{document}
@@ -135,13 +166,13 @@ How significant are a language's top-down constraints on determining how its spe
 \hypertarget{methods}{%
 \section{Methods}\label{methods}}
 
-We measure information structure within languages, using a universal information metric proposed for the study of information transmission more generally by Shannon (1948) and applied to words specifically by Levy (2008): lexical surprisal. We can compute surprisal with the predictability of the word based on previously heard or seen words in its context, as in the formula below. The surprisal of a word is inversely proportional to the predictability of a word, such that less common and less predictable words carry more information. For example, \enquote{flower} has less information than \enquote{azalea} because \enquote{flower} is much more common than \enquote{azalea}. Though the two words have the same length in number of letters, it is more difficult to process \enquote{azalea} when reading it here than when reading \enquote{flower}. Frequency is intimately tied information content in words, with much of the differences between words frequencies being explained by information content cross-linguistically (Piantadosi et al., 2011). The surprisal of a word is also correlated with the processing cost of a word, shown by evidence from e.g.~eye-tracking (Smith \& Levy, 2013) and ERP (Frank, Otten, Galli, \& Vigliocco, 2015) studies.
+We measure information structure within languages, using a universal information metric proposed for the study of information transmission more generally by Shannon (1948) and applied to words specifically by Levy (2008): lexical surprisal. We can compute surprisal with the predictability of the word based on previously heard or seen words in its context, as in the formula below. The surprisal of a word is inversely proportional to the predictability of a word, such that less common and less predictable words carry more information. For example, ``flower'' has less information than ``azalea'' because ``flower'' is much more common than ``azalea''. Though the two words have the same length in number of letters, it is more difficult to process ``azalea'' when reading it here than when reading ``flower''. Frequency is intimately tied information content in words, with much of the differences between words frequencies being explained by information content cross-linguistically (Piantadosi et al., 2011). The surprisal of a word is also correlated with the processing cost of a word, shown by evidence from e.g.~eye-tracking (Smith \& Levy, 2013) and ERP (Frank, Otten, Galli, \& Vigliocco, 2015) studies.
 
 However, when reading or listening, people don't just consider each word as an isolated linguistic signal. Listeners use the words they have already heard to predict and decode the word they are currently hearing. Following this incremental processing paradigm, we can also condition the surprisal of a word in its context. Ideally, we would like to measure the predictability of each word in an utterance using all of the information available to that word. For example, in an utterance of twenty words, we would like to use the previous \(19\) words of context to predict the \(20\)th word. However, we would need to train on a corpus of many trillion word tokens to predict with this amount of context. Regardless of computational constraints, we want to directly compare how predictable each word is regardless of its position in an utterance.
 
 We therefore use a simplifying \emph{Markov assumption}: we condition our next predictions on a fixed-size context window instead of all preceding words. Although these models may seem to use an inconsequential amount of context when predicting the next word, bigram and trigram models introduce a great deal of improvement over unigram models across tasks (Chen \& Goodman, 1999). Models which incorporate more than two words of context have issues with overfitting to the corpus and only predicting observed sequences, often generalizing poorly.
 
-When we use a word or two of context in our surprisal calculations, then the set of reasonable final items in our ngrams is greatly restricted. \enquote{Flower} may contain less information than \enquote{azalea} when we consider the words independently of their context, but with context this can be reversed. Flower appears in a variety of contexts, and so the information content of a word like \enquote{flower} in a particular context may be higher than \enquote{azalea}. If you only have azaleas in your garden, then hearing someone say \enquote{in that garden, look at the flowers} may be higher surprisal for you: you expect them to say \enquote{azalea}. This prediction does not require many words for context. For example, in the sentence \enquote{I take my coffee with cream and sugar}, when hearing \enquote{cream and}, a listener might automatically predict \enquote{sugar}, but there are few possible continuations with even the two words \enquote{cream and}. Hearing \enquote{I} restricts the next word to a verb, or possibly an adverb, and since the listener has heard the speaker refer to themselves in the first person singular, their set of possible completions is significantly restricted.
+When we use a word or two of context in our surprisal calculations, then the set of reasonable final items in our ngrams is greatly restricted. ``Flower'' may contain less information than ``azalea'' when we consider the words independently of their context, but with context this can be reversed. Flower appears in a variety of contexts, and so the information content of a word like ``flower'' in a particular context may be higher than ``azalea''. If you only have azaleas in your garden, then hearing someone say ``in that garden, look at the flowers'' may be higher surprisal for you: you expect them to say ``azalea''. This prediction does not require many words for context. For example, in the sentence ``I take my coffee with cream and sugar'', when hearing ``cream and'', a listener might automatically predict ``sugar'', but there are few possible continuations with even the two words ``cream and''. Hearing ``I'' restricts the next word to a verb, or possibly an adverb, and since the listener has heard the speaker refer to themselves in the first person singular, their set of possible completions is significantly restricted.
 
 We train two types of ngram language models independently on a corpus. One of our models is frequency-based: we do not incorporate context into our surprisal calculations. To incorporate context into our models, we train bigram and trigram language models, which incorporate one and two words of context for each processed word, respectively. The frequency-based surprisal metric gives us an idea of when in their utterances speakers say frequent i.e.~independently information-rich words. The context-based surprisal metric show us how speakers tend to distribute the information in utterances relative to real-time processing in communication. We expect a priori that our frequency-based surprisal curve will be flat. No one part of the sentence will on average have words that are more frequent than another across utterance lengths. Similarly, we expect that there will be a small smoothing effect for our contextual surprisal metric such that the word in each position of an utterance is more predictable than its frequency-based counterpart.
 
@@ -158,14 +189,14 @@ Second, we estimated a trigram model in which the surprisal of a given word (\(w
 
 \[\text{surprisal}(w_{i}) = -log P(w_i|w_{i-1},w_{i-2})\]
 
-This metric encodes the idea that words that are low frequency in isolation (e.g. \enquote{meatballs}) may become much less surprising in certain contexts (e.g. \enquote{spaghetti and meatballs}) but more surprising in others (e.g. \enquote{coffee with meatballs}). The difficulty of correctly estimating these probabilities from a corpus grows combinatorically with the number of prior words, and in practice trigram models perform well as an approximation (see e.g. Chen \& Goodman, 1999; Smith \& Levy, 2013).
+This metric encodes the idea that words that are low frequency in isolation (e.g.~``meatballs'') may become much less surprising in certain contexts (e.g.~``spaghetti and meatballs'') but more surprising in others (e.g.~``coffee with meatballs''). The difficulty of correctly estimating these probabilities from a corpus grows combinatorically with the number of prior words, and in practice trigram models perform well as an approximation (see e.g.~Chen \& Goodman, 1999; Smith \& Levy, 2013).
 
 \hypertarget{model-details}{%
 \subsubsection{Model details}\label{model-details}}
 
-We estimated the surprisal for each word type in a corpus using the KenLM toolkit (Heafield, Pouzyrevsky, Clark, \& Koehn, 2013). Each utterance was padded with a special start-of-sentence token \enquote{\(\left<s\right>\)} and end of sentence token \enquote{\(\left</s\right>\)}. Trigram estimates did not cross sentence boundaries, so for example the surprisal of the second word in an utterances was estimated as \(\text{surprisal}(w_{2}) = -P(w_2|w_{i},\left<s\right>)\). Naïve trigram models will underestimate the surprisal of words in low-frequency trigrams (e.g.~if the word \enquote{meatballs} appears only once in the corpus following exactly the words \enquote{spaghetti and}, it is perfectly predictable from its prior two words).
+We estimated the surprisal for each word type in a corpus using the KenLM toolkit (Heafield, Pouzyrevsky, Clark, \& Koehn, 2013). Each utterance was padded with a special start-of-sentence token ``\(\left<s\right>\)'' and end of sentence token ``\(\left</s\right>\)''. Trigram estimates did not cross sentence boundaries, so for example the surprisal of the second word in an utterances was estimated as \(\text{surprisal}(w_{2}) = -P(w_2|w_{i},\left<s\right>)\). Naïve trigram models will underestimate the surprisal of words in low-frequency trigrams (e.g.~if the word ``meatballs'' appears only once in the corpus following exactly the words ``spaghetti and'', it is perfectly predictable from its prior two words).
 
-To avoid this underestimation, we used modified Kneser-Ney smoothing as implemented in the KenLM toolkit (Heafield et al., 2013). Briefly, this smoothing technique discounts all ngram frequency counts, which reduces the impact of rare ngrams on probability calculations, and interpolates lower-order ngrams into the calcuations. These lower-order ngrams are weighted according to the number of distinct contexts they occur as a continuation (e.g. \enquote{Francisco} may be a common word in a corpus, but likely only occurs after \enquote{San} as in \enquote{San Francisco}, so it receives a lower weighting). For a thorough explanation of modified Kneser-Ney smoothing, see Chen and Goodman (1999).
+To avoid this underestimation, we used modified Kneser-Ney smoothing as implemented in the KenLM toolkit (Heafield et al., 2013). Briefly, this smoothing technique discounts all ngram frequency counts, which reduces the impact of rare ngrams on probability calculations, and interpolates lower-order ngrams into the calcuations. These lower-order ngrams are weighted according to the number of distinct contexts they occur as a continuation (e.g.~``Francisco'' may be a common word in a corpus, but likely only occurs after ``San'' as in ``San Francisco'', so it receives a lower weighting). For a thorough explanation of modified Kneser-Ney smoothing, see Chen and Goodman (1999).
 
 \hypertarget{aggregating-curves}{%
 \subsubsection{Aggregating curves}\label{aggregating-curves}}
@@ -198,17 +229,25 @@ Once we have fitted our language model, we can compute the surprisal of a contin
 \hypertarget{study-1-the-shape-of-information-in-written-english}{%
 \section{Study 1: The Shape of Information in Written English}\label{study-1-the-shape-of-information-in-written-english}}
 
-Genzel and Charniak (2002) performed an influential early test of the Uniform Information Density hypothesis. They analyzed the amount of information in successive sentences of the same text. They found that the amount of information increased across sentences when each was considered in isolation. They reasoned that since all prior sentences provide the context for reading each new sentences, the amount of total information that the reader decoded within each sentence was constant overall.
+Genzel and Charniak (2002) performed an influential early test of the Uniform Information Density hypothesis and found a specific information curve shape in English that serves as a prior on our analyses here. They analyzed the amount of information in successive sentences in the Penn Treebank corpus (Marcus, Santorini, \& Marcinkiewicz, 1993), and found that the amount of information increased across sentences when each was considered in isolation. They reasoned that since all prior sentences provide the context for reading each new sentences, the amount of total information that the reader decoded within each sentence was constant overall.
+
+Genzel and Charniak (2002) used a conditional probability model given by the formula below, in which the probability of a sentence is given by the unigram probability of the first word, the conditional probability of the second word given the first, and the probability of the third word given the first two words, followed by a four-gram model in which each successive word for the rest of the sentence is predicted based on the three words which precede it. Genzel and Charniak (2002) then log-scaled the probability of the sentence, giving the cross-entropy between the model and the true word distribution.
+
+\[P(S) = P(w_1) P(w_2 | w_1) P(w_3 | w_2, w_1) \cdot \prod\limits_{i=1}^n P(w_n | w_{n-3} w_{n-2}, w_{n-1})\]
+
+The roughly linear and monotonic function they found, shown in Fig \ref{fig:genzel}, serves as a prior on our results. UID would predict a result similar to Genzel and Charniak's (2002) results: a smooth and monotonically increasing linear function of word position. Why this shape? Later sentences have context from previous sentences, building readers intuitions about which words will come next and increasing predictive power. In this environment, speakers can produce increasingly informative utterances, relying on their listeners' predictive processing to interpret more information words.
 
 Yu et al. (2016) applied this same logic to each word within sentences, computing the entropy over each successive word position in an utterance. The entropy metric Yu et al. (2016) used is the average surprisal of all the words in a given word position, computed only within that position, and weighted by how many times each word occurs in that position. Their formula is given by \(\text{H}(X) = -\sum_{w}P(w \in X) \log P(w)\), where \(X\) is a word position (e.g.~first words, fifth words, final words) and \(w\) is a word occuring in position \(X\).
 
 The first word of each sentence tended to contain little information, while words in the middle of sentences each contained roughly the same amount of information as one another, and the final word of each sentence contained much more information than any other word. They found the same distribution across sentence lengths, from sentences with \(15\) words to sentences with \(45\) words.
 
-UID would predict a result similar to Genzel and Charniak's (2002) results: a smooth and monotonically increasing affine function of word position. Yu et al. (2016) interpreted their uneven information curve as evidence against the Uniform Information Density Hypothesis as, unlike Genzel and Charniak's (2002) results, information plateaued in the middle of sentences. See Fig \ref{fig:bnc-yu}.
+Yu et al. (2016) interpreted their uneven information curve as evidence against the Uniform Information Density Hypothesis as, unlike Genzel and Charniak's (2002) results, information plateaued in the middle of sentences. See Fig \ref{fig:bnc-yu}.
 
 \begin{figure}[tb]
 \includegraphics[width=1\linewidth]{figs/bnc-yu} \caption{A caption}\label{fig:bnc-yu}
 \end{figure}
+
+There are several disadvantages to the ({\textbf{???}}) metric. First, although it is faster and less intensive to compute, it does not produce a model and instead consists of summary statistics on a single corpus. Second, these statistics cannot be compared across corpora, due to the entropy metric being extremely sensitive to the size of the corpus. Third, the entropy metric is difficult to interpret. Each measure based on sentence position depends on the length of the sentence in number of words, and speakers do not choose their utterance length as a hyperparameter before beginning production. Finally, the metric makes a naive independence assumption on the words in each sentence position. The final word does depend to some extent on each word that came before it. Although Genzel and Charniak (2002) made a similar simplifying Markov assumption, their model is able to capture local dependencies between words in production.
 
 We replicate the analysis from Yu et al. (2016) here, and build an additional model to bring their analysis more in line with Genzel and Charniak's (2002) methods. Finally, we also develop a method for averaging the curves for sentences of different lengths together to provide a single typical information structure.
 
@@ -220,7 +259,7 @@ Following Yu et al. (2016), we selected the British National Corpus (BNC) for an
 \hypertarget{pre-processing}{%
 \subsection{Pre-processing}\label{pre-processing}}
 
-We began with the XML version of the corpus, and used the \texttt{justTheWords.xsl} script provided along with the corpus to produce a text file with one sentence of the corpus on each line. Compound words (like \enquote{can't}) were combined, and all words were converted to lowercase before analysis. This produced a corpus of just over six million utterance of varying lengths. From these, we excluded utterances that were too short to allow for reasonable estimation of information shape (fewer than 5 words), and utterances that were unusually long (more than 45 words). This exclusion left us with 89.83\% of the utterances (Fig \ref{fig:bnc-lengths}).
+We began with the XML version of the corpus, and used the \texttt{justTheWords.xsl} script provided along with the corpus to produce a text file with one sentence of the corpus on each line. Compound words (like ``can't'') were combined, and all words were converted to lowercase before analysis. This produced a corpus of just over six million utterance of varying lengths. From these, we excluded utterances that were too short to allow for reasonable estimation of information shape (fewer than 5 words), and utterances that were unusually long (more than 45 words). This exclusion left us with 89.83\% of the utterances (Fig \ref{fig:bnc-lengths}).
 
 Due to the size of the corpus, we do not include it along with our submission, but we include the scripts and directions in the copy of our GitHub repository.
 
@@ -263,6 +302,8 @@ Is this structure unique to written English, or does it characterize spoken Engl
 
 \caption{(A) The distribution of sentence lengths in the spoken English corpora: Adults in Santa Barbara, and parents and children in CHILDES. We analyzed sentences of length 5-15 (colored). (B) Charateristic surprisal curves for these corpora.}\label{fig:spoken-figs}
 \end{figure*}
+
+\includegraphics{figs/leap_plots-1.pdf} \includegraphics{figs/leap_plots-2.pdf}
 
 \hypertarget{study-2-information-in-spoken-english}{%
 \section{Study 2: Information in Spoken English}\label{study-2-information-in-spoken-english}}
@@ -412,6 +453,7 @@ Why does context not make a bigger difference in the shape of the barycenters?
 \setlength{\leftskip}{0.5in}
 
 \hypertarget{refs}{}
+\begin{cslreferences}
 \leavevmode\hypertarget{ref-anderson1989}{}%
 Anderson, J. R., \& Milson, R. (1989). Human memory: An adaptive perspective. \emph{Psychological Review}, \emph{96}(4), 703.
 
@@ -478,6 +520,9 @@ MacWhinney, B. (2000). \emph{The childes project: The database} (Vol. 2). Psycho
 \leavevmode\hypertarget{ref-mahowald2013}{}%
 Mahowald, K., Fedorenko, E., Piantadosi, S. T., \& Gibson, E. (2013). Info/information theory: Speakers choose shorter words in predictive contexts. \emph{Cognition}, \emph{126}(2), 313--318.
 
+\leavevmode\hypertarget{ref-marcus1993}{}%
+Marcus, M., Santorini, B., \& Marcinkiewicz, M. A. (1993). Building a large annotated corpus of english: The penn treebank. \emph{Computational Linguistics}, \emph{19}(2), 313--330.
+
 \leavevmode\hypertarget{ref-moon1996}{}%
 Moon, T. K. (1996). The expectation-maximization algorithm. \emph{IEEE Signal Processing Magazine}, \emph{13}(6), 47--60.
 
@@ -525,8 +570,8 @@ Wichmann, S., Müller, A., Wett, A., Velupillai, V., Bischoffberger, J., Brown, 
 
 \leavevmode\hypertarget{ref-yu2016}{}%
 Yu, S., Cong, J., Liang, J., \& Liu, H. (2016). The distribution of information content in english sentences. \emph{arXiv Preprint arXiv:1609.07681}.
+\end{cslreferences}
 
 \endgroup
-
 
 \end{document}

@@ -108,6 +108,18 @@ tidy_non_wiki_b <- non_wiki_b %>%
             gram = factor(gram, levels = c("unigram", "trigram")))
 
 
+sbc_b <- read_csv(here("Data/sbc_barycenters.csv"),
+              col_names = c("1", "2", "3", "4", "5",
+                            "language", "source", "gram", "sample")) %>%
+  filter(source != "wikipedia")
+
+tidy_sbc_b <- sbc_b %>%
+     pivot_longer(-c(language, source, gram, sample), 
+                  names_to = "position", values_to = "surprisal") %>%
+     mutate(position = as.numeric(position),
+            gram = factor(gram, levels = c("unigram", "trigram")))
+
+
 wals <- read_csv(here("Data/Paper/wals_distances.csv"))
 wals_types <- read_csv(here("Data/Paper/wals_type_distances.csv"))
 swadesh <- read_csv(here("Data/Paper/swadesh_distances.csv"))
@@ -182,16 +194,16 @@ em_costs <- read_csv(here("Analysis/EM/em_costs.csv"))
 # non-parametric bootstrap and
 em_boot <- em_costs %>%
   group_by(size, gram) %>%
-  tidyboot_mean(final_cost) %>%
+  tidyboot_mean(final_cost, na.rm = TRUE) %>%
   ungroup() 
 
 em_boot %>%
   ggplot(aes(x = size, y = empirical_mean, ymin = ci_lower, ymax = ci_upper,
              color = gram)) + 
-    geom_pointrange() + 
+    geom_pointrange(position = position_dodge(.25)) + 
     geom_line() + 
-    scale_x_continuous(breaks = 1:15) + 
-    theme(legend.position = "bottom")
+  scale_x_continuous(breaks = seq(1,15,1)) +
+  theme(legend.position = "bottom")
 
 barycenter_size <- 10
 ```
@@ -218,7 +230,7 @@ The roughly linear and monotonic function they found, shown in Fig \ref{fig:genz
 
 <!-- Make direct replication of the Genzel and Charniak results  -->
 
-```{r genzel, echo = F, fig.cap = "The results from the Genzel and Charniak paper"}
+```{r genzel, echo = F, fig.cap = "The results from the Genzel and Charniak paper", eval = FALSE}
 knitr::include_graphics("figs/genzel-plot.png")
 ```
 
@@ -350,6 +362,29 @@ bnc_plot2 <- tidy_non_wiki_b %>%
 
 gridExtra::grid.arrange(bnc_plot1, bnc_plot2, ncol = 1)
 ```
+
+```{r}
+tidy_sbc_b %>% 
+  group_by(language, gram, position) %>%
+  summarise(ci_upper = quantile(surprisal, .975), 
+            ci_lower = quantile(surprisal, .025),
+            surprisal = mean(surprisal)) %>%
+    ggplot(aes(x = position, y = surprisal, color = gram)) + 
+    geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), size = .75) + 
+    geom_line()
+
+
++ 
+    geom_text(aes(label = gram), data = bnc_b_annotations) +
+    scale_x_continuous(breaks = 1:5) + 
+    xlab("Coordinate") + 
+    ylab("Surprisal") + 
+    scale_color_colorblind() + 
+    labs(tag = "B") + 
+    theme_few() +
+    theme(aspect.ratio = 1/1.33, legend.position = "none")
+```
+
 
 We began by replicating Yu et al.'s [-@yu2016] analyses, examining the surprisal of words in sentence of length 15, 30, and 45 estimated by our unigram model. In line with their computations, we found a reliably non-linear shape in sentences of all 3 lengths, with the information in each word rising for the first two words, plateauing in the middle of sentences, dipping in pen-ultimate position, and rising steeply on the final word (Fig. \ref{fig:bncplots}A). Qualitatively, we found the same shape in utterances of all other lengths we sampled, from utterances with 5 words to utterances with 44 words. 
 

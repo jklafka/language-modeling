@@ -57,6 +57,12 @@ single_feature <- data %>%
   select(x1, x103a) %>%
   mutate(point = 1:n())
 
+single_feature %>%
+  rename(c = x1, d = x103a) %>%
+  mutate(d = as.numeric(as.factor(d))) %>%
+  select(-point) %>%
+  write_csv("knn_test.csv")
+
 # how languages have each feature value
 single_feature_Nxs <- single_feature %>%
   group_by(x103a) %>%
@@ -177,6 +183,39 @@ Is <- mi_data %>%
   summarise(I = mean(Ii))
 ```
 
+```{r mpmi}
+# get each feature for each language and each barycenter coordinate
+get_mis <- function(df) {
+  
+  cts <- df %>%
+    select(x1:x5) %>%
+    as.data.frame()
+  
+  disc <- df %>% 
+    select(x1a:x120a) %>%
+    as.data.frame()
+  
+  mis <- mmi(cts, disc)$bcmi
+  
+  mi_df <- mis %>%
+    as_tibble() 
+  
+  names(mi_df) <- names(disc) 
+  
+  mi_tibble <- mi_df %>%
+    mutate(position = names(cts)) %>%
+    pivot_longer(cols = x1a:x120a, names_to = "feature", 
+                 values_to = "mi")
+}
+
+Is <- data %>%
+  group_by(gram) %>%
+  nest() %>%
+  mutate(mi = map(data, get_mis)) %>%
+  select(-data) %>%
+  unnest(cols = c(mi))
+```
+
 ```{r feature-types}
 tidy_Is <- Is %>%
   ungroup() %>%
@@ -188,10 +227,27 @@ wals_types <- read_csv(here("Data/feature_types.csv"))
 
 type_Is <- left_join(tidy_Is, wals_types, by = c("feature"))
 
-ggplot(type_Is, aes(x = I, y = as.factor(position), color = position, fill = position)) + 
+ggplot(type_Is, aes(x = mi, y = as.factor(position), color = position, fill = position)) + 
   facet_grid(gram ~ type) + 
   geom_density_ridges(aes(alpha = .1)) + 
   geom_vline(aes(xintercept = 0), linetype = "dashed")
+```
+
+```{r average-features}
+booted_Is <- type_Is %>%
+  group_by(gram, type, position) %>%
+  tidyboot_mean(mi)
+
+ggplot(booted_Is, aes(x = position, y = empirical_mean, color = type)) + 
+  facet_grid(gram~type) + 
+  geom_line() +
+  geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
+                  position = position_dodge(.25)) + 
+  geom_hline(aes(yintercept = 0), linetype = "dashed") + 
+  theme(legend.position = "bottom")
+```
+
+
 
 type_model <- lmer(I ~ as.factor(position) * type + (1|feature),
                    data = type_Is %>% filter(gram == "unigram")) %>%
