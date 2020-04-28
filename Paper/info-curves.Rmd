@@ -189,7 +189,9 @@ em_boot %>%
   ggplot(aes(x = size, y = empirical_mean, ymin = ci_lower, ymax = ci_upper,
              color = gram)) + 
     geom_pointrange() + 
-    geom_line()
+    geom_line() + 
+    scale_x_continuous(breaks = 1:15) + 
+    theme(legend.position = "bottom")
 
 barycenter_size <- 10
 ```
