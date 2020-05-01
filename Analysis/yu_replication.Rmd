@@ -1,0 +1,65 @@
+---
+title: "Yu replication"
+author: "Josef Klafka and Daniel Yurovsky"
+date: "5/1/2020"
+output: html_document
+---
+
+In this file we are going to replicate the main entropy plots from Yu et al. 
+
+```{r setup, include=FALSE}
+require(entropy)
+require(tidyverse)
+require(tidyboot)
+require(tidytext)
+require(here)
+require(data.table)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+First we get the BNC. This isn't included in the repository. Read in as single tibble with one column: text. 
+
+```{r load data}
+bnc <- fread(file = here("Data/adult/bnc.txt"), 
+                  header = T, sep = "\n") %>%
+  as_tibble()
+```
+
+First, we separate the words in each sentence and get each word position within the sentence. 
+
+Second
+
+```{r compute entropies}
+bnc_words <- bnc %>%
+  mutate(sentence_id = 1:n(), 
+         sentence_length = str_count(text, pattern = "[ +]+") + 1) %>%
+  unnest_tokens(word, text, to_lower = T, token = "regex", pattern = "[ +]+") %>%
+  # convert each word to an integer id for faster computation
+  mutate(word = as.numeric(as.factor(word))) %>%
+  group_by(sentence_id) %>%
+  mutate(word_position = 1:n()) %>%
+  ungroup()
+
+bnc_entropies <- bnc_words %>%
+  group_by(sentence_length, word_position) %>%
+  count(word) %>% 
+  mutate(p = n/sum(n)) %>%
+  summarize(H = -sum(p * log(p))) %>%
+  ungroup()
+  
+```
+
+```{r plotting entropies}
+bnc_entropies %>% 
+  filter(sentence_length %in% c(15, 30, 45)) %>%
+  ggplot(aes(x = word_position, y = H)) + 
+    geom_point() + 
+    geom_line() + 
+    facet_wrap(~sentence_length)
+```
+
+```{r writing entropies}
+bnc_entropies %>%
+  write_csv(here("Data/bnc_entropies.csv"))
+```

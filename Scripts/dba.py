@@ -2,7 +2,7 @@ import csv, argparse, random
 import numpy as np
 from tslearn.barycenters import dtw_barycenter_averaging
 
-# BARYCENTER_SIZE = 5
+BARYCENTER_SIZE = 5
 OUTPUT_FILE = "Data/5barycenters.csv"
 
 parser = argparse.ArgumentParser()
@@ -13,7 +13,7 @@ args = parser.parse_args()
 
 assert args.gram in ["unigram", "trigram"], "Only accepts 'unigram' or 'trigram'"
 
-## read in surprisals data
+# read in surprisals data
 X = []
 with open("Surprisals/" + args.corpus + '/' + args.gram + '/' + \
             args.language + "_compressed.csv", 'r') as f:
@@ -22,11 +22,10 @@ with open("Surprisals/" + args.corpus + '/' + args.gram + '/' + \
          X.append(row)
 
 # get barycenter of info-curves as list
-print(BARYCENTER_SIZE)
-X = [[float(item) for item in series if item != "NA"] for series in X]
-barycenter = dtw_barycenter_averaging(X = X,
-                barycenter_size = BARYCENTER_SIZE,
-                verbose = True).reshape(BARYCENTER_SIZE).tolist()
+data = [[float(item) for item in series if item != "NA"] for series in X]
+
+barycenter = dtw_barycenter_averaging(X = data,
+                barycenter_size = BARYCENTER_SIZE).reshape(BARYCENTER_SIZE).tolist()
 barycenter += [args.language, args.corpus, args.gram]
 
 # output barycenter to

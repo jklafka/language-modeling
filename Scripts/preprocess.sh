@@ -16,12 +16,12 @@ else
 
   if [[ $1 == "wikipedia" ]]
   then
-    # get the language's Wikipedia prefix (e.g. "en" for English)
+    ## get the language's Wikipedia prefix (e.g. "en" for English)
     PREFIX=$(cat language_dict.json | jq --arg lang "$2" '.[$lang]' | tr -d \")
-    # get most recent full wikipedia dump
+    ## get most recent full wikipedia dump
     DUMPSDATE=$(python3 Scripts/get_dumpsdate.py)
-    timeout 10m curl -o datafile "https://dumps.wikimedia.org/other/cirrussearch/current/${PREFIX}wiki-${DUMPSDATE}-cirrussearch-content.json.gz"
-    # extract the text into a single txt file with one sentence per line
+    timeout 5m curl -o datafile "https://dumps.wikimedia.org/other/cirrussearch/current/${PREFIX}wiki-${DUMPSDATE}-cirrussearch-content.json.gz"
+    ## extract the text into a single txt file with one sentence per line
     python3 Scripts/cirrus-extract.py datafile
     python3 Scripts/get_wikipedia.py $2
     rm -r text

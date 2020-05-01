@@ -226,13 +226,7 @@ Once we have fitted our language model, we can compute the surprisal of a contin
 
 $$P(S) = P(w_1) P(w_2 | w_1) P(w_3 | w_2, w_1) \cdot \prod\limits_{i=1}^n P(w_n | w_{n-3} w_{n-2}, w_{n-1})$$
 
-The roughly linear and monotonic function they found, shown in Fig \ref{fig:genzel}, serves as a prior on our results. UID would predict a result similar to Genzel and Charniak's [-@genzel2002] results: a smooth and monotonically increasing linear function of word position. Why this shape? Later sentences have context from previous sentences, building readers intuitions about which words will come next and increasing predictive power. In this environment, speakers can produce increasingly informative utterances, relying on their listeners' predictive processing to interpret more information words. 
-
-<!-- Make direct replication of the Genzel and Charniak results  -->
-
-```{r genzel, echo = F, fig.cap = "The results from the Genzel and Charniak paper", eval = FALSE}
-knitr::include_graphics("figs/genzel-plot.png")
-```
+The roughly linear and monotonic function they found serves as a prior on our results. UID would predict a result similar to Genzel and Charniak's [-@genzel2002] results: a smooth and monotonically increasing linear function of word position. Why this shape? Later sentences have context from previous sentences, building readers intuitions about which words will come next and increasing predictive power. In this environment, speakers can produce increasingly informative utterances, relying on their listeners' predictive processing to interpret more information words. 
 
 @yu2016 applied this same logic to each word within sentences, computing the entropy over each successive word position in an utterance. The entropy metric @yu2016 used is the average surprisal of all the words in a given word position, computed only within that position, and weighted by how many times each word occurs in that position. Their formula is given by $\text{H}(X) = -\sum_{w}P(w \in X) \log P(w)$, where $X$ is a word position (e.g. first words, fifth words, final words) and $w$ is a word occuring in position $X$. 
 
