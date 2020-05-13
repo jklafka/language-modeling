@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## preprocess the corpus
-cat Data/$1/$2.txt | python3 Scripts/process_corpus.py > Data/$1/${2}_temp.txt
+# cat Data/$1/$2.txt | python3 Scripts/process_corpus.py > Data/$1/${2}_temp.txt
 
 ## build the unigram model
 kenlm/build/bin/lmplz -o 1 --discount_fallback < Data/$1/${2}_temp.txt > Models/$1/unigram/$2.lm
