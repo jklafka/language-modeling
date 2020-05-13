@@ -541,6 +541,11 @@ n_fams <- families_b %>%
     filter(!is.na(family), family != "other") %>%
     count() %>%
     pull()
+
+# families_b %>% 
+#   pivot_wider(names_from = "position", values_from = "surprisal") %>% 
+#   ungroup() %>% 
+#   write_csv(here("Data/5barycenters_fam.csv"))
 ```
 
 

@@ -13,15 +13,17 @@ args = parser.parse_args()
 assert args.gram in ["unigram", "trigram"], "Choose 'unigram' or 'trigram' barycenters"
 
 # read in barycenters
-barycenters = pd.read_csv("../Data/5barycenters.csv")
+barycenters = pd.read_csv("Data/5barycenters_fam.csv")
 barycenters = barycenters[(barycenters["gram"] == args.gram) & \
     (barycenters["source"] == "wikipedia")]
 
 # get the numerical barycenters
 centers = barycenters.loc[:, '1':'5'].to_numpy()
 languages = barycenters["language"].tolist()
+families = barycenters["family"].tolist()
 
 figure = ff.create_dendrogram(centers, orientation = "left",
-                                    labels = languages, distfun = cdist_dtw)
+                                    labels = languages, distfun = cdist_dtw,
+                                    colorscale = families)
 figure.update_layout(width = 800, height = 2000)
 figure.show()
