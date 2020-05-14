@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # takes source (childes or wikipedia or corpus); name of language/corpus;
-# e.g.: sh Scripts/process.sh childes Eng-NA
+# e.g.: sh Scripts/cross-val.sh childes Eng-NA
 
 ## get corpus into .txt file
 if [[ $1 == "childes" ]]
@@ -9,8 +9,8 @@ then
   # get the CHILDES corpus
   Rscript Scripts/get_childes.R $2
 
-  sh Scripts/process.sh adult $2
-  sh Scripts/process.sh child $2
+  sh Scripts/cross-val.sh adult $2
+  sh Scripts/cross-val.sh child $2
 
 else
 
@@ -27,11 +27,11 @@ else
     rm -r text
     rm datafile
 
-    sh Scripts/process.sh $1 $2
+    sh Scripts/cross-val.sh $1 $2
 
   else
 
-    sh Scripts/process.sh adult $1
+    sh Scripts/cross-val.sh adult $1
 
   fi
 
