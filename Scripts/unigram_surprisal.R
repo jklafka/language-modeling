@@ -9,8 +9,8 @@ require(here)
 corpus_name <- commandArgs(trailingOnly=TRUE)[1]
 language_name <- commandArgs(trailingOnly=TRUE)[2]
 test_location <- commandArgs(trailingOnly=TRUE)[3]
-model_file <- here(glue("Models/{corpus_name}/unigram/{language_name}.lm"))
-corpus_file <- here(glue("Data/{corpus_name}/{language_name}_temp.txt"))
+suffix <- commandArgs(trailingOnly=TRUE)[4]
+model_file <- here(glue("Models/{corpus_name}/unigram/{language_name}_{suffix}.lm"))
 
 
 read_unigram_model <- function(file) {

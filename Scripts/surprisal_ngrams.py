@@ -4,10 +4,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument("corpus", help="Type of corpus you're working with")
 parser.add_argument("language", help="Name of the language you're using")
 parser.add_argument("test_location", help="Location of the testing file you're working with")
+parser.add_argument("suffix")
 args = parser.parse_args()
 
 model = kenlm.LanguageModel("Models/" + args.corpus + "/trigram/" + \
-    args.language + ".klm")
+    args.language + '_' + args.suffix + ".klm")
 
 
 # gets surprisal from string based on the model's stored probabilities
