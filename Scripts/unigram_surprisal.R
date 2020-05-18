@@ -41,4 +41,7 @@ surprisals <- corpus %>%
   left_join(model, by = c("word")) %>%
   select(-word)
 
-write_csv(surprisals, here(glue("Surprisals/{corpus_name}/unigram/{language_name}.csv")))
+outfile <- here(glue("ValSurprisals/{corpus_name}/unigram/{language_name}.csv"))
+# write_csv(surprisals, here(glue("ValSurprisals/{corpus_name}/unigram/{language_name}.csv")))
+write.table(surprisals, outfile, sep = ",",
+            col.names = !file.exists(outfile), append = T)

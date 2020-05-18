@@ -1,5 +1,10 @@
 #!/bin/bash
 
+## arguments
+## 1. corpus name; 2. language name;
+## 3. location of training file; 4. location of testing file
+
+
 ## preprocess the corpus
 # cat Data/$1/$2.txt | python3 Scripts/process_corpus.py > Data/$1/${2}_temp.txt
 

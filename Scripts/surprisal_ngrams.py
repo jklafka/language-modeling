@@ -42,8 +42,8 @@ corpus = [utterance.strip('["\n]') for utterance in open(args.test_location, 'r'
 
 corpus = [utterance for utterance in corpus if utterance.strip() != ""]
 
-with open("Surprisals/" + args.corpus + "/trigram/" + \
-            args.language + ".csv", 'w') as f:
+with open("ValSurprisals/" + args.corpus + "/trigram/" + \
+            args.language + ".csv", 'a') as f:
     writer = csv.writer(f)
     writer.writerow(['position', 'surprisal', 'length'])
 
