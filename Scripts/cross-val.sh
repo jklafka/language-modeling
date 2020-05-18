@@ -16,7 +16,7 @@ split -l split_length Data/$1/${2}_processed.txt
 ## iterate over pieces: train and test unigram and trigram model on all but held-out piece
 ## record suprisals on held-out piece as test and write to file
 for i in ("alphabet[@:1:${K}]");
-  cat Data/$1/${2}_temp[a-f!"$i"] > Data/$1/${2}_bigtemp.txt
+  cat Data/$1/${2}_temp[a-${K}!"${i}"] > Data/$1/${2}_bigtemp.txt
   do sh Scripts/process.sh Data/$1/${2}_bigtemp.txt Data/$1/${2}_temp${i}.txt
   rm Data/$1/${2}_bigtemp.txt
 done
