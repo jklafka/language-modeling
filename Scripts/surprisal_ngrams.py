@@ -3,7 +3,7 @@ import sys, csv, kenlm, argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("corpus", help="Type of corpus you're working with")
 parser.add_argument("language", help="Name of the language you're using")
-# parser.add_argument("order", help="Order of ngram you're working with")
+parser.add_argument("test_location", help="Location of the testing file you're working with")
 args = parser.parse_args()
 
 model = kenlm.LanguageModel("Models/" + args.corpus + "/trigram/" + \
@@ -38,8 +38,7 @@ def ngrams(sentence, n):
         return list(zip(joined_grams, range(len(joined_grams)), utt_length))
 
 # take data and turn it into ngrams
-corpus = [utterance.strip('["\n]') for utterance in open("Data/" + \
-    args.corpus + '/' + args.language + "_temp.txt", 'r').readlines()]
+corpus = [utterance.strip('["\n]') for utterance in open(args.test_location, 'r').readlines()]
 
 corpus = [utterance for utterance in corpus if utterance.strip() != ""]
 

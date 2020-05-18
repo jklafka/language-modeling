@@ -17,6 +17,6 @@ split -l split_length Data/$1/${2}_processed.txt
 ## record suprisals on held-out piece as test and write to file
 for i in ("alphabet[@:1:${K}]");
   cat Data/$1/${2}_temp[a-${K}!"${i}"] > Data/$1/${2}_bigtemp.txt
-  do sh Scripts/process.sh Data/$1/${2}_bigtemp.txt Data/$1/${2}_temp${i}.txt
+  do sh Scripts/process.sh $1 $2 Data/$1/${2}_bigtemp.txt Data/$1/${2}_temp${i}.txt
   rm Data/$1/${2}_bigtemp.txt
 done
