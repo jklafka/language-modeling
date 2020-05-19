@@ -3,6 +3,7 @@
 ## arguments
 ## 1. corpus name; 2. language name;
 ## 3. location of training file; 4. location of testing file
+## 5. name of model
 
 
 ## preprocess the corpus
