@@ -9,14 +9,18 @@ declare -a alphabet=( 'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'i' 'j' 'k' 'l' 'm' 'n'
 # cat Data/$1/$2.txt | python3 Scripts/process_corpus.py > Data/$1/${2}_processed.txt
 #
 ## split file into K pieces
-let split_length="`wc -l Data/$1/${2}.txt | grep -oE "\d+"`/$K"
+let split_length="`wc -l Data/$1/${2}_processed.txt | grep -oE "\d+"`/$K"
 
-split -l split_length -a 1 Data/$1/${2}_processed.txt
+shuf -o Data/$1/${2}_shuffled.txt Data/$1/${2}_processed.txt
+rm Data/$1/${2}_processed.txt
+split -l split_length -a 1 Data/$1/${2}_shuffled.txt
 
 ## iterate over pieces: train and test unigram and trigram model on all but held-out piece
 ## record suprisals on held-out piece as test and write to file
 for letter in "${alphabet[@]:1:${K}}";
-  cat Data/$1/${2}_temp[a-${alphabet[$K]}!${letter}] > Data/$1/${2}_bigtemp.txt
+  cat Data/$1/${2}_shuffled[a-${alphabet[$K]}!${letter}].txt > Data/$1/${2}_bigtemp.txt
   do sh Scripts/process.sh $1 $2 Data/$1/${2}_bigtemp.txt Data/$1/${2}_temp${i}.txt $letter
   rm Data/$1/${2}_bigtemp.txt
 done
+
+rm Data/$1/${2}_shuffled.txt
