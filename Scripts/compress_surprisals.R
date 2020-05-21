@@ -11,7 +11,7 @@ MAX_LENGTH <- 45
 corpus_name <- commandArgs(trailingOnly=TRUE)[1]
 language_name <- commandArgs(trailingOnly=TRUE)[2]
 gram <- commandArgs(trailingOnly=TRUE)[3]
-surprisals <- read_csv(here(glue("Surprisals/{corpus_name}/{gram}/{language_name}.csv")))
+surprisals <- read_csv(here(glue("ValSurprisals/{corpus_name}/{gram}/{language_name}.csv")))
 
 surprisals %>%
   filter(length >= MIN_LENGTH, length <= MAX_LENGTH, complete.cases(.)) %>%
@@ -24,5 +24,5 @@ surprisals %>%
   ungroup() %>%
   pivot_wider(names_from = position, values_from = surprisal) %>%
   select(-length) %>%
-  write_csv(here(glue("Surprisals/{corpus_name}/{gram}/{language_name}_compressed.csv")),
+  write_csv(here(glue("ValSurprisals/{corpus_name}/{gram}/{language_name}_compressed.csv")),
             col_names=FALSE)

@@ -8,7 +8,7 @@ parser.add_argument("suffix")
 args = parser.parse_args()
 
 model = kenlm.LanguageModel("Models/" + args.corpus + "/trigram/" + \
-    args.language + '_' + args.suffix + ".klm")
+    args.language + '/' + args.suffix + ".klm")
 
 
 # gets surprisal from string based on the model's stored probabilities
@@ -46,7 +46,7 @@ corpus = [utterance for utterance in corpus if utterance.strip() != ""]
 with open("ValSurprisals/" + args.corpus + "/trigram/" + \
             args.language + ".csv", 'a') as f:
     writer = csv.writer(f)
-    writer.writerow(['position', 'surprisal', 'length'])
+    # writer.writerow(['position', 'surprisal', 'length'])
 
     for utterance in corpus:
      # convert each utterance into a list of ngrams
