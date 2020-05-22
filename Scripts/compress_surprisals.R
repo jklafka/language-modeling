@@ -14,13 +14,11 @@ gram <- commandArgs(trailingOnly=TRUE)[3]
 surprisals <- read_csv(here(glue("ValSurprisals/{corpus_name}/{gram}/{language_name}.csv")))
 
 surprisals %>%
-  filter(length >= MIN_LENGTH, length <= MAX_LENGTH, complete.cases(.)) %>%
-  mutate(switch = position < lag(position)) %>%
-  mutate(switch = if_else(is.na(switch), FALSE, switch)) %>%
+  filter(length >= MIN_LENGTH, length <= MAX_LENGTH) %>%
+  mutate(switch = position < lag(position, default = FALSE)) %>%
   mutate(switch = cumsum(switch)) %>%
-  group_by(length, position, switch) %>% # get ids for each sentence
-  summarise(surprisal = mean(surprisal, na.rm = T)) %>%
-  summarise(surprisal = mean(surprisal, na.rm = T)) %>%
+  group_by(length, position) %>% 
+  summarise(surprisal = mean(surprisal, na.rm = T),  n = n()) %>%
   ungroup() %>%
   pivot_wider(names_from = position, values_from = surprisal) %>%
   select(-length) %>%
