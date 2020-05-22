@@ -17,7 +17,7 @@ surprisals %>%
   filter(length >= MIN_LENGTH, length <= MAX_LENGTH) %>%
   mutate(switch = position < lag(position, default = FALSE)) %>%
   mutate(switch = cumsum(switch)) %>%
-  group_by(length, position) %>% 
+  group_by(length, position) %>%
   summarise(surprisal = mean(surprisal, na.rm = T),  n = n()) %>%
   ungroup() %>%
   pivot_wider(names_from = position, values_from = surprisal) %>%
