@@ -5,4 +5,4 @@
 #SBATCH --mail-type=END,FAIL
 
 
-sh cross-val.sh $1 $2
+sh Scripts/cross-val.sh $1 $2

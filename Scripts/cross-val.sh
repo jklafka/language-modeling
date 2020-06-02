@@ -9,8 +9,8 @@ declare -a alphabet=( 'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'i' 'j' 'k' 'l' 'm' 'n'
 cat Data/$1/$2.txt | python3 Scripts/process_corpus.py > Data/$1/${2}_processed.txt
 
 ## split file into K pieces
-numerator=`wc -l Data/$1/${2}_processed.txt | grep -oE "\d+"`
-let split_length=" $numerator / $K "
+#numerator=`wc -l Data/$1/${2}_processed.txt | grep -oE "\d+"`
+#let split_length=" $numerator / $K "
 
 shuf -o Data/$1/${2}_shuffled.txt Data/$1/${2}_processed.txt
 rm Data/$1/${2}_processed.txt
@@ -19,10 +19,10 @@ if [ ! -d "Data/$1/$2/" ]
 then
   mkdir Data/$1/$2/
 fi
-split -l $split_length -a 1 Data/$1/${2}_shuffled.txt Data/$1/$2/
+split -n 10 -a 1 Data/$1/${2}_shuffled.txt Data/$1/$2/
 
 
-mkdir Models/$1/unigram/$2/
+mkdir -p Models/$1/unigram/$2/
 mkdir Models/$1/trigram/$2/
 echo "position,surprisal,length" > ValSurprisals/$1/trigram/${2}.csv
 
@@ -30,10 +30,10 @@ echo "position,surprisal,length" > ValSurprisals/$1/trigram/${2}.csv
 ## record suprisals on held-out piece as test and write to file
 for holdout in "${alphabet[@]:0:${K-1}}"
 do
-  echo $holdout
+  # echo $holdout
   for letter in "${alphabet[@]:0:${K-1}}"
   do
-    echo $letter
+    # echo $letter
     [ $holdout != $letter ] && cat Data/$1/${2}/$letter > Data/$1/${2}/bigtemp.txt
   done
   sh Scripts/process.sh $1 $2 Data/$1/${2}/bigtemp.txt Data/$1/${2}/$holdout $holdout
