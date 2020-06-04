@@ -10,7 +10,7 @@ corpus_name <- commandArgs(trailingOnly=TRUE)[1]
 language_name <- commandArgs(trailingOnly=TRUE)[2]
 suffix <- commandArgs(trailingOnly=TRUE)[3]
 model_file <- here(glue("Models/{corpus_name}/unigram/{language_name}/{suffix}.lm"))
-test_file <- here(glue("Data/{corpus_name}/unigram/{language_name}/{suffix}"))
+test_file <- here(glue("Data/{corpus_name}/{language_name}/{suffix}"))
 
 read_unigram_model <- function(file) {
   read_lines(file, skip = 7) %>%
