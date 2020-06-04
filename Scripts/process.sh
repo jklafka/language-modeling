@@ -10,11 +10,11 @@ cat $3 | ~/kenlm/build/bin/lmplz -o 3 -S 10% --discount_fallback > Models/$1/tri
 # convert trigram model to binary for faster reading and lower storage
 ~/kenlm/build/bin/build_binary Models/$1/trigram/${2}/${5}.arpa Models/$1/trigram/${2}/${5}.klm
 ## extract unigram data from trigram model
-echo \data\ > Models/$1/unigram/${2}/${5}.arpa
+echo \data\ > Models/$1/unigram/${2}/${5}.lm
 # get number of unigrams
-grep -oE "ngram 1=\d+" Models/$1/trigram/${2}/${5}.arpa >> Models/$1/unigram/${2}/${5}.arpa
+grep -oE "ngram 1=\d+" Models/$1/trigram/${2}/${5}.arpa >> Models/$1/unigram/${2}/${5}.lm
 # get all unigrams
-sed -n "/^[\]1grams:/,/^$/p" Models/$1/trigram/${2}/${5}.arpa >> Models/$1/unigram/${2}/${5}.arpa
+sed -n "/^[\]1grams:/,/^$/p" Models/$1/trigram/${2}/${5}.arpa >> Models/$1/unigram/${2}/${5}.lm
 rm Models/$1/trigram/${2}/${5}.arpa
 
 # get surprisals and barycenter
