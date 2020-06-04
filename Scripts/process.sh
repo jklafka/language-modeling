@@ -10,9 +10,9 @@
 # cat Data/$1/$2.txt | python3 Scripts/process_corpus.py > Data/$1/${2}_temp.txt
 
 ## build the unigram model
-~/kenlm/build/bin/lmplz -o 1 --discount_fallback < $3 > Models/$1/unigram/${2}/${5}.lm
+#~/kenlm/build/bin/lmplz -o 1 -S 1G --discount_fallback < $3 > Models/$1/unigram/${2}/${5}.lm
 ## get surprisals and barycenter
-Rscript Scripts/unigram_surprisal.R $1 $2 $4 $5
+#Rscript Scripts/unigram_surprisal.R $1 $2 $4 $5
 # Rscript Scripts/compress_surprisals.R $1 $2 unigram
 # python3 Scripts/dba.py $1 $2 unigram
 
