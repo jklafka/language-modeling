@@ -26,6 +26,7 @@ split -n 10 -a 1 Data/$1/${2}_shuffled.txt Data/$1/$2/
 mkdir -p Models/$1/unigram/$2/
 mkdir Models/$1/trigram/$2/
 echo "position,surprisal,length" > ValSurprisals/$1/trigram/${2}.csv
+echo "position,surprisal,length" > ValSurprisals/$1/unigram/${2}.csv
 
 ## iterate over pieces: train and test unigram and trigram model on all but held-out piece
 ## record suprisals on held-out piece as test and write to file

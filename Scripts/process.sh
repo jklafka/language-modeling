@@ -19,5 +19,5 @@ sed -n "/^[\]1-grams:/,/^$/p" Models/$1/trigram/${2}/${5}.arpa >> Models/$1/unig
 rm Models/$1/trigram/${2}/${5}.arpa
 
 # get surprisals and barycenter
-Rscript Scripts/unigram_surprisal.R $1 $2 $4 $5
+Rscript Scripts/unigram_surprisal.R $1 $2 $5
 python3 Scripts/surprisal_ngrams.py $1 $2 $4 $5

@@ -8,10 +8,9 @@ require(here)
 
 corpus_name <- commandArgs(trailingOnly=TRUE)[1]
 language_name <- commandArgs(trailingOnly=TRUE)[2]
-test_location <- here(commandArgs(trailingOnly=TRUE)[3])
-suffix <- commandArgs(trailingOnly=TRUE)[4]
+suffix <- commandArgs(trailingOnly=TRUE)[3]
 model_file <- here(glue("Models/{corpus_name}/unigram/{language_name}/{suffix}.lm"))
-
+test_file <- here(glue("Data/{corpus_name}/unigram/{language_name}/{suffix}"))
 
 read_unigram_model <- function(file) {
   read_lines(file, skip = 7) %>%
@@ -35,7 +34,7 @@ read_corpus <- function(file) {
 }
 
 model <- read_unigram_model(model_file)
-corpus <- read_corpus(test_location)
+corpus <- read_corpus(test_file)
 
 surprisals <- corpus %>%
   left_join(model, by = c("word")) %>%
@@ -43,7 +42,7 @@ surprisals <- corpus %>%
 
 outfile <- here(glue("ValSurprisals/{corpus_name}/unigram/{language_name}.csv"))
 # write_csv(surprisals, here(glue("ValSurprisals/{corpus_name}/unigram/{language_name}.csv")))
-write.table(surprisals, outfile, sep = ",",
+write.table(surprisals %>% arrange(position, surprisal, length), outfile, sep = ",",
             col.names = !file.exists(outfile),
             row.names = F,
             append = T)
