@@ -39,11 +39,12 @@ corpus <- read_corpus(test_file)
 
 surprisals <- corpus %>%
   left_join(model, by = c("word")) %>%
-  select(-word)
+  select(-word) %>%
+  filter(complete.cases(.))
 
 outfile <- here(glue("ValSurprisals/{corpus_name}/unigram/{language_name}.csv"))
 # write_csv(surprisals, here(glue("ValSurprisals/{corpus_name}/unigram/{language_name}.csv")))
-write.table(surprisals %>% arrange(position, surprisal, length), outfile, sep = ",",
+write.table(surprisals %>% select(position, surprisal, length), outfile, sep = ",",
             col.names = !file.exists(outfile),
             row.names = F,
             append = T)
