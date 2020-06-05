@@ -36,9 +36,13 @@ read_corpus <- function(file) {
 
 model <- read_unigram_model(model_file)
 corpus <- read_corpus(test_file)
+unk <- model %>% 
+  filter(word == "<unk>") %>% 
+  pull(surprisal)
 
 surprisals <- corpus %>%
   left_join(model, by = c("word")) %>%
+  mutate(surprisal = recode(surprisal, .missing = unk)) %>%
   select(-word) %>%
   filter(complete.cases(.))
 
