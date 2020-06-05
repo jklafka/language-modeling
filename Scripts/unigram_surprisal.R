@@ -13,10 +13,11 @@ model_file <- here(glue("Models/{corpus_name}/unigram/{language_name}/{suffix}.l
 test_file <- here(glue("Data/{corpus_name}/{language_name}/{suffix}"))
 
 read_unigram_model <- function(file) {
-  read_lines(file, skip = 7) %>%
+  read_lines(file, skip = 2) %>%
     enframe(name = NULL, value = "line") %>%
     slice(1:(n()-2)) %>%
-    separate(line, into = c("surprisal", "word"), sep = "\t") %>%
+    separate(line, into = c("surprisal", "word", "noise"), sep = "\t") %>%
+    select(-noise) %>%
     mutate(surprisal = -as.numeric(surprisal))
 }
 
