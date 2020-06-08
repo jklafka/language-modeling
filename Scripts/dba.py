@@ -3,7 +3,7 @@ import numpy as np
 from tslearn.barycenters import dtw_barycenter_averaging
 
 BARYCENTER_SIZE = 5
-OUTPUT_FILE = "Data/5barycenters_crossval.csv"
+OUTPUT_FILE = "Data/crossval_barycenters.csv"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("corpus", help="Type of corpus you're working with")

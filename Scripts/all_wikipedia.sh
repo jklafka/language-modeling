@@ -25,7 +25,7 @@ declare -a langs=("Basque" "Alemannic" "Wolof" "Bosnian"
 "Tulu" "Kabiye" "Maori" "Nepali" "Mongolian" "Hindi" "Danish" "Hebrew"
 "Indonesian" "Vietnamese" "Dutch" "Serbian" "Ukrainian" "Russian" "German"
 "Swedish" "Japanese" "Arabic" "Polish" "French" "Spanish"
-"English" "Chinese" "Swedish" "French" "English" "Chinese")
+"English" "Chinese")
 
 for i in "${langs[@]}"
   do
