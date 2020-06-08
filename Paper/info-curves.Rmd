@@ -70,6 +70,19 @@ set.seed(42)
 options(digits=2)
 ```
 
+```{r check for langs to do}
+crossval_langs <- read_csv(here("Data/crossval_barycenters.csv")) %>% 
+  filter(source == "wikipedia") %>% 
+  distinct(language)
+
+langs <- read_csv(here("languages.txt")) %>% 
+  distinct(language) 
+
+langs %>%
+  anti_join(crossval_langs, by = "language") %>%
+  pull(language)
+```
+
 
 ```{r load-data, include = F}
 # childes_results <- read_csv(here("Data/Paper/childes_results.csv"))
