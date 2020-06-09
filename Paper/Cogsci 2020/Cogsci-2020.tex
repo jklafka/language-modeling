@@ -52,8 +52,8 @@
 % \textwidth 16cm
 % \textheight 21cm
 
-\title{Broad consistency but cross-linguistic variation in the structure of
-information in sentences}
+\title{Broad consistency but cross-linguistic variation in the structure
+of information in sentences}
 
 
 \author{Josef Klafka \and Daniel Yurovsky \\
@@ -180,7 +180,7 @@ provide a single typical information structure.
 
 Following Yu et al. (2016), we selected the British National Corpus
 (BNC) for analysis (British National Corpus Consortium, 2007). The
-British National Corpus is \textasciitilde{}100 million word corpus
+British National Corpus is \textasciitilde100 million word corpus
 consisting of spoken (10\%) and written (90\%) English from the late
 20th Century.
 
@@ -226,13 +226,13 @@ Second, we estimated a trigram model in which the surprisal of a given
 word (\(w_i\)) encodes how unexpected it is to read it after reading the
 prior two words (\(w_{i-1}\) and \(w_{i-2}\)):
 \(\text{surprisal}(w_{i}) = -log P(w_i|w_{i-1},w_{i-2})\). This metric
-encodes the idea that words that are low frequency in isolation (e.g.
-``meatballs'') may become much less surprising in certain contexts (e.g.
-``spaghetti and meatballs'') but more surprising in others (e.g.
-``coffee with meatballs''). The difficulty of correctly estimating these
-probabilities from a corpus grows combinatorically with the number of
-prior words, and in practice trigram models perform well as an
-approximation (see e.g. Chen \& Goodman, 1999; Smith \& Levy, 2013).
+encodes the idea that words that are low frequency in isolation
+(e.g.~``meatballs'') may become much less surprising in certain contexts
+(e.g.~``spaghetti and meatballs'') but more surprising in others
+(e.g.~``coffee with meatballs''). The difficulty of correctly estimating
+these probabilities from a corpus grows combinatorically with the number
+of prior words, and in practice trigram models perform well as an
+approximation (see e.g.~Chen \& Goodman, 1999; Smith \& Levy, 2013).
 
 \hypertarget{model-details}{%
 \subsubsection{Model details}\label{model-details}}
@@ -433,7 +433,7 @@ information}\label{study-3-cross-linguistic-variation-in-information}}
 
 To measure cross-linguistic variation in the structure of information
 across sentences, we constructed a corpus of Wikipedia articles from all
-languages with at least 10,000 articles. This resulted a set of 152
+languages with at least 10,000 articles. This resulted a set of 155
 languages from 16 families. We then used two measures of lexical
 similarity to investigate cross-linguistic variation in information
 curves.
@@ -568,6 +568,7 @@ interact with them.
 \noindent
 
 \hypertarget{refs}{}
+\begin{cslreferences}
 \leavevmode\hypertarget{ref-anderson1989}{}%
 Anderson, J. R., \& Milson, R. (1989). Human memory: An adaptive
 perspective. \emph{Psychological Review}, \emph{96}(4), 703.
@@ -680,6 +681,7 @@ Planck Institute for the Science of Human History, Jena}.
 Yu, S., Cong, J., Liang, J., \& Liu, H. (2016). The distribution of
 information content in english sentences. \emph{arXiv Preprint
 arXiv:1609.07681}.
+\end{cslreferences}
 
 \bibliographystyle{apacite}
 

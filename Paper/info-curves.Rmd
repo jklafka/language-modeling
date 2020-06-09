@@ -96,7 +96,7 @@ lengths <- read_csv(here("Data/Paper/lengths.csv"))
 
 bnc <- read_csv(here("Data/length_counts.csv"))
 
-b <- read_csv(here("Data/5barycenters.csv"),
+b <- read_csv(here("Data/crossval_barycenters.csv"),
               col_names = c("1", "2", "3", "4", "5",
                             "language", "source", "gram")) %>%
   filter(source == "wikipedia")
@@ -109,9 +109,9 @@ tidy_b <- b %>%
             gram = factor(gram, levels = c("unigram", "trigram")))
 
 
-non_wiki_b <- read_csv(here("Data/5barycenters.csv"),
-              col_names = c("1", "2", "3", "4", "5",
-                            "language", "source", "gram")) %>%
+non_wiki_b <- read_csv(here("Data/crossval_barycenters.csv")) %>%
+              # col_names = c("1", "2", "3", "4", "5",
+              #               "language", "source", "gram")) %>%
   filter(source != "wikipedia")
 
 tidy_non_wiki_b <- non_wiki_b %>%
@@ -542,8 +542,8 @@ n_langs <- tidy_b %>%
 families <- read_csv(here("Data/Paper/families.csv"))
 
 scaled_b <- tidy_b %>%
-    group_by(language, gram) %>%
-    mutate(surprisal = scale(surprisal, scale = FALSE))
+    group_by(language, gram) #%>%
+    #mutate(surprisal = scale(surprisal, scale = FALSE))
 
 families_b <- scaled_b %>%
     left_join(families, by = c("language")) 
@@ -575,9 +575,10 @@ We used Multiple Imputation Multiple Correspondence Analysis to fill in the miss
 ## Data processing
 ```{r diff-languages, fig.height=3, fig.width = 3.5, fig.pos = "tb", fig.cap="Characteristic information curves (centered) for a sample of languages from Wikipedia"}
 families_b %>%
-    filter(language %in% c("Afrikaans", "Czech", 
-                           "Japanese", "Tamil", "Kannada",
-                           "Hebrew", "Somali", "Maltese")) %>%
+    filter(language %in% c("English", "Japanese", "Aymara", "Armenian", "Serbian",
+                           "German", "Chinese", "Spanish",
+                           "Hebrew", "Swedish", "Alemannic",
+                           "Asturian", "Scots")) %>%
     ggplot(aes(x = position, y = surprisal, color = language, label = language,
                group = interaction(language, family))) +
     facet_grid(gram ~ family, scales = "free_y") +
