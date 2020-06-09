@@ -39,7 +39,7 @@ def ngrams(sentence, n):
         return list(zip(joined_grams, range(len(joined_grams)), utt_length))
 
 # take data and turn it into ngrams
-corpus = [utterance.encode("utf-8").strip('["\n]') for utterance in open(args.test_location, 'r').readlines()]
+corpus = [utterance.decode("utf-8").strip('["\n]') for utterance in open(args.test_location, 'rb').readlines()]
 
 corpus = [utterance for utterance in corpus if utterance.strip() != ""]
 
