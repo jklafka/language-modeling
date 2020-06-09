@@ -6,21 +6,21 @@ declare -a alphabet=( 'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'i' 'j' 'k' 'l' 'm' 'n'
                       'o' 'p' 'q' 'r' 's' 't' 'u' 'v' 'w' 'x' 'y' 'z' )
 
 ## tokenize corpus
-cat Data/$1/$2.txt | python3 Scripts/process_corpus.py > Data/$1/${2}_processed.txt
+# cat Data/$1/$2.txt | python3 Scripts/process_corpus.py > Data/$1/${2}_processed.txt
 
 # ## split file into K pieces
-# numerator=`wc -l Data/$1/${2}_processed.txt | grep -oE "\d+"`
-# let split_length=" $numerator / $K "
+numerator=`wc -l Data/$1/${2}_processed.txt | grep -oE "\d+"`
+let split_length="(($numerator / $K))"
 
 shuf -o Data/$1/${2}_shuffled.txt Data/$1/${2}_processed.txt
-rm Data/$1/${2}_processed.txt
-
-if [ ! -d "Data/$1/$2/" ]
-then
-  mkdir Data/$1/$2/
-fi
-split -n 10 -a 1 Data/$1/${2}_shuffled.txt Data/$1/$2/
-# split -l split_length -a 1 Data/$1/${2}_shuffled.txt Data/$1/$2/
+# rm Data/$1/${2}_processed.txt
+#
+# if [ ! -d "Data/$1/$2/" ]
+# then
+#   mkdir Data/$1/$2/
+# fi
+# # split -n 10 -a 1 Data/$1/${2}_shuffled.txt Data/$1/$2/
+split -l split_length -a 1 Data/$1/${2}_shuffled.txt Data/$1/$2/
 
 
 mkdir -p Models/$1/unigram/$2/
