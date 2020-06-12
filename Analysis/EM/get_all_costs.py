@@ -12,11 +12,11 @@ assert args.gram in ["unigram", "trigram"], "Only accepts 'unigram' or 'trigram'
 
 ## read in surprisals data
 X = []
-with open("../../Surprisals/" + args.corpus + '/' + args.gram + '/' + \
+with open("../../ValSurprisals/" + args.corpus + '/' + args.gram + '/' + \
             args.language + "_compressed.csv", 'r') as f:
      reader = csv.reader(f)
      for row in reader:
-         X.append(row)
+         X.append(row[1:])
 
 # get barycenter for each size hyperparameter value as list
 for BARYCENTER_SIZE in range(1, 15):
