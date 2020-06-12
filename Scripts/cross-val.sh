@@ -25,7 +25,7 @@ fi
 
 mkdir -p Models/$1/unigram/$2/
 mkdir Models/$1/trigram/$2/
-echo "position,surprisal,length" > ValSurprisals/$1/trigram/${2}.csv
+# echo "position,surprisal,length" > ValSurprisals/$1/trigram/${2}.csv
 echo "position,surprisal,length" > ValSurprisals/$1/unigram/${2}.csv
 
 ## iterate over pieces: train and test unigram and trigram model on all but held-out piece
@@ -44,7 +44,7 @@ done
 
 Rscript Scripts/compress_surprisals.R $1 $2 unigram
 python3 Scripts/dba.py $1 $2 unigram
-Rscript Scripts/compress_surprisals.R $1 $2 trigram
-python3 Scripts/dba.py $1 $2 trigram
+# Rscript Scripts/compress_surprisals.R $1 $2 trigram
+# python3 Scripts/dba.py $1 $2 trigram
 
 rm Data/$1/${2}_shuffled.txt

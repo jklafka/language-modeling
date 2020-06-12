@@ -575,16 +575,14 @@ We used Multiple Imputation Multiple Correspondence Analysis to fill in the miss
 ## Data processing
 ```{r diff-languages, fig.height=3, fig.width = 3.5, fig.pos = "tb", fig.cap="Characteristic information curves (centered) for a sample of languages from Wikipedia"}
 families_b %>%
-    filter(language %in% c("English", "Japanese", "Aymara", "Armenian", "Serbian",
-                           "German", "Chinese", "Spanish",
-                           "Hebrew", "Swedish", "Alemannic",
-                           "Asturian", "Scots")) %>%
+    filter(gram == "trigram") %>%
+    distinct(language, position, .keep_all = T) %>%
     ggplot(aes(x = position, y = surprisal, color = language, label = language,
                group = interaction(language, family))) +
     facet_grid(gram ~ family, scales = "free_y") +
     geom_point() + 
     geom_line() +
-    scale_color_ptol() + 
+    # scale_color_ptol() + 
     geom_dl(method = list(dl.trans(x = x + 1.25), "first.points", cex = .6)) + 
     theme_few(base_size = 9) +
     labs(x = "Barycenter coordinate", y = "Mean information") +

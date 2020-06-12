@@ -7,20 +7,12 @@
 
 ## build the unigram model
 cat $3 | ~/kenlm/build/bin/lmplz -o 1 -S 10% > Models/$1/unigram/${2}/${5}.arpa
-
-## build the trigram model
-cat $3 | ~/kenlm/build/bin/lmplz -o 3 -S 10% > Models/$1/trigram/${2}/${5}.arpa
-# convert trigram model to binary for faster reading and lower storage
-~/kenlm/build/bin/build_binary Models/$1/trigram/${2}/${5}.arpa Models/$1/trigram/${2}/${5}.klm
-
-# ## extract unigram data from trigram model
-# echo '\data\' > Models/$1/unigram/${2}/${5}.lm
-# # get number of unigrams
-# grep "ngram 1=\d+" Models/$1/trigram/${2}/${5}.arpa >> Models/$1/unigram/${2}/${5}.lm
-# # get all unigrams
-# sed -n "/^[\]1-grams:/,/^$/p" Models/$1/trigram/${2}/${5}.arpa >> Models/$1/unigram/${2}/${5}.lm
-# rm Models/$1/trigram/${2}/${5}.arpa
+#
+# ## build the trigram model
+# cat $3 | ~/kenlm/build/bin/lmplz -o 3 -S 10% > Models/$1/trigram/${2}/${5}.arpa
+# # convert trigram model to binary for faster reading and lower storage
+# ~/kenlm/build/bin/build_binary Models/$1/trigram/${2}/${5}.arpa Models/$1/trigram/${2}/${5}.klm
 
 # get surprisals and barycenter
 Rscript Scripts/unigram_surprisal.R $1 $2 $5
-python3 Scripts/surprisal_ngrams.py $1 $2 $4 $5
+# python3 Scripts/surprisal_ngrams.py $1 $2 $4 $5
