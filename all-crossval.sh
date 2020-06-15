@@ -28,12 +28,12 @@ declare -a big_languages=("Basque" "Bosnian" "Afrikaans" "Anglo-Saxon" "Slovak"
 ## for each language
 ## submit a job to run cross-val for that language on a compute node with enough memory
 
-for language in "${small_languages[@]}"
-do
-  sbatch one-crossval.sh wikipedia $language
-done
+# for language in "${small_languages[@]}"
+# do
+#   sbatch one-crossval.sh wikipedia $language
+# done
 
 for language in "${big_languages[@]}"
 do
-  sbatch one-crossval.sh wikipedia $language
+  sbatch big-crossval.sh wikipedia $language
 done
