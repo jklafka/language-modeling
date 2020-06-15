@@ -35,5 +35,5 @@ declare -a big_languages=("Basque" "Bosnian" "Afrikaans" "Anglo-Saxon" "Slovak"
 
 for language in "${big_languages[@]}"
 do
-  sbatch big-crossval.sh wikipedia $language
+  sbatch one-crossval.sh wikipedia $language
 done
