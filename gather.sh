@@ -5,6 +5,7 @@ readarray langs < languages.txt
 for lang in "${langs[@]}"
 do
   ## do we have a unigram and trigram model folder?
+  echo $lang
   [ -d "Models/wikipedia/unigram/$lang/" ] && (echo "$lang unigram" >> to_model.txt)
   [ -d "Models/wikipedia/trigram/$lang/" ] && (echo "$lang trigram" >> to_model.txt)
 
