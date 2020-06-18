@@ -1,0 +1,42 @@
+---
+title: "make families file"
+output: html_document
+---
+
+```{r load-libraries}
+library(tidyverse)
+library(here)
+```
+
+```{r}
+languages <- read_csv(here("languages.txt"))
+
+families <- read_csv(here("Data/wiki/wals_dataset/language.csv")) %>%
+  select(iso_code, family) %>%
+  filter(!is.na(iso_code)) %>%
+  distinct(family, iso_code)
+
+codes <- read_csv(here("Data/wiki/codes.csv"))
+
+all_families <- languages %>%
+  left_join(codes, by = "language") %>%
+  left_join(families, by = c("iso" = "iso_code")) %>%
+  select(-wiki, -iso)
+```
+
+```{r fix-missing, eval = FALSE}
+missing_families <- all_families %>%
+  filter(is.na(family))
+
+write_csv(missing_families, here("Data/wiki/missing_families.csv"))
+```
+
+```{r fixed-families}
+fixed_families <- read_csv(here("Data/wiki/manual_families.csv")) %>% 
+  bind_rows(filter(all_families, !is.na(family)))
+
+fixed_families %>%
+  group_by(family) %>%
+  count() %>%
+  arrange(desc(n))
+```

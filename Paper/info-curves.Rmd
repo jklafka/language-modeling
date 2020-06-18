@@ -582,11 +582,20 @@ extra_trigrams <- tidy_b %>%
   filter(n > 1) %>%
   pull(language)
 
-unigrams <- no_unigrams <- tidy_b %>%
+no_trigrams <- tidy_b %>%
+  select(language, gram) %>%
+  distinct() %>%
+  anti_join(langs, ., by = "language")
+
+unigrams <- tidy_b %>%
   filter(position == 1, gram == "unigram") %>%
   pull(language)
 
-no_unigrams <- tidy_b %>%
+no_unigrams <- langs %>%
+  filter(!language %in% unigrams) %>%
+  pull(language)
+
+no_trigrams <- tidy_b %>%
   distinct(language) %>%
   filter(!language %in% unigrams) %>%
   pull(language)
@@ -599,9 +608,33 @@ no_unigrams <- tidy_b %>%
   select(language)
 ```
 
+Non-uniformity across languages
+```{r non-uniform}
+lang_surprisals <- families_b %>%
+  filter(source == "wikipedia") %>%
+  distinct(language, position, gram, .keep_all = TRUE) %>%
+  group_by(gram, language) %>%
+  mutate(surprisal = scale(surprisal, scale = FALSE)) 
+
+gram_deviations <- lang_surprisals %>%
+  summarise(deviations = sum(abs(surprisal))) %>%
+  tidyboot_mean(deviations) 
+
+gram_similarities <- lang_surprisals %>%
+  group_by(gram, position) %>%
+  summarise(surprisal = sd(surprisal)) %>%
+  summarise(surprisal = mean(surprisal))
+
+  summarise(deviations = sum(abs(surprisal))) %>%
+  tidyboot_mean(deviations) 
+
+
+```
+
+
 ```{r diff-languages, fig.height=3, fig.width = 3.5, fig.pos = "tb", fig.cap="Characteristic information curves (centered) for a sample of languages from Wikipedia"}
 families_b %>%
-  mutate(family = if_else(is.na(family, "other", family))) %>%
+  mutate(family = if_else(is.na(family), "other", family)) %>%
     filter(language %in% c("Russian", "Vietnamese", "Arabic", "Malay", "Slovenian", 
                            "Korean", "Croatian", "Bulgarian", "Finnish",
                            "Persian", "Bosnian", "Thai", "Sardinian",
