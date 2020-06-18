@@ -23,7 +23,9 @@ declare -a languages=("Alemannic" "Wolof" "Urdu" "Silesian" "Acehnese"
 "Asturian" "Emilian" "Romagnol" "Extremaduran" "Franco" "Provençal"
 "Czech" "Slovenian" "Võro" "Esperanto" "Lithuanian" "Latvian"
 "Samogitian" "Chavacano" "Danish" "Indonesian" "Vietnamese" "Dutch"
-"Ukrainian" "Russian" "German" "Arabic" "Polish" "French" "Spanish")
+"Ukrainian" "Russian" "German" "Arabic" "Polish" "French" "Spanish"
+"English" "Chinese" "Japanese" "French" "Swedish" "Hebrew" "Serbian"
+"Hindi" "Chavacano" "Marathi" "Extremaduran" "Karachay-Balkar" "Samogitian")
 
 for language in "${languages[@]}"
 do
