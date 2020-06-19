@@ -25,10 +25,10 @@ declare -a big_languages=("Basque" "Bosnian" "Afrikaans" "Anglo-Saxon" "Slovak"
 "Czech" "Slovenian" "Võro" "Esperanto" "Lithuanian" "Latvian"
 "Samogitian" "Chavacano" "Danish" "Indonesian" "Vietnamese" "Dutch"
 "Ukrainian" "Russian" "German" "Arabic" "Polish" "French" "Spanish"
-"Cantonese" "Aromanian" "Tarantino")
+"Cantonese" "Aromanian" "Tarantino" "Gothic" "Piedmontese"
+"Kashubian" "Cebuano" "Banyumasan" "Buginese" 
 
-declare -a new_languages=("Gothic" "Piedmontese"
-"Kashubian" "Cebuano" "Banyumasan" "Buginese" "Banjar" "Chamorro" "Minangkabau"
+declare -a new_languages=("Banjar" "Chamorro" "Minangkabau"
 "Gan" "Azerbaijani" "Karakalpak" "Tuvan" "Aramaic" "Tigrinya"
 "Komi-Permyak" "Udmurt" "Moksha" "Kashmiri" "Doteli" "Pali" "Romani"
 "Interlingua" "Interlingue" "Lojban" "Novial" "Volapuk" "Latgalian"
