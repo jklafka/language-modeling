@@ -26,7 +26,7 @@ declare -a big_languages=("Basque" "Bosnian" "Afrikaans" "Anglo-Saxon" "Slovak"
 "Samogitian" "Chavacano" "Danish" "Indonesian" "Vietnamese" "Dutch"
 "Ukrainian" "Russian" "German" "Arabic" "Polish" "French" "Spanish"
 "Cantonese" "Aromanian" "Tarantino" "Gothic" "Piedmontese"
-"Kashubian" "Cebuano" "Banyumasan" "Buginese" 
+"Kashubian" "Cebuano" "Banyumasan" "Buginese")
 
 declare -a new_languages=("Banjar" "Chamorro" "Minangkabau"
 "Gan" "Azerbaijani" "Karakalpak" "Tuvan" "Aramaic" "Tigrinya"
