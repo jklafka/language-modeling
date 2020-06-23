@@ -144,7 +144,7 @@ Tswana,Niger-Congo,Bantoid
 Yoruba,Niger-Congo,Defoid
 Kabiye,Niger-Congo,Gur
 Wolof,Niger-Congo,Northern Atlantic
-Swahili,Niger–Congo,Bantoid
+Swahili,Niger-Congo,Bantoid
 Chavacano,other,Creoles and Pidgins
 Papiamentu,other,Creoles and Pidgins
 Quechua,Quechuan,Quechuan
@@ -164,3 +164,104 @@ Erzya,Uralic,Mordvin
 Komi,Uralic,Permic
 Hungarian,Uralic,Ugric
 Nahuatl,Uto-Aztecan,Aztecan
+Somali,Afro-Asiatic,Cushitic
+Aymara,Aymaran,Aymara
+Guarani,Tupian,Tupi-Guarani
+Kabyle,Afro-Asiatic,Berber
+Tetum,Astronesian,Malayo-Polynesian
+Tulu,Dravidian,Southern Dravidian
+Kabiye,Niger-Congo,Atlantic-Congo
+Maori,Austronesian,Malayo-Polynesian
+Nepali,Indo-European,Indic
+Piedmontese,Indo-European,Romance
+Aromanian,Indo-European,Romance
+Tarantino,Indo-European,Romance
+Kashubian,Indo-European,Slavic
+Cebuano,Austronesian,Malayo-Polynesian
+Banyumasan,Austronesian,Malayo-Polynesian
+Buginese,Austronesian,Malayo-Polynesian
+Banjar,Austronesian,Malayo-Polynesian
+Chamorro,Austronesian,Malayo-Polynesian
+Minangkabau,Austronesian,Malayo-Polynesian
+Gan,Sino-Tibetan,Sinitic
+Cantonese,Sino-Tibetan,Sinitic
+Azerbaijani,Turkic,Oghuz
+Karakalpak,Turkic,Kipchak
+Tuvan,Turkic,Siberian Turkic
+Aramaic,Afro-Asiatic,Semitic
+Tigrinya,Afro-Asiatic,Semitic
+Komi-Permyak,Uralic,Permic
+Udmurt,Uralic,Permic
+Moksha,Uralic,Mordvinic
+Kashmiri,Indo-European,Indic
+Doteli,Indo-European,Indic
+Pali,Indo-European,Indic
+Romani,Indo-European,Indic
+Interlingua,Constructed,Constructed
+Interlingue,Constructed,Constructed
+Lojban,Constructed,Constructed
+Novial,Constructed,Constructed
+Volapuk,Constructed,Constructed
+Latgalian,Indo-European,Baltic
+Cornish,Indo-European,Celtic
+Dzongkha,Sino-Tibetan,Bodish
+Newar,Sino-Tibetan,Newaric
+Pontic,Indo-European,Greek
+Zhuang,Kra-Dai,Tai
+Avar,Caucasian,Avar
+Chechen,Caucasian,Nakh
+Lak,Caucasian,Lak
+Kongo,Niger-Congo,Bantoid
+Kikuyu,Niger-Congo,Bantoid
+Lingala,Niger-Congo,Bantoid
+Chichewa,Niger-Congo,Bantoid
+Kirundi,Niger-Congo,Bantoid
+Kinyarwanda,Niger-Congo,Bantoid
+Shona,Niger-Congo,Bantoid
+Swati,Niger-Congo,Bantoid
+Sesotho,Niger-Congo,Bantoid
+Tumbuka,Niger-Congo,Bantoid
+Venda,Niger-Congo,Bantoid
+Xhosa,Niger-Congo,Bantoid
+Zulu,Niger-Congo,Bantoid
+Kalmyk,Mongolic,Oirat
+Hawaiian,Austronesian,Malayo-Polynesian
+Tahitian,Austronesian,Malayo-Polynesian
+Oromo,Afro-Asiatic,Cushitic
+Bislama,English Creole,Pacific
+Norfolk,English Creole,Pitkern
+Sranan,English Creole,Atlantic
+Navajo,Na-Dene,Athabaskan
+Abkhazian,Caucasian,Abazgi
+Kabardian,Caucasian,Circassian
+Inupiak,Eskimo-Aleut,Inuit
+Inuktitut,Eskimo-Aleut,Inuit
+Greenlandic,Eskimo-Aleut,Inuit
+Nauruan,Austronesian,Malayo-Polynesian
+Fula,Niger-Congo,Senegambian
+Akan,Niger-Congo,Kwa
+Ewe,Niger-Congo,Gbe
+Twi,Niger-Congo,Kwa
+Igbo,Niger-Congo,Igboid
+Cheyenne,Algic,Algonquian
+Cree,Algic,Algonquian
+Cherokee,Iroquoian,Southern Iroquoian
+Bambara,Niger-Congo,Mande
+Fijian,Austronesian,Malayo-Polynesian
+Sango,Niger-Congo,Ubangian
+Afar,Afro-Asiatic,Cushitic
+Herero,Niger-Congo,Bantoid
+Kanuri,Nilo-Saharan,Saharan
+Muscogee,Muskogean,Eastern Muskogean
+Ndonga,Niger-Congo,Ovambo
+Kuanyama,Niger-Congo,Ovambo
+Adyghe,Caucasian,Circassian
+Choctaw,Muskogean,Western Muskogean
+Marshallese,Austronesian,Malayo-Polynesian
+Nuosu,Sino-Tibetan,Nisoish
+Livvi-Karelian,Uralic,Finnic
+Dinka,Nilo-Saharan,Nilotic
+Atikamekw,Algic,Algonquian
+Ingush,Caucasian,Nakh
+Gorontalo,Austronesian,Malayo-Polynesian
+Santali,Austro-Asiatic,Munda
