@@ -56,7 +56,7 @@ library(broom.mixed)
 library(ggdendro)
 library(gridExtra)
 library(ggpmisc)
-
+library(dtw)
 library(tidyverse)
 
 
@@ -96,17 +96,21 @@ lengths <- read_csv(here("Data/Paper/lengths.csv"))
 
 bnc <- read_csv(here("Data/length_counts.csv"))
 
-b <- read_csv(here("Data/crossval_barycenters.csv"),
-              col_names = c("1", "2", "3", "4", "5",
-                            "language", "source", "gram")) %>%
-  filter(source == "wikipedia")
+b <- read_csv(here("Data/bootstrapped_crossval_barycenters.csv"))
+              # col_names = c("1", "2", "3", "4", "5",
+              #               "language", "source", "gram")) %>%
+  #filter(source == "wikipedia")
   
 
 tidy_b <- b %>%
-     pivot_longer(-c(language, source, gram), 
+     pivot_longer(-c(language, source, gram, strap), 
                   names_to = "position", values_to = "surprisal") %>%
      mutate(position = as.numeric(position),
-            gram = factor(gram, levels = c("unigram", "trigram")))
+            gram = factor(gram, levels = c("unigram", "trigram"))) %>%
+  group_by(source, language, gram, position) %>%
+  summarise(ci_upper = quantile(surprisal, .95),
+            ci_lower = quantile(surprisal, .05),
+            surprisal = mean(surprisal))
 
 
 non_wiki_b <- read_csv(here("Data/crossval_barycenters.csv")) %>%
@@ -541,6 +545,11 @@ n_langs <- tidy_b %>%
 
 families <- read_csv(here("Data/Paper/families.csv"))
 
+families %>%
+  group_by(family, genus, language) %>%
+  distinct() %>%
+  write_csv(here("Data/Paper/families.csv"))
+
 scaled_b <- tidy_b %>%
     group_by(language, gram) #%>%
     #mutate(surprisal = scale(surprisal, scale = FALSE))
@@ -550,11 +559,10 @@ families_b <- scaled_b %>%
 
 n_fams <- families_b %>%
     ungroup() %>%
-    distinct(family) %>%
+    distinct(family, genus) %>%
+    group_by(family, genus) %>%
     filter(!is.na(family), family != "other") %>%
-    count() %>%
-    pull()
-
+    count() 
 # families_b %>% 
 #   pivot_wider(names_from = "position", values_from = "surprisal") %>% 
 #   ungroup() %>% 
@@ -611,45 +619,79 @@ no_trigrams <- tidy_b %>%
 Non-uniformity across languages
 ```{r non-uniform}
 lang_surprisals <- families_b %>%
-  filter(source == "wikipedia") %>%
+  filter(source == "wikipedia", position) %>%
   distinct(language, position, gram, .keep_all = TRUE) %>%
   group_by(gram, language) %>%
   mutate(surprisal = scale(surprisal, scale = FALSE)) 
 
 gram_deviations <- lang_surprisals %>%
   summarise(deviations = sum(abs(surprisal))) %>%
-  tidyboot_mean(deviations) 
+  tidyboot_mean(deviations, nboot = 109) 
 
 gram_similarities <- lang_surprisals %>%
   group_by(gram, position) %>%
   summarise(surprisal = sd(surprisal)) %>%
   summarise(surprisal = mean(surprisal))
 
-  summarise(deviations = sum(abs(surprisal))) %>%
-  tidyboot_mean(deviations) 
 
+```
+
+F-statistic approximation
+```{r}
+families_b <- families_b %>%
+  filter(!is.na(family)) %>%
+  group_by(gram, family, genus, language) %>%
+  mutate(surprisal = scale(surprisal, scale = FALSE)) %>%
+  ungroup()
+
+family_means <- families_b %>%
+  group_by(gram, position, genus) %>%
+  summarise(family_surprisal = mean(surprisal), family_n = n())
+
+overall_mean <- families_b %>%
+  group_by(gram, position) %>%
+  summarise(overall_surprisal = mean(surprisal))
+
+SSG <- family_means %>%
+  left_join(overall_mean, by = c("gram", "position")) %>%
+  mutate(dist = family_n * (family_surprisal - overall_surprisal)^2) %>%
+  summarise(dist = sum(dist)) %>%
+  summarise(group = sum(dist))
+
+SST <- families_b %>%
+  left_join(overall_mean, by = c("gram", "position")) %>%
+  mutate(dist = (surprisal - overall_surprisal)^2) %>%
+  group_by(gram, position) %>%
+  summarise(dist = sum(dist)) %>%
+  summarise(total = sum(dist))
+
+SSE <- left_join(SSG, SST, by = c("gram")) %>%
+  mutate(e = total - group) %>%
+  mutate(df_g = unique(family_means$genus) %>% length - 1,
+         df_e = unique(families_b$language) %>% length() - df_g - 1,
+         msg = group/df_g,
+         mse = e/df_e,
+         f = msg/mse)
+
+pf(1.72, 23, 134)
 
 ```
 
 
+
 ```{r diff-languages, fig.height=3, fig.width = 3.5, fig.pos = "tb", fig.cap="Characteristic information curves (centered) for a sample of languages from Wikipedia"}
 families_b %>%
-  mutate(family = if_else(is.na(family), "other", family)) %>%
-    filter(language %in% c("Russian", "Vietnamese", "Arabic", "Malay", "Slovenian", 
-                           "Korean", "Croatian", "Bulgarian", "Finnish",
-                           "Persian", "Bosnian", "Thai", "Sardinian",
-                           "Sicilian", "Greek", "Javanese", "Urdu", "Icelandic",
-                           "Tatar")) %>%
-    distinct(language, position, .keep_all = T) %>%
+    distinct(language, gram, position, .keep_all = T) %>%
+    filter(family == "Niger-Congo") %>%
     ggplot(aes(x = position, y = surprisal, color = language, label = language,
                group = interaction(language, family))) +
-    facet_grid(gram ~ family, scales = "free_y") +
+    facet_grid(gram ~ genus, scales = "free_y") +
     geom_point() + 
     geom_line() +
     # scale_color_ptol() + 
     geom_dl(method = list(dl.trans(x = x + 1.25), "first.points", cex = .6)) + 
     theme_few(base_size = 9) +
-    labs(x = "Barycenter coordinate", y = "Mean information") +
+    labs(x = "Barycenter coordinate", y = "Mean information") +#+
     theme(legend.position = "none", aspect.ratio = 1.33)
 ```
 

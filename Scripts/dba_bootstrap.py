@@ -3,7 +3,7 @@ import numpy as np
 from tslearn.barycenters import dtw_barycenter_averaging
 
 BARYCENTER_SIZE = 5
-OUTPUT_FILE = "Data/crossval_barycenters.csv"
+OUTPUT_FILE = "Data/bootstrapped_crossval_barycenters.csv"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("corpus", help="Type of corpus you're working with")
@@ -14,7 +14,7 @@ args = parser.parse_args()
 assert args.gram in ["unigram", "trigram"], "Only accepts 'unigram' or 'trigram'"
 
 all_barycenters = []
-for i in range(1000):
+for i in range(1,1000):
     # read in surprisals data
     X = []
     weights = []

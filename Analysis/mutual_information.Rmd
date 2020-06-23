@@ -15,6 +15,7 @@ library(ggthemes)
 library(lmerTest)
 library(broom)
 library(broom.mixed)
+library(mpmi)
 
 knitr::opts_chunk$set(echo = TRUE)
 
@@ -22,7 +23,7 @@ theme_set(theme_few() + theme(legend.position = "none"))
 ```
 
 ```{r read-data, message = FALSE}
-data <- read_csv(here("Data/5barycenters.csv")) %>%
+data <- read_csv(here("Data/crossval_barycenters.csv")) %>%
   filter(source == "wikipedia") %>%
   left_join(read_csv(here("Data/final_features.csv")), by = "language") %>%
   clean_names()
@@ -238,7 +239,7 @@ booted_Is <- type_Is %>%
   group_by(gram, type, position) %>%
   tidyboot_mean(mi)
 
-ggplot(booted_Is, aes(x = position, y = empirical_mean, color = type)) + 
+ggplot(booted_Is, aes(x = position, y = empirical_stat, color = type)) + 
   facet_grid(gram~type) + 
   geom_line() +
   geom_pointrange(aes(ymin = ci_lower, ymax = ci_upper), 
