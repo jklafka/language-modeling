@@ -1,0 +1,1102 @@
+family NA unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.255
+[DBA] epoch 2, cost: 0.254
+[DBA] epoch 3, cost: 0.254
+family NA trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.346
+[DBA] epoch 2, cost: 0.243
+[DBA] epoch 3, cost: 0.242
+[DBA] epoch 4, cost: 0.242
+family Nilo-Saharan unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Nilo-Saharan trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Uto-Aztecan unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Uto-Aztecan trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Astronesian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Astronesian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Iroquoian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Iroquoian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Constructed unigram
+Attempt 1
+[DBA] epoch 1, cost: 1.356
+[DBA] epoch 2, cost: 1.267
+[DBA] epoch 3, cost: 1.267
+family Constructed trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.974
+[DBA] epoch 2, cost: 1.954
+[DBA] epoch 3, cost: 1.954
+family Tai-Kadai unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.234
+[DBA] epoch 2, cost: 0.166
+[DBA] epoch 3, cost: 0.166
+family Tai-Kadai trigram
+family Basque unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Basque trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Dravidian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.658
+[DBA] epoch 2, cost: 0.655
+[DBA] epoch 3, cost: 0.655
+family Dravidian trigram
+Attempt 1
+[DBA] epoch 1, cost: 4.129
+[DBA] epoch 2, cost: 3.021
+[DBA] epoch 3, cost: 3.021
+family Japanese unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Japanese trigram
+family Indo-European unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.845
+[DBA] epoch 2, cost: 0.819
+[DBA] epoch 3, cost: 0.813
+[DBA] epoch 4, cost: 0.811
+[DBA] epoch 5, cost: 0.810
+[DBA] epoch 6, cost: 0.810
+[DBA] epoch 7, cost: 0.810
+family Indo-European trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.446
+[DBA] epoch 2, cost: 1.379
+[DBA] epoch 3, cost: 1.375
+[DBA] epoch 4, cost: 1.373
+[DBA] epoch 5, cost: 1.373
+[DBA] epoch 6, cost: 1.372
+[DBA] epoch 7, cost: 1.372
+[DBA] epoch 8, cost: 1.371
+[DBA] epoch 9, cost: 1.365
+[DBA] epoch 10, cost: 1.361
+[DBA] epoch 11, cost: 1.352
+[DBA] epoch 12, cost: 1.347
+[DBA] epoch 13, cost: 1.346
+[DBA] epoch 14, cost: 1.345
+[DBA] epoch 15, cost: 1.345
+family Korean unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Korean trigram
+family English Creole unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.289
+[DBA] epoch 2, cost: 0.236
+[DBA] epoch 3, cost: 0.236
+family English Creole trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.651
+[DBA] epoch 2, cost: 0.437
+[DBA] epoch 3, cost: 0.437
+family Algic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.672
+[DBA] epoch 2, cost: 0.671
+[DBA] epoch 3, cost: 0.671
+family Algic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.568
+[DBA] epoch 2, cost: 0.568
+family Kra-Dai unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Kra-Dai trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Turkic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.296
+[DBA] epoch 2, cost: 0.260
+[DBA] epoch 3, cost: 0.260
+family Turkic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.703
+[DBA] epoch 2, cost: 0.672
+[DBA] epoch 3, cost: 0.668
+[DBA] epoch 4, cost: 0.668
+family Aymaran unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Aymaran trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Caucasian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.622
+[DBA] epoch 2, cost: 0.568
+[DBA] epoch 3, cost: 0.567
+[DBA] epoch 4, cost: 0.567
+family Caucasian trigram
+Attempt 1
+[DBA] epoch 1, cost: 2.906
+[DBA] epoch 2, cost: 2.391
+[DBA] epoch 3, cost: 2.386
+[DBA] epoch 4, cost: 2.386
+family Austro-Asiatic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.829
+[DBA] epoch 2, cost: 0.698
+[DBA] epoch 3, cost: 0.695
+[DBA] epoch 4, cost: 0.695
+family Austro-Asiatic trigram
+Attempt 1
+[DBA] epoch 1, cost: 2.139
+[DBA] epoch 2, cost: 2.038
+[DBA] epoch 3, cost: 2.038
+family Nakh-Daghestanian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Nakh-Daghestanian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Niger-Congo unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.704
+[DBA] epoch 2, cost: 0.647
+[DBA] epoch 3, cost: 0.645
+[DBA] epoch 4, cost: 0.644
+[DBA] epoch 5, cost: 0.644
+[DBA] epoch 6, cost: 0.644
+[DBA] epoch 7, cost: 0.644
+[DBA] epoch 8, cost: 0.644
+family Niger-Congo trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.079
+[DBA] epoch 2, cost: 1.044
+[DBA] epoch 3, cost: 1.041
+[DBA] epoch 4, cost: 1.023
+[DBA] epoch 5, cost: 1.012
+[DBA] epoch 6, cost: 1.011
+[DBA] epoch 7, cost: 1.010
+[DBA] epoch 8, cost: 1.010
+family Mongolic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.577
+[DBA] epoch 2, cost: 0.556
+[DBA] epoch 3, cost: 0.556
+family Mongolic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.251
+[DBA] epoch 2, cost: 0.214
+[DBA] epoch 3, cost: 0.214
+family Sino-Tibetan unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.938
+[DBA] epoch 2, cost: 0.884
+[DBA] epoch 3, cost: 0.884
+family Sino-Tibetan trigram
+Attempt 1
+[DBA] epoch 1, cost: 3.153
+[DBA] epoch 2, cost: 2.534
+[DBA] epoch 3, cost: 2.444
+[DBA] epoch 4, cost: 2.431
+[DBA] epoch 5, cost: 2.431
+family Tupian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Tupian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Altaic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.337
+[DBA] epoch 2, cost: 0.302
+[DBA] epoch 3, cost: 0.299
+[DBA] epoch 4, cost: 0.299
+family Altaic trigram
+Attempt 1
+[DBA] epoch 1, cost: 2.370
+[DBA] epoch 2, cost: 2.269
+[DBA] epoch 3, cost: 2.265
+[DBA] epoch 4, cost: 2.265
+family Afro-Asiatic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.499
+[DBA] epoch 2, cost: 0.479
+[DBA] epoch 3, cost: 0.472
+[DBA] epoch 4, cost: 0.471
+[DBA] epoch 5, cost: 0.471
+family Afro-Asiatic trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.682
+[DBA] epoch 2, cost: 1.620
+[DBA] epoch 3, cost: 1.485
+[DBA] epoch 4, cost: 1.480
+[DBA] epoch 5, cost: 1.480
+family Eskimo-Aleut unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.288
+[DBA] epoch 2, cost: 0.262
+[DBA] epoch 3, cost: 0.262
+family Eskimo-Aleut trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.596
+[DBA] epoch 2, cost: 0.460
+[DBA] epoch 3, cost: 0.460
+family Kartvelian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.073
+[DBA] epoch 2, cost: 0.066
+[DBA] epoch 3, cost: 0.064
+[DBA] epoch 4, cost: 0.064
+family Kartvelian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.534
+[DBA] epoch 2, cost: 0.520
+[DBA] epoch 3, cost: 0.520
+family Uralic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.882
+[DBA] epoch 2, cost: 0.833
+[DBA] epoch 3, cost: 0.828
+[DBA] epoch 4, cost: 0.828
+family Uralic trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.177
+[DBA] epoch 2, cost: 1.037
+[DBA] epoch 3, cost: 0.982
+[DBA] epoch 4, cost: 0.982
+[DBA] epoch 5, cost: 0.982
+family Quechuan unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Quechuan trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Na-Dene unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Na-Dene trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family other unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family other trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+family Austronesian unigram
+Attempt 1
+[DBA] epoch 1, cost: 1.458
+[DBA] epoch 2, cost: 1.392
+[DBA] epoch 3, cost: 1.365
+[DBA] epoch 4, cost: 1.357
+[DBA] epoch 5, cost: 1.355
+[DBA] epoch 6, cost: 1.355
+[DBA] epoch 7, cost: 1.355
+family Austronesian trigram
+Attempt 1
+[DBA] epoch 1, cost: 2.988
+[DBA] epoch 2, cost: 2.795
+[DBA] epoch 3, cost: 2.656
+[DBA] epoch 4, cost: 2.563
+[DBA] epoch 5, cost: 2.545
+[DBA] epoch 6, cost: 2.543
+[DBA] epoch 7, cost: 2.543
+[DBA] epoch 8, cost: 2.543
+genus Lowland East Cushitic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Lowland East Cushitic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Southern Iroquoian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Southern Iroquoian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Basque unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Basque trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Bantoid unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.511
+[DBA] epoch 2, cost: 0.450
+[DBA] epoch 3, cost: 0.449
+[DBA] epoch 4, cost: 0.448
+[DBA] epoch 5, cost: 0.448
+genus Bantoid trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.767
+[DBA] epoch 2, cost: 0.738
+[DBA] epoch 3, cost: 0.716
+[DBA] epoch 4, cost: 0.690
+[DBA] epoch 5, cost: 0.680
+[DBA] epoch 6, cost: 0.677
+[DBA] epoch 7, cost: 0.676
+[DBA] epoch 8, cost: 0.676
+[DBA] epoch 9, cost: 0.676
+genus Abazgi unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Abazgi trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Tai unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Tai trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Baltic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.400
+[DBA] epoch 2, cost: 0.342
+[DBA] epoch 3, cost: 0.342
+genus Baltic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.202
+[DBA] epoch 2, cost: 0.197
+[DBA] epoch 3, cost: 0.197
+genus Pacific unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Pacific trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Turkic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.337
+[DBA] epoch 2, cost: 0.302
+[DBA] epoch 3, cost: 0.299
+[DBA] epoch 4, cost: 0.299
+genus Turkic trigram
+Attempt 1
+[DBA] epoch 1, cost: 2.370
+[DBA] epoch 2, cost: 2.269
+[DBA] epoch 3, cost: 2.265
+[DBA] epoch 4, cost: 2.265
+genus Aymaran unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Aymaran trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Ubangian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Ubangian trigram
+genus Newaric unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Newaric trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Armenian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Armenian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Mordvinic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Mordvinic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Chinese unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.311
+[DBA] epoch 2, cost: 0.208
+[DBA] epoch 3, cost: 0.184
+[DBA] epoch 4, cost: 0.184
+genus Chinese trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.937
+[DBA] epoch 2, cost: 0.823
+[DBA] epoch 3, cost: 0.790
+[DBA] epoch 4, cost: 0.790
+genus Semitic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.753
+[DBA] epoch 2, cost: 0.728
+[DBA] epoch 3, cost: 0.728
+genus Semitic trigram
+Attempt 1
+[DBA] epoch 1, cost: 2.231
+[DBA] epoch 2, cost: 2.094
+[DBA] epoch 3, cost: 2.083
+[DBA] epoch 4, cost: 2.083
+genus Nilotic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Nilotic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Berber unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Berber trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus West Chadic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus West Chadic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Siberian Turkic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Siberian Turkic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Kartvelian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.073
+[DBA] epoch 2, cost: 0.066
+[DBA] epoch 3, cost: 0.064
+[DBA] epoch 4, cost: 0.064
+genus Kartvelian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.534
+[DBA] epoch 2, cost: 0.520
+[DBA] epoch 3, cost: 0.520
+genus Oghuz unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Oghuz trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Khmer unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Khmer trigram
+genus Central Luzon unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Central Luzon trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Slavic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.631
+[DBA] epoch 2, cost: 0.589
+[DBA] epoch 3, cost: 0.587
+[DBA] epoch 4, cost: 0.587
+genus Slavic trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.366
+[DBA] epoch 2, cost: 1.292
+[DBA] epoch 3, cost: 1.270
+[DBA] epoch 4, cost: 1.236
+[DBA] epoch 5, cost: 1.227
+[DBA] epoch 6, cost: 1.227
+genus Cushitic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.051
+[DBA] epoch 2, cost: 0.051
+[DBA] epoch 3, cost: 0.051
+genus Cushitic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.258
+[DBA] epoch 2, cost: 0.249
+[DBA] epoch 3, cost: 0.249
+genus Malyo-Polynesian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.907
+[DBA] epoch 2, cost: 0.895
+[DBA] epoch 3, cost: 0.895
+genus Malyo-Polynesian trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.058
+[DBA] epoch 2, cost: 1.047
+[DBA] epoch 3, cost: 1.047
+genus Atlantic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Atlantic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Japanese unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Japanese trigram
+genus Korean unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Korean trigram
+genus Mordvin unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Mordvin trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Oirat unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Oirat trigram
+genus Greater Central Philippine unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Greater Central Philippine trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Karluk unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Karluk trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Kipchak unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Kipchak trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Mande unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Mande trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Northern Luzon unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Northern Luzon trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Nakh unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.340
+[DBA] epoch 2, cost: 0.330
+[DBA] epoch 3, cost: 0.330
+genus Nakh trigram
+Attempt 1
+[DBA] epoch 1, cost: 5.765
+[DBA] epoch 2, cost: 5.765
+genus Defoid unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Defoid trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Circassian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.115
+[DBA] epoch 2, cost: 0.110
+[DBA] epoch 3, cost: 0.110
+genus Circassian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Gbe unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Gbe trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus NA unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.255
+[DBA] epoch 2, cost: 0.254
+[DBA] epoch 3, cost: 0.254
+genus NA trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.346
+[DBA] epoch 2, cost: 0.243
+[DBA] epoch 3, cost: 0.242
+[DBA] epoch 4, cost: 0.242
+genus Burmese-Lolo unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Burmese-Lolo trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Senegambian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Senegambian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Algonquian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.672
+[DBA] epoch 2, cost: 0.671
+[DBA] epoch 3, cost: 0.671
+genus Algonquian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.568
+[DBA] epoch 2, cost: 0.568
+genus Avar unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Avar trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Pitkern unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Pitkern trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Constructed unigram
+Attempt 1
+[DBA] epoch 1, cost: 1.356
+[DBA] epoch 2, cost: 1.267
+[DBA] epoch 3, cost: 1.267
+genus Constructed trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.974
+[DBA] epoch 2, cost: 1.954
+[DBA] epoch 3, cost: 1.954
+genus Central Malayo-Polynesian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Central Malayo-Polynesian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Atlantic-Congo unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Atlantic-Congo trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Viet-Muong unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Viet-Muong trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Lak unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Lak trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Malayo-Polynesian unigram
+Attempt 1
+[DBA] epoch 1, cost: 1.394
+[DBA] epoch 2, cost: 1.340
+[DBA] epoch 3, cost: 1.330
+[DBA] epoch 4, cost: 1.327
+[DBA] epoch 5, cost: 1.327
+genus Malayo-Polynesian trigram
+Attempt 1
+[DBA] epoch 1, cost: 3.175
+[DBA] epoch 2, cost: 3.020
+[DBA] epoch 3, cost: 2.908
+[DBA] epoch 4, cost: 2.716
+[DBA] epoch 5, cost: 2.569
+[DBA] epoch 6, cost: 2.534
+[DBA] epoch 7, cost: 2.528
+[DBA] epoch 8, cost: 2.527
+[DBA] epoch 9, cost: 2.527
+genus Igboid unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Igboid trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Athabaskan unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Athabaskan trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Aymara unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Aymara trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Inuit unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.288
+[DBA] epoch 2, cost: 0.262
+[DBA] epoch 3, cost: 0.262
+genus Inuit trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.596
+[DBA] epoch 2, cost: 0.460
+[DBA] epoch 3, cost: 0.460
+genus Mongolic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.085
+[DBA] epoch 2, cost: 0.075
+[DBA] epoch 3, cost: 0.075
+genus Mongolic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.251
+[DBA] epoch 2, cost: 0.214
+[DBA] epoch 3, cost: 0.214
+genus Greek unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.415
+[DBA] epoch 2, cost: 0.363
+[DBA] epoch 3, cost: 0.363
+genus Greek trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.545
+[DBA] epoch 2, cost: 0.180
+[DBA] epoch 3, cost: 0.180
+genus Munda unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Munda trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Ovambo unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Ovambo trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Finnic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.688
+[DBA] epoch 2, cost: 0.622
+[DBA] epoch 3, cost: 0.618
+[DBA] epoch 4, cost: 0.618
+genus Finnic trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.241
+[DBA] epoch 2, cost: 1.211
+[DBA] epoch 3, cost: 1.202
+[DBA] epoch 4, cost: 1.202
+genus Gur unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Gur trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Celtic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.329
+[DBA] epoch 2, cost: 0.309
+[DBA] epoch 3, cost: 0.309
+genus Celtic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.381
+[DBA] epoch 2, cost: 0.366
+[DBA] epoch 3, cost: 0.366
+genus Albanian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Albanian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Lezgic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Lezgic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Permic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.107
+[DBA] epoch 2, cost: 0.099
+[DBA] epoch 3, cost: 0.099
+genus Permic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.134
+[DBA] epoch 2, cost: 0.112
+[DBA] epoch 3, cost: 0.108
+[DBA] epoch 4, cost: 0.108
+genus Northern Atlantic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Northern Atlantic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Oceanic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.135
+[DBA] epoch 2, cost: 0.135
+genus Oceanic trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.695
+[DBA] epoch 2, cost: 1.629
+[DBA] epoch 3, cost: 1.626
+[DBA] epoch 4, cost: 1.626
+genus Kwa unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.043
+[DBA] epoch 2, cost: 0.038
+[DBA] epoch 3, cost: 0.038
+genus Kwa trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.102
+[DBA] epoch 2, cost: 0.102
+genus Ugric unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Ugric trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Sinitic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Sinitic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.512
+[DBA] epoch 2, cost: 0.382
+[DBA] epoch 3, cost: 0.382
+genus Romance unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.431
+[DBA] epoch 2, cost: 0.413
+[DBA] epoch 3, cost: 0.413
+[DBA] epoch 4, cost: 0.413
+genus Romance trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.001
+[DBA] epoch 2, cost: 0.952
+[DBA] epoch 3, cost: 0.947
+[DBA] epoch 4, cost: 0.947
+genus Germanic unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.384
+[DBA] epoch 2, cost: 0.360
+[DBA] epoch 3, cost: 0.360
+[DBA] epoch 4, cost: 0.360
+genus Germanic trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.749
+[DBA] epoch 2, cost: 0.732
+[DBA] epoch 3, cost: 0.727
+[DBA] epoch 4, cost: 0.720
+[DBA] epoch 5, cost: 0.718
+[DBA] epoch 6, cost: 0.715
+[DBA] epoch 7, cost: 0.709
+[DBA] epoch 8, cost: 0.706
+[DBA] epoch 9, cost: 0.703
+[DBA] epoch 10, cost: 0.701
+[DBA] epoch 11, cost: 0.701
+genus South-Central Dravidian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus South-Central Dravidian trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Aztecan unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Aztecan trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Indic unigram
+Attempt 1
+[DBA] epoch 1, cost: 1.352
+[DBA] epoch 2, cost: 1.207
+[DBA] epoch 3, cost: 1.176
+[DBA] epoch 4, cost: 1.176
+[DBA] epoch 5, cost: 1.176
+genus Indic trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.526
+[DBA] epoch 2, cost: 1.381
+[DBA] epoch 3, cost: 1.305
+[DBA] epoch 4, cost: 1.288
+[DBA] epoch 5, cost: 1.276
+[DBA] epoch 6, cost: 1.269
+[DBA] epoch 7, cost: 1.269
+[DBA] epoch 8, cost: 1.269
+genus Javanese unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Javanese trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Tupi-Guarani unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Tupi-Guarani trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Southern Dravidian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.327
+[DBA] epoch 2, cost: 0.295
+[DBA] epoch 3, cost: 0.290
+[DBA] epoch 4, cost: 0.290
+genus Southern Dravidian trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.037
+[DBA] epoch 2, cost: 0.927
+[DBA] epoch 3, cost: 0.913
+[DBA] epoch 4, cost: 0.913
+genus Iranian unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.263
+[DBA] epoch 2, cost: 0.253
+[DBA] epoch 3, cost: 0.252
+[DBA] epoch 4, cost: 0.252
+genus Iranian trigram
+Attempt 1
+[DBA] epoch 1, cost: 1.145
+[DBA] epoch 2, cost: 1.094
+[DBA] epoch 3, cost: 1.094
+genus Quechuan unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Quechuan trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Kam-Tai unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.234
+[DBA] epoch 2, cost: 0.166
+[DBA] epoch 3, cost: 0.166
+genus Kam-Tai trigram
+genus Creoles and Pidgins unigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
+genus Creoles and Pidgins trigram
+Attempt 1
+[DBA] epoch 1, cost: 0.000
+[DBA] epoch 2, cost: 0.000
