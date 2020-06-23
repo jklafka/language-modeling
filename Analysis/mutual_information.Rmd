@@ -26,7 +26,10 @@ theme_set(theme_few() + theme(legend.position = "none"))
 data <- read_csv(here("Data/crossval_barycenters.csv")) %>%
   filter(source == "wikipedia") %>%
   left_join(read_csv(here("Data/final_features.csv")), by = "language") %>%
-  clean_names()
+  clean_names() %>%
+  group_by(language, gram) %>%
+  slice(1) %>%
+  ungroup()
 ```
 
 ## Our approach
