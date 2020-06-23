@@ -608,12 +608,43 @@ no_trigrams <- tidy_b %>%
   filter(!language %in% unigrams) %>%
   pull(language)
 
+```
 
-%>%
-  group_by(language, source, gram) %>%
-  count() %>%
-  filter(n > 1) %>%
-  select(language)
+```{r}
+family_barycenters <- read_csv(here("Data/by_family_barycenters.csv")) %>%
+  filter(!is.na(family)) %>%
+  pivot_longer(-c(family, gram), 
+                  names_to = "position", values_to = "surprisal") %>%
+  mutate(position = as.numeric(position))
+
+genus_barycenters <- read_csv(here("Data/by_genus_barycenters.csv")) %>%
+  filter(!is.na(genus)) %>%
+  pivot_longer(-c(genus, gram), 
+                  names_to = "position", values_to = "surprisal") %>%
+  mutate(position = as.numeric(position))
+
+ggplot(family_barycenters %>%
+         filter(family %in% c("Indo-European", "Austronesian", 
+                             "Niger-Congo", "Dravidian")), 
+       aes(x = position, y = surprisal, color = family,
+                               group = family)) + 
+  geom_point() + 
+  geom_line() + 
+  facet_wrap(~gram) + 
+  theme(legend.position = "bottom")
+
+
+ggplot(genus_barycenters %>%
+         filter(genus %in% c("Germanic", "Slavic", 
+                             "Romance", "Greek",
+                             "Baltic")), 
+       aes(x = position, y = surprisal, color = genus,
+                               group = genus)) + 
+  geom_point() + 
+  geom_line() + 
+  facet_wrap(~gram) + 
+  theme(legend.position = "bottom")
+
 ```
 
 Non-uniformity across languages
@@ -638,15 +669,20 @@ gram_similarities <- lang_surprisals %>%
 
 F-statistic approximation
 ```{r}
-families_b <- families_b %>%
+families_b_scaled <- families_b %>%
   filter(!is.na(family)) %>%
   group_by(gram, family, genus, language) %>%
   mutate(surprisal = scale(surprisal, scale = FALSE)) %>%
-  ungroup()
+  ungroup() %>%
+  left_join(family_barycenters %>% rename(family_surprisal = surprisal),
+            by = c("family", "gram", "position")) %>%
+  group_by(gram, family, language) %>%
+  nest() %>%
+  mutate(dist = map(data, ~dtwDist(surprisal, family_surprisal)))
 
 family_means <- families_b %>%
-  group_by(gram, position, genus) %>%
-  summarise(family_surprisal = mean(surprisal), family_n = n())
+  group_by(gram, position, family) %>%
+  summarise(family_n = n())
 
 overall_mean <- families_b %>%
   group_by(gram, position) %>%

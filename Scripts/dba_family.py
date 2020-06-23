@@ -31,6 +31,9 @@ for family in families:
         print("family", family, gram)
         data = [row[:5] for row in X if row[-2] == family and row[-3] == gram]
         data = [[float(item) for item in series if item != "NA"] for series in data]
+
+        data =  [[el - sum(row) / len(row) for el in row] for row in data]
+
         if data != []:
             barycenter = dtw_barycenter_averaging(X = data,
                             barycenter_size = BARYCENTER_SIZE,
@@ -43,6 +46,9 @@ for genus in genii:
         print("genus", genus, gram)
         data = [row[:5] for row in X if row[-1] == genus and row[-3] == gram]
         data = [[float(item) for item in series if item != "NA"] for series in data]
+
+        data =  [[el - sum(row) / len(row) for el in row] for row in data]
+
         if data != []:
             barycenter = dtw_barycenter_averaging(X = data,
                             barycenter_size = BARYCENTER_SIZE,
