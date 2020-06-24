@@ -20,7 +20,8 @@ with open("Data/families_barycenters.csv", 'r') as f:
          if row[-2] not in genealogy:
              genealogy[row[-2]] = []
          genealogy[row[-2]].append(row[-1])
-
+# get unique genii
+genealogy = {family : list(set(genii)) for family, genii in genealogy.items()}
 barycenters = []
 
 for gram in grams:
