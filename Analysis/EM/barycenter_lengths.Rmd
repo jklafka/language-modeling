@@ -1,0 +1,17 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+```
+
+```{r}
+costs <- read_csv(here("analysis/EM/costs/child/unigram/childes_dtw_dists.csv"),
+                  col_names = c("1", "2", "3", "4", "5", "6", "7", "8",
+                                "9", "10", "11", "12", "13", "14", "15"))
+
+```

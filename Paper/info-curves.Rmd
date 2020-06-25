@@ -111,15 +111,24 @@ b <- read_csv(here("Data/crossval_barycenters.csv")) %>%
   #filter(source == "wikipedia")
   
 
+# tidy_b <- b %>%
+#      pivot_longer(-c(language, source, gram, strap), 
+#                   names_to = "position", values_to = "surprisal") %>%
+#      mutate(position = as.numeric(position),
+#             gram = factor(gram, levels = c("unigram", "trigram"))) %>%
+#   group_by(source, language, gram, position) %>%
+#   summarise(ci_upper = quantile(surprisal, .95),
+#             ci_lower = quantile(surprisal, .05),
+#             surprisal = mean(surprisal))
+
 tidy_b <- b %>%
-     pivot_longer(-c(language, source, gram, strap), 
+  ungroup() %>% 
+     pivot_longer(-c(language, source, gram, family, genus), 
                   names_to = "position", values_to = "surprisal") %>%
      mutate(position = as.numeric(position),
             gram = factor(gram, levels = c("unigram", "trigram"))) %>%
   group_by(source, language, gram, position) %>%
-  summarise(ci_upper = quantile(surprisal, .95),
-            ci_lower = quantile(surprisal, .05),
-            surprisal = mean(surprisal))
+  summarise(surprisal = mean(surprisal))
 
 
 non_wiki_b <- read_csv(here("Data/crossval_barycenters.csv")) %>%
@@ -556,8 +565,8 @@ families <- read_csv(here("Data/Paper/families.csv"))
 
 
 scaled_b <- tidy_b %>%
-    group_by(language, gram) #%>%
-    #mutate(surprisal = scale(surprisal, scale = FALSE))
+    group_by(language, gram) %>%
+    mutate(surprisal = scale(surprisal, scale = FALSE))
 
 families_b <- scaled_b %>%
     left_join(families, by = c("language")) 
@@ -619,9 +628,6 @@ no_trigrams <- tidy_b %>%
 ```{r}
 genealogy_barycenters <- read_csv(here("Data/genealogy_barycenters.csv")) %>%
   filter(!is.na(family)) %>%
-  group_by(family, genus, gram) %>%
-  slice(1) %>%
-  ungroup() %>%
   pivot_longer(-c(family, genus, gram), 
                   names_to = "position", values_to = "surprisal") %>%
   mutate(position = as.numeric(position))
@@ -704,7 +710,7 @@ genus_n <- families_b_scaled %>%
 
 SSG_family <- family_means %>%
   left_join(family_n, by = c("family", "gram"))%>%
-  left_join(overall_mean, by = c("gram", "position")) %>%
+  left_join(overall_means, by = c("gram", "position")) %>%
   group_by(gram, family, n) %>%
   nest() %>%
   mutate(dist = map(data, ~dtwDist(t(.x$family_surprisal), 
@@ -718,7 +724,7 @@ SSG_family <- family_means %>%
 
 SSG_genus <- genus_means %>%
   left_join(genus_n, by = c("family","genus", "gram"))%>%
-  left_join(overall_mean, by = c("gram", "position")) %>%
+  left_join(overall_means, by = c("gram", "position")) %>%
   group_by(gram, family, genus, n) %>%
   nest() %>%
   mutate(dist = map(data, ~dtwDist(t(.x$genus_surprisal), 
