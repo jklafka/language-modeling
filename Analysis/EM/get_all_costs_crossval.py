@@ -15,6 +15,7 @@ assert args.gram in ["unigram", "trigram"], "Only accepts 'unigram' or 'trigram'
 compression_costs = np.zeros((10,15))
 
 for split in range(1,11):
+    print("split no. %d" % split)
     X = []
     Y = []
     with open("../../ValSurprisals/" + args.corpus + '/' + args.gram + '/' + \
@@ -43,4 +44,4 @@ for split in range(1,11):
         compression_costs[split-1, BARYCENTER_SIZE-1] = total_dtw_dist
 
 np.savetxt("costs/" + args.corpus + '/' + args.gram + '/' + \
-            args.language + "dtw_dists.csv", compression_costs, delimiter=",")
+            args.language + "_dtw_dists.csv", compression_costs, delimiter=",")

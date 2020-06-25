@@ -43,9 +43,9 @@ do
   rm Data/$1/${2}/bigtemp.txt
 done
 
-Rscript Scripts/compress_surprisals_bootstrap.R $1 $2 unigram
-python3 Scripts/dba_bootstrap.py $1 $2 unigram
-Rscript Scripts/compress_surprisals_bootstrap.R $1 $2 trigram
-python3 Scripts/dba_bootstrap.py $1 $2 trigram
+Rscript Scripts/compress_surprisals.R $1 $2 unigram
+python3 Scripts/dba.py $1 $2 unigram
+Rscript Scripts/compress_surprisals.R $1 $2 trigram
+python3 Scripts/dba.py $1 $2 trigram
 
 rm Data/$1/${2}_shuffled.txt
