@@ -10,8 +10,20 @@ library(here)
 ```
 
 ```{r}
-costs <- read_csv(here("analysis/EM/costs/child/unigram/childes_dtw_dists.csv"),
+costs <- read_csv(here("analysis/EM/costs/adult/unigram/childes_dtw_dists.csv"),
                   col_names = c("1", "2", "3", "4", "5", "6", "7", "8",
-                                "9", "10", "11", "12", "13", "14", "15"))
+                                "9", "10", "11", "12", "13", "14", "15")) %>%
+  mutate(strap = 1:n()) %>%
+  pivot_longer(cols = -strap, names_to = "length") %>%
+  mutate(length = as.numeric(length))
+
+costs %>%
+  group_by(length) %>%
+  summarise(value = mean(value)) %>%
+  ggplot(aes(x = length, y = value)) + 
+  geom_point() + 
+  geom_line()
+
+
 
 ```

@@ -1,0 +1,159 @@
+Attempt 1
+[DBA] epoch 1, cost: 1.350
+[DBA] epoch 2, cost: 1.031
+[DBA] epoch 3, cost: 1.031
+1
+Attempt 1
+[DBA] epoch 1, cost: 0.848
+[DBA] epoch 2, cost: 0.789
+[DBA] epoch 3, cost: 0.789
+2
+Attempt 1
+[DBA] epoch 1, cost: 0.665
+[DBA] epoch 2, cost: 0.630
+[DBA] epoch 3, cost: 0.623
+[DBA] epoch 4, cost: 0.622
+[DBA] epoch 5, cost: 0.622
+[DBA] epoch 6, cost: 0.622
+3
+Attempt 1
+[DBA] epoch 1, cost: 0.664
+[DBA] epoch 2, cost: 0.588
+[DBA] epoch 3, cost: 0.570
+[DBA] epoch 4, cost: 0.564
+[DBA] epoch 5, cost: 0.561
+[DBA] epoch 6, cost: 0.560
+[DBA] epoch 7, cost: 0.560
+[DBA] epoch 8, cost: 0.560
+4
+Attempt 1
+[DBA] epoch 1, cost: 0.670
+[DBA] epoch 2, cost: 0.592
+[DBA] epoch 3, cost: 0.558
+[DBA] epoch 4, cost: 0.552
+[DBA] epoch 5, cost: 0.551
+[DBA] epoch 6, cost: 0.550
+[DBA] epoch 7, cost: 0.550
+[DBA] epoch 8, cost: 0.550
+5
+Attempt 1
+[DBA] epoch 1, cost: 0.651
+[DBA] epoch 2, cost: 0.566
+[DBA] epoch 3, cost: 0.524
+[DBA] epoch 4, cost: 0.518
+[DBA] epoch 5, cost: 0.518
+[DBA] epoch 6, cost: 0.517
+[DBA] epoch 7, cost: 0.516
+[DBA] epoch 8, cost: 0.515
+[DBA] epoch 9, cost: 0.515
+[DBA] epoch 10, cost: 0.515
+[DBA] epoch 11, cost: 0.515
+[DBA] epoch 12, cost: 0.515
+6
+Attempt 1
+[DBA] epoch 1, cost: 0.679
+[DBA] epoch 2, cost: 0.547
+[DBA] epoch 3, cost: 0.498
+[DBA] epoch 4, cost: 0.489
+[DBA] epoch 5, cost: 0.485
+[DBA] epoch 6, cost: 0.484
+[DBA] epoch 7, cost: 0.484
+[DBA] epoch 8, cost: 0.484
+7
+Attempt 1
+[DBA] epoch 1, cost: 0.652
+[DBA] epoch 2, cost: 0.512
+[DBA] epoch 3, cost: 0.474
+[DBA] epoch 4, cost: 0.470
+[DBA] epoch 5, cost: 0.469
+[DBA] epoch 6, cost: 0.469
+[DBA] epoch 7, cost: 0.469
+[DBA] epoch 8, cost: 0.469
+[DBA] epoch 9, cost: 0.469
+8
+Attempt 1
+[DBA] epoch 1, cost: 0.659
+[DBA] epoch 2, cost: 0.546
+[DBA] epoch 3, cost: 0.478
+[DBA] epoch 4, cost: 0.470
+[DBA] epoch 5, cost: 0.467
+[DBA] epoch 6, cost: 0.467
+[DBA] epoch 7, cost: 0.466
+[DBA] epoch 8, cost: 0.466
+[DBA] epoch 9, cost: 0.466
+9
+Attempt 1
+[DBA] epoch 1, cost: 0.612
+[DBA] epoch 2, cost: 0.506
+[DBA] epoch 3, cost: 0.467
+[DBA] epoch 4, cost: 0.461
+[DBA] epoch 5, cost: 0.460
+[DBA] epoch 6, cost: 0.459
+[DBA] epoch 7, cost: 0.459
+[DBA] epoch 8, cost: 0.459
+10
+Attempt 1
+[DBA] epoch 1, cost: 0.648
+[DBA] epoch 2, cost: 0.504
+[DBA] epoch 3, cost: 0.469
+[DBA] epoch 4, cost: 0.452
+[DBA] epoch 5, cost: 0.445
+[DBA] epoch 6, cost: 0.443
+[DBA] epoch 7, cost: 0.442
+[DBA] epoch 8, cost: 0.441
+[DBA] epoch 9, cost: 0.441
+[DBA] epoch 10, cost: 0.441
+11
+Attempt 1
+[DBA] epoch 1, cost: 0.677
+[DBA] epoch 2, cost: 0.506
+[DBA] epoch 3, cost: 0.465
+[DBA] epoch 4, cost: 0.450
+[DBA] epoch 5, cost: 0.441
+[DBA] epoch 6, cost: 0.439
+[DBA] epoch 7, cost: 0.439
+[DBA] epoch 8, cost: 0.439
+[DBA] epoch 9, cost: 0.439
+[DBA] epoch 10, cost: 0.439
+[DBA] epoch 11, cost: 0.439
+12
+Attempt 1
+[DBA] epoch 1, cost: 0.693
+[DBA] epoch 2, cost: 0.507
+[DBA] epoch 3, cost: 0.466
+[DBA] epoch 4, cost: 0.457
+[DBA] epoch 5, cost: 0.452
+[DBA] epoch 6, cost: 0.449
+[DBA] epoch 7, cost: 0.447
+[DBA] epoch 8, cost: 0.446
+[DBA] epoch 9, cost: 0.444
+[DBA] epoch 10, cost: 0.444
+[DBA] epoch 11, cost: 0.444
+[DBA] epoch 12, cost: 0.444
+[DBA] epoch 13, cost: 0.443
+[DBA] epoch 14, cost: 0.439
+[DBA] epoch 15, cost: 0.435
+[DBA] epoch 16, cost: 0.435
+[DBA] epoch 17, cost: 0.434
+[DBA] epoch 18, cost: 0.434
+[DBA] epoch 19, cost: 0.434
+[DBA] epoch 20, cost: 0.434
+[DBA] epoch 21, cost: 0.434
+13
+Attempt 1
+[DBA] epoch 1, cost: 0.717
+[DBA] epoch 2, cost: 0.533
+[DBA] epoch 3, cost: 0.493
+[DBA] epoch 4, cost: 0.473
+[DBA] epoch 5, cost: 0.461
+[DBA] epoch 6, cost: 0.455
+[DBA] epoch 7, cost: 0.451
+[DBA] epoch 8, cost: 0.450
+[DBA] epoch 9, cost: 0.449
+[DBA] epoch 10, cost: 0.447
+[DBA] epoch 11, cost: 0.444
+[DBA] epoch 12, cost: 0.444
+[DBA] epoch 13, cost: 0.444
+[DBA] epoch 14, cost: 0.444
+[DBA] epoch 15, cost: 0.444
+14

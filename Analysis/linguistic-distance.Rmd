@@ -15,55 +15,64 @@ require(viridis)
 require(stringdist)
 require(lsa)
 
+options(dplyr.summarise.inform = FALSE)
+
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Download and unzip the WALS data file from "https://wals.info/download" (the file is called wals_language.csv.zip) to get the originals for this data processing pipeline. Codes are created from the language_dict.json file in the top-level directory of the repository, filled out manually from here: "https://en.wikipedia.org/wiki/Wikipedia:WikiProject_Languages/List_of_ISO_639-3_language_codes_(2019)"
 ```{r get WALS features, echo = F, include = F}
 # get list of all languages we use in wikipedia dataset
-langs <- read_csv(here("../Data/final_features.csv")) %>%
+langs <- read_csv(here("Data/final_features.csv"), show_col_types = FALSE) %>%
   pull(language)
 
-
 # get iso code and WALS code mappings
-languages <- read_csv(here("../Data/wiki/wals_dataset/languages.csv")) %>%
+languages <- read_csv(here("Data/wiki/wals_dataset/languages.csv"),
+                      show_col_types = FALSE) %>%
   select(ID, ISO639P3code) %>%
   rename(iso = ISO639P3code)
 
 # get iso code paired with all initial feature values and NAs
-values <- read_csv(here("../Data/wiki/wals_dataset/values.csv")) %>%
+values <- read_csv(here("Data/wiki/wals_dataset/values.csv"),
+                   show_col_types = FALSE) %>%
   select(Language_ID, Parameter_ID, Value) %>%
   pivot_wider(names_from = Parameter_ID, values_from = Value) %>%
   left_join(languages, by = c("Language_ID" = "ID")) %>%
   clean_names()
 
 # get wikipedia language name to iso code mappings
-iso_to_language <- read_csv(here("../Data/wiki/codes.csv")) %>%
+iso_to_language <- read_csv(here("Data/wiki/codes.csv"),
+                            show_col_types = FALSE) %>%
   select(language, iso) %>%
   group_by(language) %>%
   slice(1) %>%
   ungroup()
 
 # match up initial wals features with wikipedia language name mappings
-final_features <- values %>%
+raw_wals_features <- values %>%
   inner_join(iso_to_language, by = "iso") %>%
-  semi_join(langs, by = "language") %>%
+  #semi_join(langs, by = "language", copy = TRUE) %>%
   select(-language_id, -iso) %>%
-  distinct(language, .keep_all = TRUE)
+  distinct(language, .keep_all = TRUE) %>%
+  select(language, x1a:x120a)
+
+write_csv(raw_wals_features, here("Data/mdpi_paper/raw_wals_features.csv"))
 
 # get all currently valued features
-wals_features <- read_csv(here("../Data/Paper/wals_features.csv")) %>%
+wals_features <- read_csv(here("Data/mdpi_paper/wals_features.csv"),
+                          show_col_types = FALSE) %>%
   clean_names() %>%
   bind_rows(final_features) %>%
-  select(language:x120a) %>%
+  select(x1a:x120a) %>%
   distinct(language, .keep_all=T) %>%
   remove_na
 
 # imputation
-imputed_wals <- wals_features %>%
+imputed_wals <- raw_wals_features %>%
   column_to_rownames("language") %>%
+  select(x1a:x120a) %>%
   mutate_all(as_factor) %>%
-  MIMCA(ncp = 20, threshold = 1e-2, maxiter = 1000)
+  MIMCA(ncp = 20, threshold = 1e-1, maxiter = 1000)
 
 imputed_features <- imputed_wals[[1]][99]$`nboot=99` %>%
   as_tibble() %>%
@@ -140,9 +149,11 @@ langs_pairwise <- expand.grid(language1 = langs,
 ```
 
 ```{r make wals distance space}
-feature_types <- read_csv(here("../Data/feature_types.csv"))
+feature_types <- read_csv(here("Data/feature_types.csv"),
+                          show_col_types = FALSE)
 
-wals_features <- read_csv(here("../Data/final_features.csv")) %>%
+wals_features <- read_csv(here("Data/mdpi_paper/raw_wals_features.csv"),
+                          show_col_types = FALSE) %>%
   pivot_longer(-language, names_to = "feature", values_to = "value") %>%
   mutate(feature = gsub("x", "", feature),
          feature = gsub("a", "A", feature)) %>%
@@ -155,7 +166,7 @@ wals_distance <- function(language1, language2) {
     filter(complete.cases(.)) %>%
     mutate(wals_dist = ifelse(value.x == value.y, 1, 0)) %>%
     group_by(language.x, language.y) %>%
-    summarise(wals_dist = sum(wals_dist)) %>%
+    summarise(wals_dist = mean(wals_dist)) %>%
     rename(language1 = language.x, language2 = language.y) %>%
     ungroup()
 }
@@ -168,7 +179,7 @@ wals_type_distance <- function(language1, language2) {
     filter(complete.cases(.)) %>%
     mutate(wals_dist = ifelse(value.x == value.y, 1, 0)) %>%
     group_by(type, language.x, language.y) %>%
-    summarise(wals_dist = sum(wals_dist)) %>%
+    summarise(wals_dist = mean(wals_dist)) %>%
     rename(language1 = language.x, language2 = language.y) %>%
     ungroup()
 }
@@ -179,12 +190,12 @@ langs_pairwise <- expand_grid(language1 = distinct(wals_features,language),
 wals_space <- map_dfr(1:nrow(langs_pairwise), ~wals_distance(langs_pairwise[.x,"language1"],
                                           langs_pairwise[.x,"language2"]))
 wals_space %>%
-  write_csv(here("../Data/Paper/wals_distances.csv"))
+  write_csv(here("Data/mdpi_paper/raw_wals_distances_mean.csv"))
 
 wals_type_space <- map_dfr(1:nrow(langs_pairwise), ~wals_type_distance(langs_pairwise[.x,"language1"],
                                           langs_pairwise[.x,"language2"]))
 wals_type_space %>%
-  write_csv(here("../Data/Paper/wals_type_distances.csv"))
+  write_csv(here("Data/mdpi_paper/raw_wals_type_distances_mean.csv"))
 
 ```
 

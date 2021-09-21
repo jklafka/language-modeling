@@ -13,7 +13,7 @@ model_file <- here(glue("Models/{corpus_name}/unigram/{language_name}/{suffix}.l
 test_file <- here(glue("Data/{corpus_name}/{language_name}/{suffix}"))
 
 read_unigram_model <- function(file) {
-  read_lines(file, skip = 2) %>%
+  read_lines(file, skip = 4) %>%
     enframe(name = NULL, value = "line") %>%
     slice(1:(n()-2)) %>%
     separate(line, into = c("surprisal", "word", "noise"), sep = "\t") %>%
@@ -42,8 +42,13 @@ unk <- model %>%
 
 surprisals <- corpus %>%
   left_join(model, by = c("word")) %>%
-  mutate(surprisal = recode(surprisal, .missing = unk)) %>%
-  select(-word) %>%
+  select(-word) 
+
+surprisals[is.na(surprisals$surprisal), "surprisal"] <- unk
+
+rm(list = ls(model, corpus))
+
+surprisals <- surprisals %>%
   filter(complete.cases(.))
 
 outfile <- here(glue("ValSurprisals/{corpus_name}/unigram/{language_name}.csv"))

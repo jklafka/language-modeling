@@ -8,7 +8,7 @@ parser.add_argument("suffix")
 args = parser.parse_args()
 
 model = kenlm.LanguageModel("Models/" + args.corpus + "/trigram/" + \
-    args.language + '/' + args.suffix + ".klm")
+    args.language + '/' + args.suffix + ".lm")
 
 
 # gets surprisal from string based on the model's stored probabilities

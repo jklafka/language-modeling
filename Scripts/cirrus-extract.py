@@ -170,7 +170,10 @@ def process_dump(input_file, out_file, file_size, file_compress):
         content = json.loads(input.readline())
         type = index['index']['_type']
         id = index['index']['_id']
-        language = content['language']
+        try:
+            language = content['language']
+        except KeyError:
+            continue;
         revision = content['version']
         if type == 'page':
             title = content['title']

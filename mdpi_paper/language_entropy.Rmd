@@ -1,0 +1,670 @@
+---
+title: Characterizing the typical information curves of diverse languages
+author:
+  - name: Josef Klafka
+    affil: 1
+  - name: Daniel Yurovsky
+    affil: 1*
+affiliation:
+  - num: 1
+    address: | 
+      Department of Psychology,
+      Carnegie Mellon University, 
+      5000 Forbes Ave, Pittsburgh, PA 15213, USA
+correspondence: |
+  yurovsky@cmu.edu
+journal: entropy
+type: article
+status: submit
+bibliography: mybibfile.bib
+abstract: |
+  Optimal coding theories of language predict that speakers should keep the amount of information in their utterances relatively uniform under the constraints imposed by their language. But how much do these constraints influence information structure, and how does this influence vary across languages? We present a novel method for characterizing the information structure of sentences across a diverse set of languages. While the structure of English is broadly consistent with the shape predicted by optimal coding, languages vary broadly in their shapes and many are not consistent with this prediction. We then show that the characteristic information curves of languages are partly related to a variety of typological features from phonology to word order. These results present an important step in the direction of exploring upper bounds for the extent to which linguistic codes can be optimal for communication.
+
+keywords: |
+  communication; typology; language development
+acknowledgement: |
+  This research was funded by a James S McDonnell Foundation Scholar Award to DY. 
+authorcontributions: |
+  J.K. and D.Y. conceive and designed the experiments; J.K. and D.Y. performed the 
+  experiments; J.K. and D.Y. analyzed the data; J.K. and D. Y. wrote the paper.
+conflictsofinterest: |
+  The authors declare no conflict of interest.
+abbreviations:
+  - short: BNC
+    long: British National Corpus
+  - short: SBC
+    long: Santa Barbara Corpus of Spoken American English
+  - short: DBA
+    long: Dynamic Time Warping Barycenter Averaging
+  - short: CHILDES
+    long: Child Language Data Exchange System
+  - short: WALS
+    long: World Atlas of Linguistic Structure
+  - short: MIMCA
+    long: Multiple Imputation Multiple Correspondence Analysis
+output: rticles::mdpi_article
+---
+
+```{r load-packages, include = FALSE}
+library(xtable)
+library(knitr)
+library(papaja)
+library(ggthemes)
+library(lmerTest)
+library(directlabels)
+library(ggrepel)
+library(feather)
+library(here)
+library(tidyboot)
+library(broom)
+library(broom.mixed)
+library(ggdendro)
+library(gridExtra)
+library(ggpmisc)
+library(dtw)
+library(tidyverse)
+
+
+theme_set(theme_classic(base_size = 14) + theme(legend.position = "none"))
+
+knitr::opts_chunk$set(fig.pos = 'tb', echo = FALSE, warning = FALSE, 
+                      cache = TRUE, warning = FALSE, message = FALSE, 
+                      sanitize = TRUE, fig.path='figs/', fig.width = 3,
+                      fig.height = 3)
+set.seed(42)
+options(digits=3)
+```
+
+```{r load-data, include = F}
+families <- read_csv(here("Data/mdpi_paper/families.csv"),
+                     show_col_types = FALSE)
+
+lengths <- read_csv(here("Data/mdpi_paper/lengths.csv"),
+                    show_col_types = FALSE)
+
+english_wiki_lengths <- read_csv(here("Data/mdpi_paper/English_lengths.csv"),
+                                 col_names = c("length", "n"),
+                                 show_col_types = FALSE)
+
+bnc <- read_csv(here("Data/length_counts.csv"),
+                show_col_types = FALSE)
+
+
+bnc_surprisals <- read_csv(here("Data/mdpi_paper/bnc_subset.csv"),
+                           show_col_types = FALSE) %>%
+    mutate(gram = factor(gram, levels = c("unigram", "trigram")))
+
+b <- read_csv(here("Data/crossval_barycenters.csv"), show_col_types = FALSE) %>%
+  group_by(language, source, gram) %>%
+  slice(1) %>%
+  left_join(families, by = "language")
+
+tidy_b <- b %>%
+  ungroup() %>% 
+     pivot_longer(-c(language, source, gram, family, genus), 
+                  names_to = "position", values_to = "surprisal") %>%
+     mutate(position = as.numeric(position),
+            gram = factor(gram, levels = c("unigram", "trigram"))) %>%
+  group_by(source, language, gram, position) %>%
+  summarise(surprisal = mean(surprisal))
+
+
+raw_wals <- read_csv(here("Data/mdpi_paper/raw_wals_distances_mean.csv"),
+                 show_col_types = FALSE) %>%
+  mutate(measure = "raw")
+imputed_wals <- read_csv(here("Data/mdpi_paper/wals_distances.csv"),
+                 show_col_types = FALSE) %>%
+  mutate(measure = "imputed")
+
+wals <- bind_rows(raw_wals, imputed_wals)
+
+raw_wals_types <- read_csv(here("Data/mdpi_paper/raw_wals_type_distances_mean.csv"),
+                       show_col_types = FALSE) %>%
+  mutate(measure = "raw")
+imputed_wals_types <- read_csv(here("Data/mdpi_paper/wals_type_distances.csv"),
+                       show_col_types = FALSE) %>%
+  mutate(measure = "imputed")
+
+wals_types <- bind_rows(raw_wals_types, imputed_wals_types)
+
+cosines <- read_csv(here("Data/mdpi_paper/cosines.csv"),
+                    show_col_types = FALSE) 
+
+```
+
+
+# Introduction
+
+One of the defining features of human language is its power to transmit information. We use language for a variety of purposes like greeting friends, making records, and signaling group identity. These purposes all share a common goal: Transmitting information that changes the mental state of our listener [@austin1975]. For this reason, we can describe language as a cryptographic code, one that allows speakers to turn their intended meaning into a message that can be transmitted to a listener, and subsequently converted by the listener back into an approximation of the intended meaning [@shannon1948]. 
+
+How should we expect this code to be structured? If language has evolved as a code for information transmission, its structure should reflect this process of optimization [@anderson1989]. The optimal code would have to work with two competing pressures: (1) For listeners to easily and successfully decode messages sent by the speaker, and (2) For speakers to easily code their messages and transmit them to a listener with minimal effort and error. A fundamental constraint on both of these processes is the linear order of spoken language--sounds are produced one at a time and each is unavailable perceptually once it is no longer being produced. 
+
+Humans accommodate this linear order constraint through incremental processing: People process speech continuously as it arrives, predicting upcoming words and building expectations about the meaning of an utterance in real time rather than at its conclusion [@kutas2011; @tanenhaus1995; @pickering2013]. This solution creates new guidance for speakers. Since prediction errors can lead to severe processing costs and difficulty integrating new information on the part of listeners, speakers should seek to minimize prediction errors. However, the cost of producing more predictable utterances is using more words. Thus, the most efficient strategy is for speakers seeking to minimize their production costs is to produce utterances that are just at the prediction capacity of listeners without exceeding this capacity [@aylett2004; @genzel2002; @levy2007]. In other words, speakers should maintain a constant transmission of information, with the optimal rate of information transfer as close to the listener's fastest decoding rate as possible. The hypothesis that speakers follow this optimal strategy is known as the *Uniform Information Density* hypothesis. 
+
+Using information theory, a mathematical framework for formalizing predictability, researchers have tested and confirmed this optimal coding prediction across several levels and contexts in language production. For example, @genzel2002 provided a clever indirect test of Uniform Information Density  across sentences in a paragraph. They showed that the predictability of successive sentences, when analyzed in isolation, decreases, as would be expected if readers use prior sentences to predict the content of future sentences. Thus, based on the increasing amount of context, they found that total predictability remains constant. At the level of individual words, @mahowald2013 showed that speakers use shorter alternatives of more predictable words, maximizing the amount of information in each word while minimizing the time spent on those words.  
+Other research has suggested that efficient encoding impacts how speakers structure units between words and sentences. The inclusion of complementizers in relative clauses [@jaeger2010] and the use of contractions [@frank2008] are two situations in sentence formation in which speakers can omit or reduce words to communicate more efficiently and maximize use of the communication channel without exceeding the listener's capacity. 
+
+How languages evolve is shaped by efficient communication as well. @piantadosi2011 showed that more easily predictable words in a language may tend to become shorter over time, maximizing the amount of information transmitted over the communication channel at every second by speakers in each language. Semantic categories of words across languages can also evolve to be structured efficiently. Categories such as kinship terms [@kemp2012] maintain a trade-off between informativeness and complexity. Structure in langauge evolves from a trade-off between efficient and learnable encoding on the one hand and an expressive and descriptive lexicon on the other [@kirby2015]. Languages may come to efficiently describe the particular environment in which they are spoken over the course of evolution: features of the world that are relevant to speakers become part of a language, while irrelevant features are disregarded [@perfors2014]. 
+
+However, speakers are still bound by the syntactic rules of their language. While complementizers are often optional, determiners are not. Similarly, speakers may have a choice about which of several near-synonyms they produce, but they cannot choose the canonical order of subjects, verbs, and objects. Properties of a language, like canonical word order, impose top-down constraints on how speakers can structure what they say. While speakers may produce utterances as uniform in information density as their languages will allow, these top-down constraints may create significant and unique variation across languages. 
+
+How significant are a language's top-down constraints on determining how its speakers structure their speech? @yu2016 analyzed how the information in words of English sentences of a fixed length varies with their order in the sentence (e.g. first word, second word, etc). They found a surprising non-linear shape, and argued that this shape may arise from top-down grammatical constraints in the English language. In this paper, we replicate their analysis, and then extend their ideas. We ask:  (1) Whether this shape is affected by the amount of context leveraged in prediction, (2) Whether this shape varies across written and spoken contexts, and (3) Whether this shape is broadly characteristic of a diverse set of languages or varies predictably from language to language. We find that languages are characterized by highly-reliable but cross-linguistically variable information structures that co-vary with top-down linguistic features. However, using sufficient predictive context partially flattens these shapes across languages, in accord with predictions of the Uniform Information Density hypothesis.
+
+# Study 1: The Shape of Information in Written English
+
+@genzel2002 performed an influential early test of the Uniform Information Density hypothesis, analyzing the amount of information in successive sentences in a corpus. They reasoned that if speakers keep the amount of information in each sentence constant, but readers of the text process each successive sentence in the context of the prior sentences, then a predictive model that does not have access to this prior context should find each successive sentence more surprising. To test this hypothesis, they used a simple n-gram model in which the surprisal of each word is computed as the probability of it following each of the prior n-words. They found that the surprisal-per-word of sentences later in an article was higher than sentences earlier in the same article. 
+
+@yu2016 applied this same logic to each word within sentences. They reasoned that if speakers were processing each word in the context of all prior words in the sentence, but their predictive model ignored this context by considering the base-rate entropy of each word, they would observe the same monotonically increasing surprisal as a function of word position within each sentence. However, this is not what they observed. Instead, they found a characteristic three-step distribution: Words early in an utterance had very low information, then information was constant throughout most of the utterance, then there was a slight dip, and finally a steep rise for the final word. @yu2016 interpreted this uneven information curve as evidence against the Uniform Information Density Hypothesis. Unlike Genzel and Charniak's results, information plateaued in the middle of sentences and then dipped instead of rising throughout. 
+
+However, @yu2016's analysis leaves some open questions. First, they used an unusual metric to quantify the information in each word. They computed the average surprisal of all the words in a given word position, computed only within that position, and weighted by how many times each word occurs in that position. Their formula is given by $\text{H}(X) = -\sum_{w}P(w \in X) \log P(w)$, where $X$ is a word position (e.g. first words, fifth words, final words) and $w$ is a word occuring in position $X$. If the goal is to consider the surprisal of each word in a model that does not use prior context, then the model should not consider sentence position either. Second, with the exception of the small dip that appears near the end of the sentence, the shape is roughly consistent with the predicted monotonically increasing per-word surprisal. Third, it is difficult to know whether the characteristic shape generalizes across sentences of all lengths, and not just the three particular lengths that @yu2016 analyzed. Finally, it would be ideal to estimate the characteristic information profiles of sentences when context is considered, and not just in the absence of the context of prior words. That is, ideally we could observe the uniform surprisal of words directly for a model of the reader and not just indirectly for a model of a context-less reader. 
+
+In Study 1, we attempt to resolve these issues. We first replicate Yu et al.'s analysis using a standard unigram language model. We then use a trigram model to show that the information in English sentences is significantly more uniform when words are processed in context. Finally, we introduce a method for aggregating across sentences of different lengths to produce a single characteristic profile for sentences of English, and show that they are broadly consistent with a Uniform Information Density prediction akin to @genzel2002.
+
+## Method
+
+### Data 
+
+```{r bnc-setup}
+MIN <- 5
+MAX <- 45
+
+bnc_total <- lengths %>%
+    filter(language == "bnc") %>%
+    pull(n) %>%
+    sum()
+
+bnc_kept <- lengths %>% 
+    filter(length >= MIN, length <= MAX) %>% 
+    summarise(n = sum(n)) %>%
+    mutate(n = (n/bnc_total) * 100) %>%
+    pull(n) %>%
+    round(2)
+    
+```
+
+Following @yu2016, we selected the British National Corpus (BNC) to estimate the information in English sentences [@leech1992]. The BNC is an approximately 100 million word corpus consisting of mainly of written (90%) with some spoken transcriptions (10%) of English collected by researchers at Oxford University in the 1980s and 1990s. The BNC is intended to be representative of British English at the end of the 20th century, and contains a wide variety of genres (e.g. newspaper articles, pamphlets, fiction novels, academic papers).
+
+We began with the XML version of the corpus, and used the \texttt{justTheWords.xsl} script provided along with the corpus to produce a text file with one sentence of the corpus on each line. Compound words (like "can't") were combined, and all words were converted to lowercase before analysis. This produced a corpus of just over six million utterance of varying lengths. From these, we excluded utterances that were too short to allow for reasonable estimation of information shape (fewer than `r MIN` words), and utterances that were unusually long (more than `r MAX` words). This exclusion left us with `r bnc_kept`% of the utterances (Fig \ref{fig:bnc-lengths}).
+
+```{r bnc-lengths, echo = F, fig.height = 3, , fig.width = 3, fig.align = "center", fig.cap="The distribution of sentence lengths in the British National Corpus (BNC). We analyzed sentences of length 5-45 (colored)."}
+
+# raw length distribution
+lengths %>%
+    filter(language == "bnc", length <= 100) %>%
+    mutate(group = if_else(length < MIN | length > MAX, "out", "in")) %>%
+    ggplot(aes(x = length, y = n, fill = group, color = group)) +
+    geom_col() +
+    labs(x = "sentence length", y = "frequency") +
+    theme(legend.position = "none", aspect.ratio = 1/1.33) + 
+    scale_fill_manual(values = c(ptol_pal()(1), "light gray")) +
+    scale_color_manual(values = c(ptol_pal()(1), "light gray"))
+
+```
+
+### Models
+
+To estimate how information is distributed across utterances, we computed the lexical surprisal of  words in each position of English sentences under two different models. First, we estimated a unigram model which considers each word independently. This unigram surprisal measure is a direct transformation of the word's frequency and thus less frequent words are more surprising. 
+
+$$\text{surprisal}(\text{word}) = -\log P(\text{word})$$ 
+
+Second, we estimated a trigram model in which the surprisal of a given word ($w_i$) encodes how unexpected it is to read it after reading the prior two words ($w_{i-1}$ and $w_{i-2}$):
+
+$$\text{surprisal}(w_{i}) = -log P(w_i|w_{i-1},w_{i-2})$$ 
+
+This metric encodes the idea that words that are low frequency in isolation (e.g. "meatballs") may become much less surprising in certain contexts (e.g. "spaghetti and meatballs") but more surprising in others (e.g. "coffee with meatballs"). Because the problem of estimating probabilities grows  combinatorically with the number of prior words due to sparsity, we chose a trigram rather than a quadgram model as in @genzel2002. In practice, trigram models perform well as an approximation [see e.g. @chen1999; @smith2013].
+
+We estimated these models using the KenLM toolkit [@heafield2013]. Each utterance was padded with a special start-of-sentence token "$\left<s\right>$" and end of sentence token "$\left</s\right>$". Trigram estimates did not cross sentence boundaries, so for example the surprisal of the second word in an utterances was estimated as $\text{surprisal}(w_{2}) = -P(w_2|w_{i},\left<s\right>)$. 
+
+Naïve trigram models will underestimate the surprisal of words in low-frequency trigrams (e.g. if the word "meatballs" appears only once in the corpus following exactly the words "spaghetti and", it is perfectly predictable from its prior two words). To avoid this underestimation, we used modified Kneser-Ney smoothing as implemented in the KenLM toolkit [@heafield2013]. Briefly, this smoothing technique discounts all ngram frequency counts, which reduces the impact of rare ngrams on probability calculations, and interpolates lower-order ngrams into the calculations. These lower-order ngrams are weighted according to the number of distinct contexts they occur as a continuation (e.g. "Francisco" may be a common word in a corpus, but likely only occurs after "San" as in "San Francisco", so it receives a lower weighting). For a thorough explanation of modified Kneser-Ney smoothing, see @chen1999.
+
+In order to prevent overfitting, we computed the surprisal of words in sentences using cross-validation. We divided the corpus into 10 sub-corpora of equal lengths. For each sub-corpus, we fit the unigram and trigram models on all other subcorpora, and then used this model to estimate the surprisal of words in this corpus.
+
+### Characteristic information curves
+
+To develop a characteristic information curve for sentences in the corpus, we needed to aggregate sentences that varied dramatically in length (Figure \ref{fig:bnc-plots}A). We used Dynamic Time Warping Barycenter Averaging (DBA), an algorithm for finding the average of sequences that share and underlying pattern but vary in length [@petitjean2011]. 
+
+Dynamic Time Warping is a method for calculating an alignment between two sequences in which one can be produced by warping the other. Canonically, there is a template sequence (e.g. a known vowel's acoustic profile, a known walker's motion-capture limb positions) and a set of unknown sequences that may be new instances of the template sequence produced by perturbations in speed or acceleration (e.g. extending pr shortening the vowel, walking faster or slower). Dynamic time warping works by finding a partial match between the known template and unknown instance under the constraint that each point in the instance must come from a point in the template, and that the ordering of points must be preserved, but that multiple points in the sequence can match one point in the template (i.e. lengthening) and multiple points in the template can match one point in the sequence (i.e. shortening).
+
+Dynamic time warping barycenter averaging inverts standard dynamic time warping, discovering a latent invariant template from a set of sequences rather than identifying new instances of a known template. We used DBA to discover the short sequence of surprisal values that characterized the surprisal curves common to sentences of varying sentence lengths. We first averaged individual sentences of the same length together and then applied the DBA algorithm to this set of average sequences. 
+
+We use the implementation of DBA in the Python package tslearn [@tavenard2017], which fits the barycenter to a time-series dataset through the expectation-maximization algorithm [EM @moon1996]. DBA in this implementation allows us to specify the size of the barycenter. Because of the characteristic shape observed by @yu2016 and that we also found in our data (Fig \ref{fig:bnc-lengths}), we chose a barycenter of length 5 to capture the varying information slopes across sentences. However, all of the results we report in this Study and in others were similar for barycenters of varying lengths.
+
+## Results and Discussion
+
+```{r bnc-raw-full, eval = F}
+bnc_unigram_surprisals <- read_csv(here("Valsurprisals/adult/unigram/bnc.csv"),
+                                   show_col_types = FALSE)
+bnc_trigram_surprisals <- read_csv(here("Valsurprisals/adult/trigram/bnc.csv"),
+                                   show_col_types = FALSE)
+
+bnc_subset_unigram <- bnc_unigram_surprisals %>%
+  filter(length %in% c(15, 30, 45)) %>%
+  mutate(new_sent = !(position > lag(position)), 
+         new_sent = if_else(is.na(new_sent), 0, as.numeric(new_sent)),
+         sentence = cumsum(new_sent)) %>%
+  group_by(length, position) %>%
+  summarise(mean = mean(surprisal), sem = sd(surprisal)/sqrt(n()-1)) %>%
+  mutate(gram = "unigram")
+
+bnc_subset_trigram <- bnc_trigram_surprisals %>%
+  filter(length %in% c(15, 30, 45)) %>%
+  mutate(new_sent = !(position > lag(position)), 
+         new_sent = if_else(is.na(new_sent), 0, as.numeric(new_sent)),
+         sentence = cumsum(new_sent)) %>%
+  group_by(length, position) %>%
+  summarise(mean = mean(surprisal), sem = sd(surprisal)/sqrt(n()-1)) %>%
+  mutate(gram = "trigram")
+
+write_csv(bind_rows(bnc_subset_unigram, bnc_subset_trigram),
+          here("Data/mdpi_paper/bnc_subset.csv"))
+```
+
+```{r bnc-plots, fig.height = 3, fig.width = 6, fig.align = "center", fig.cap = "(A) Surprisal by sentence position of length 15, 30, and 45 sentences in the British National Corpus under unigram and trigram surprisal models. Error bars indicate 95\\% confidence intervals (tiny due to sample size). (B) Characteristic information curves produced by the DBA algorithm averaging over all sentence lengths in each corpus."}
+bnc_annotations <- tibble(position = c(12, 27, 42),
+                          length = c(15, 30, 45),
+                          gram = c("unigram", "unigram", "unigram"),
+                          mean= c(4, 4, 4))
+
+bnc_plot1 <- ggplot(bnc_surprisals, aes(x = position, y = mean, color = as.factor(length),
+                           linetype = gram, label = length)) + 
+    geom_pointrange(aes(ymin = mean - 1.96 * sem, ymax = mean + 1.96 * sem), 
+                  position = position_dodge(.5), size = .025) + 
+    geom_line(position = position_dodge(.5)) + 
+    scale_color_ptol() + 
+    scale_linetype_manual(values = c("solid", "longdash")) + 
+    geom_text(data = bnc_annotations) + 
+    annotate("text", x = 6.5, y = 3.5, label = "Unigram") + 
+    annotate("text", x = 6.5, y = 2.5, label = "Trigram") + 
+    labs(x = "Sentence position", y = "Surprisal") + 
+    labs(tag = "A") + 
+    theme_few() +
+    theme(legend.position = "none", aspect.ratio = 1/1.33)
+
+
+bnc_b_annotations <- tibble(position = c(2.5, 2.5),
+                          gram = c("unigram","trigram"),
+                          surprisal = c(3.5, 2.75))
+
+bnc_plot2 <- tidy_b %>% 
+    filter(gram %in% c("unigram", "trigram"), 
+           source == "adult",
+           language == "bnc") %>% 
+    ggplot(aes(x = position, y = surprisal, color = gram)) + 
+    geom_point(size = .75) + 
+    geom_line() + 
+    geom_text(aes(label = gram), data = bnc_b_annotations) +
+    scale_x_continuous(breaks = 1:5) + 
+    xlab("Coordinate") + 
+    ylab("Surprisal") + 
+    scale_color_colorblind() + 
+    labs(tag = "B") + 
+    theme_few() +
+    theme(aspect.ratio = 1/1.33, legend.position = "none")
+
+gridExtra::grid.arrange(bnc_plot1, bnc_plot2, ncol = 2)
+```
+
+We began by replicating Yu et al.'s analyses with a standard unigram model, examining the surprisal of words in sentence of length 15, 30, and 45 as they did. In line with their findings, we found a reliably non-linear shape in sentences of all 3 lengths, with the information in each word rising for the first two words, plateauing in the middle of sentences, dipping in pen-ultimate position, and rising steeply on the final word (Figure \ref{fig:bnc-plots}A). Qualitatively, we found the same shape in utterances of all other lengths we sampled, from utterances with 5 words to utterances with 45 words. 
+
+In comparison, under the trigram model we observed 3 major changes. First, each word contained significantly less information. This is to be expected as the knowing two prior words makes it much easier to predict the next word. Second, the fall and peak at the ends of utterances was still observable, but much less pronounced. Finally, the first word of each sentence was now much more surprising than the rest of the words in the sentence, because the model had only the start of sentence token $\left<s\right>$ to use as context. Thus, the trigram model likely overestimates the information for humans reading the first word. Together, these results suggest that @yu2016 overestimated the non-uniformity of information in sentences. Nonetheless, the final words of utterances do consistently contain more information than the other words.
+
+Figure \ref{fig:bnc-plots}B shows the barycenters produced by the dynamic time warping barycenter averaging algorithm (DBA). The algorithm correctly recovers both the initial and final rise in information under the unigram model, and the initial fall and smaller final rise in the trigram model. We take this as evidence that (1) these shapes are characteristic of all lengths, and (2) that DBA effectively recovers characteristic information structure. 
+
+In sum, the results of Study 1 suggest that sentences of written English have a characteristic non-uniform information structure, with information rising at the ends of sentences. This structure is more pronounced when each word is considered in isolation, but some of the structure remains even when each word is considered in context. These results are broadly consistent with the predictions of a Uniform Information Density Account: Information increases over the course of sentences, but approaches uniformity as more context is considered.
+
+Is this structure unique to written English, or does it characterize spoken English as well? In Study 2, we apply this same analysis to two corpora of spoken English--the first of adults speaking to other adults, and the second of adults and children speaking to each other.
+
+# Study 2: Information in Spoken English
+
+Spoken language is different from written language in several respects. First, the speed at which it can be processed is constrained by the speed at which it is produced. Second, speech occurs in a multimodal environment, providing listeners information from a variety of sources beyond the words conveyed (e.g. prosody, gesture, world context). Finally, both words and sentence structures tend to be simpler in spoken language than written language as they must be produced and processed in real time [@christiansen2016]. Thus, sentences of spoken English may have different information curves than sentences of written English.
+
+The language young children hear is further different from the language adults speak to each other. Child-directed speech tends to simpler than adult-directed speech on a number of dimensions including the lengths and prosodic contours of utterances, the diversity of words, and the complexity of syntactic structures [@snow1972]. The speech produced by young children is even more distinct from adult-adult speech, replete with simplifications and modifications imposed by their developing knowledge of both the lexicon and grammar [@clark2009]. In Study 2, we ask whether spoken English--produced both by adults and children-- has the same characteristic information shape as written English.
+
+## Method 
+
+### Data
+
+To estimate the information in utterances of adult-adult spoken English, we used the Santa Barbara Corpus of Spoken American English, a $\sim$ 250,000 word corpus of recordings of naturally occurring spoken interactions from diverse regions of the United States [@du-bois2000]. For parent-child interactions, we used all of the North American English corpora in the Child Language Data Exchange System (CHILDES) hosted through the childes-db interface [@macwhinney2000; @sanchez2019]. We selected for analysis all $\sim$ 1 million utterances produced by children (mostly under the age of five), and $\sim$ 1.7 million utterances produced by the parents of these children.
+
+### Models
+
+All pre-processing and modeling details were identical to Study 1 except for the selection of sentences for analysis. Because the utterances in both the Santa Barbara Corpus and CHILDES were significantly shorter than the sentences in the British National Corpus, we analyzed all utterances of at least 5 and most 15 words (see Fig. \ref{fig:spoken-figs}A). Models were estimated separately for each of the 3 corpora.
+
+## Results and Discussion
+
+```{r spoken-figs, fig.height = 5, fig.width = 6, fig.align = "center", set.cap.width=T, num.cols.cap=2, fig.cap = "(A) The distribution of sentence lengths in the spoken English corpora: Adults in Santa Barbara, and parents and children in CHILDES. We analyzed sentences of length 5-15 (colored). (B) Charateristic surprisal curves for these corpora."}
+SPOKEN_MIN <- 5
+SPOKEN_MAX <- 15
+
+# raw length distribution
+spoken_plot1 <- lengths %>%
+    filter(language != "bnc", length <= 40) %>%
+    mutate(corpus = case_when(language == "sbc" ~ "adults",
+                              source == "adult" ~ "parents",
+                              T ~ "children"),
+           corpus = factor(corpus, levels = c("adults", "parents",
+                                              "children")),
+           group = if_else(length < SPOKEN_MIN | length > SPOKEN_MAX, "out", "in")) %>%
+    ggplot(aes(x = length, y = n, fill = group, color = group)) +
+    facet_wrap(~ corpus, scales = "free_y") +
+    geom_col() +
+    labs(x = "sentence length", y = "frequency") +
+    theme(legend.position = "none", aspect.ratio = 1/1.33) + 
+    scale_fill_manual(values = c(ptol_pal()(1), "light gray")) +
+    scale_color_manual(values = c(ptol_pal()(1), "light gray")) + 
+    labs(tag = "A")
+
+
+
+spoken_annotations <- tibble(position = c(2.5, 2.5),
+                          gram = c("unigram","trigram"),
+                          surprisal = c(3.25, 2),
+                          plot_person = c("adults", "adults")) %>%
+    mutate(plot_person = factor(plot_person, levels = c("adults", "parents",
+                                              "children")))
+
+spoken_plot2 <- tidy_b %>% 
+    filter(source != "wikipedia",
+           gram %in% c("unigram", "trigram"), 
+           language %in% c("sbc", "Eng-NA")) %>% 
+    mutate(plot_person = case_when(language == "sbc" ~ "adults",
+                                   source == "adult" ~ "parents",
+                                   T ~ "children"),
+           plot_person = factor(plot_person, levels = c("adults", "parents",
+                                              "children"))) %>%
+    ggplot(aes(x = position, y = surprisal, color = gram)) + 
+    facet_wrap(~ plot_person) + 
+    geom_point(size = .75) + 
+    geom_line() + 
+    geom_text(aes(label = gram), data = spoken_annotations) +
+    scale_x_continuous(breaks = 1:5) + 
+    xlab("barycenter coordinate") + 
+    ylab("surprisal") + 
+    scale_color_colorblind() + 
+    theme(legend.position = "none", aspect.ratio = 1/1.33) +
+    labs(tag = "B")
+
+gridExtra::grid.arrange(spoken_plot1, spoken_plot2, ncol = 1)
+```
+
+The information curves found in adults-adult utterances were quite similar to those of parent-child utterances and child-parent utterances (Fig. \ref{fig:spoken-figs}B). Under the unigram model, information rose steeply in the beginnings of utterances, was relatively flatter in the middle of utterances, and the rose even more steeply at the ends. Under the trigram model, the curve was nearly identical. Both curves were similar in shape to the characeristic curve for written English estimated in Study 1.
+
+Curves for parent and child speech were similar to those of adults with some small differences. Unigram curves for both were monotonically increasing, although the largest jump in the parent curve occurred in the 4th barycenter position rather than the third. Trigram curves were also broadly similar, although the parent curve dipped between first and second position. This decreasing slope is inconsistent with the UID prediction of monotonic increase. It is possible that this decrease is a real feature of speech to children--parents may begin utterances to children more variably than when they speak to other adults.
+
+Overall, the preponderance of evidence suggests that the characteristic shape of the information curve for spoken English is similar to that of written English. And this appears to be approximately true in speech to children and by children. All of these curves are broadly consistent with predictions from a Uniform Information Density account that information measured without context should increase, and that including some context will reduce the rate of increase. 
+
+In Study 3 we apply this technique to a diverse set of written languages of different families to ask whether these structures vary cross-linguistically. 
+
+# Study 3: Language structures and large-scale data analysis
+
+In Study 3, we applied the same method as in Studies 1 and 2 to a diverse set of over two hundred natural languages represented on Wikipedia. In our prior studies, we found that the distribution of information in sentences of English is broadly consistent with predictions of a Uniform Information Density account: Information roughly rises over sequential words in a sentence, and further information rises more slowly when more prior context is used to predict the next word. In Study 3 we ask whether this same pattern characterizes natural languages in general, and whether variability in the characteristic information curves of languages is related to their typological features.
+
+## Method
+
+### Data
+
+```{r wiki-langs}
+keep_langs <- tidy_b %>%
+  ungroup() %>%
+  filter(source == "wikipedia") %>%
+  group_by(language) %>%
+  count() %>%
+  filter(n== 10) %>%
+  pull(language)
+
+n_langs <- tidy_b %>% 
+  filter(source == "wikipedia", language %in% keep_langs) %>% 
+  ungroup() %>%
+  distinct(language) %>% 
+  count() %>%
+  pull()
+
+scaled_b <- tidy_b %>%
+  filter(source == "wikipedia", language %in% keep_langs) %>% 
+  group_by(language, gram) %>%
+  mutate(surprisal = scale(surprisal, scale = FALSE))
+
+families_b <- scaled_b %>%
+    left_join(families, by = c("language")) 
+
+n_fams <- families_b %>%
+  ungroup() %>%
+  distinct(family) %>%
+  count() %>%
+  pull()
+```
+
+To measure cross-linguistic variation in the structure of information across sentences, we constructed a corpus of Wikipedia articles using the Wikiextractor tool from the Natural Language Text Analytics (TANL) pipeline [@attardi2010]. We retained all languages with at least 10,000 articles, resulting in data from a set of `r n_langs` languages from `r n_fams` families. 
+
+To understand how potential variation in information curve shape are related to the structure of these languages, we used the typological feature information for these languages available in the  World Atlas of Language Structures [WALS, @wals]. The WALS database has data for $144$ typological features in thousands of languages from across the world. These features describe aspects of morphology, syntax, phonology, etymology and semantics--in short the features describe the structures in each language. 
+
+There are several categories of WALS features. Phonology features describe sounds, stress, intonation, and syllable structure in each language. Nominal categories describe the morphology and semantics of nouns, including features for cases, definiteness and plurals. Verbal categories describe analogous verb features, focusing on tense, mood and aspect. Nominal syntax features describe a heterogeneous collection of noun phenomena, focusing on possessives and adjectives. Word order features describe word order in a language, not only canonical ordering of the subject, object and verb but also orderings of heads and modifiers, relative clauses and other orderings. Simple clause features describe the syntax and organization of single clauses, such as passive and negative constructions in the language. 
+
+### Models
+
+Language models were estimated separately for each language using the same procedures as in Study 1. To accommodate the variety of lengths across language corpora, we analyzed sentences of lengths 5 to 45. Word boundaries were assumed to be identified by spaces as in Studies 1 and 2. Wikipedia entries for all languages were hand-checked to ensure that this assumption was appropriate to the best of our abilities, but it is a potential source of noise in the analyses. 
+
+For each pair of languages, we derived two pairwise similarity measures. To estimate the information structure similarity, we first centered each language's 5-point barycenter curve (since surprisal is highly correlate with corpus size), and then computed the cosine similarity between the two centered curves. To compare typological similarity, we computed the proportion of features in the World Atlas of Linguistic Structure (WALS) on which the two languages shared the same feature value. Because WALS is a compiled collection from the fieldwork of many linguists, rather than a complete analysis by a single group, features vary in the number of values they take. Some features--like Vowel Quality Inventories (2A), have multiple features but also a natural ordering (small inventory, medium inventory, large inventory). However, others, like  others like Position of Tense-Aspect Affixes (69A) have multiple values with no obvious ordering (prefixes, suffixes, tone, combination with no primary, none). For this reason, we used exact match as our distance function, but other more sensitive metrics could be used in the future by other researchers.
+
+Finally, because of the collaboratie constructin of WALS, many features are missing in many languages. For this reason, only features present in WALS for both languages in a pair were considered for estimating their proportion of shared features. We also attempted to address this sparsity problem by imputing missing feature data where possible using Multiple Imputation with Multiple correspondence Analysis [MIMCA, @audigier2017]. MIMCA begins with mean imputation, converts the categorical WALS features into a numerical contingency table with dummy coding, then repeatedly performs principle components analysis and reconstructs the contingency table. Results of analyses using imputed features were qualitatively to those performed on raw features but with weaker correlations as described below. Nonetheless, we report both measures as they may be of use in future research.
+
+## Results and Discussion
+
+In Studies 1 and 2, we observed that characteristic information curve of English to be generally increasing in both unigram and trigram models. In Study 3, we first replicated this analysis on the larger English language sample in the Wikipedia corpus (Figure \ref{fig:wiki-english}). The unigram information curve for English estimated on Wikipedia was nearly identical to the curve observed in the British National Corpus un Study 1 (see Figure \ref{fig:bnc-plots}b). The trigram curve had a more pronounced dip in the 4th coordinate, but otherwise maintained the general shape and characteristic final rise we had previously observed. 
+
+```{r wiki-english, fig.height = 3.5, fig.width = 6, fig.align = "center", set.cap.width=T, fig.cap = "(A) The distribution of sentence lengths in the English Wikipedia Corpus. We analyzed sentences of length 5-45 (colored). (B) Charateristic information curves for English in the Wikipedia corpus."}
+wiki_english_plot1 <- english_wiki_lengths %>%
+  filter(length <= 100) %>%
+    mutate(group = if_else(length < MIN | length > MAX, "out", "in")) %>%
+    ggplot(aes(x = length, y = n, fill = group, color = group)) +
+    geom_col() +
+    labs(x = "sentence length", y = "frequency", tag = "A") +
+    theme(legend.position = "none", aspect.ratio = 1/1.33) + 
+    scale_fill_manual(values = c(ptol_pal()(1), "light gray")) +
+    scale_color_manual(values = c(ptol_pal()(1), "light gray"))
+
+wiki_english_annotations <- tibble(position = c(2.5, 2.5),
+                          gram = c("unigram","trigram"),
+                          surprisal = c(3.65, 2.55))
+
+wiki_english_plot2 <- tidy_b %>% 
+    filter(gram %in% c("unigram", "trigram"), 
+           source == "wikipedia",
+           language == "English") %>% 
+    ggplot(aes(x = position, y = surprisal, color = gram)) + 
+    geom_point(size = .75) + 
+    geom_line() + 
+    geom_text(aes(label = gram), data = wiki_english_annotations) +
+    scale_x_continuous(breaks = 1:5) + 
+    xlab("Coordinate") + 
+    ylab("Surprisal") + 
+    scale_color_colorblind() + 
+    labs(tag = "B") + 
+    theme_few() +
+    theme(aspect.ratio = 1/1.33, legend.position = "none")
+
+gridExtra::grid.arrange(wiki_english_plot1, wiki_english_plot2, nrow = 1)
+```
+
+This shape did not, however, characterize all of the `r n_langs` represented in Wikpedia. Languages varied widely in the shapes of their information curves, both in the unigram and in the trigram model. Under the unigram model, some languages--like Spanish and German were generally increasing like English. Others, like Hindi and Chinese, had negative slopes in their characteristic curves, and yet others like Urdu had a mix of positive and negative slopes. Under the trigram model, languages also varied, with reliable negative slopes in a number of languages including Russian and Urdu.
+
+In lieu of presenting characteristic curves for all languages, Figure \ref{fig:family-curves} shows the characteristic information curves for each of the six language families in which at least 10 languages were represented in Wikipedia. These curves were produced by first centering the surprisal for each language so that the surprisal of the mean word was 0 in order to deconfound differences due to corpus size, and then applying the barycenter averaging algorithm to the curves from all languages in the relevant family. 
+
+```{r genealogy-barycenters}
+genealogy_barycenters <- read_csv(here("Data/genealogy_barycenters.csv"),
+                                  show_col_types = FALSE) %>%
+  filter(!is.na(family)) %>%
+  pivot_longer(-c(family, genus, gram), 
+                  names_to = "position", values_to = "surprisal") %>%
+  mutate(position = as.numeric(position),
+         gram = factor(gram, levels = c("unigram", "trigram"))) 
+
+top_families <- families_b %>%
+  filter(source == "wikipedia", gram == "trigram") %>%
+  distinct(family, language) %>%
+  group_by(family) %>%
+  count() %>%
+  arrange(desc(n)) %>%
+  ungroup() %>%
+  slice(1:6)
+
+```
+
+
+```{r family-curves, fig.height = 3.5, fig.width = 6, fig.align = "center", set.cap.width=T, fig.cap = "Centered characteristic information curves for the six most frequent language families represented on Wikipedia. The dashed line shows the mean curve across all language families."}
+ggplot(genealogy_barycenters %>%
+         filter(family %in% top_families$family,
+                genus == "mean"), 
+       aes(x = position, y = surprisal, color = family, group = family,
+           label = family)) + 
+  geom_point() + 
+  geom_line() + 
+  facet_wrap(~gram) + 
+  geom_dl(method = list(dl.trans(x = x + .1), "last.qp", cex = .45)) + 
+  scale_x_continuous(limits = c(1, 6), breaks = 1:5) +
+  geom_line(data = filter(genealogy_barycenters, family == "mean"), 
+            color = "black", linetype = "dashed", size = .7) +
+  theme(aspect.ratio = 1/1.33, legend.position = "none")
+```
+
+
+```{r non-uniform}
+lang_surprisals <- families_b %>%
+  filter(source == "wikipedia") %>%
+  distinct(language, position, gram, .keep_all = TRUE) %>%
+  group_by(gram, language) %>%
+  mutate(surprisal = scale(surprisal, scale = FALSE)) 
+
+gram_deviations <- lang_surprisals %>%
+  summarise(deviations = sum(abs(surprisal))) %>%
+  tidyboot_mean(deviations, nboot = 109) 
+
+gram_variance <- lang_surprisals %>%
+  group_by(gram, position) %>%
+  summarise(variance = var(surprisal)) %>%
+  tidyboot_mean(variance)
+
+unigram_variance <- gram_variance %>%
+  filter(gram == "unigram")
+
+
+trigram_variance <- gram_variance %>%
+  filter(gram == "trigram")
+
+```
+
+Two main trends are apparent. First, no language families have curves that are monotonically increasing, and neither does the mean curve over all languages for either the unigram nor the trigram model. Thus, the Uniform Information Density prediction does not appear to hold for languages other than English. Second, information curves for distinct families were more different from each-other under the trigram model than the unigram model. To confirm this statistically, we computed the variance in surprisals at each of the 5 barycenter positions across all `r n_langs` languages. The average variance across the 5 positions under the unigram model was `r unigram_variance$empirical_stat` with a 95% confidence interval of [`r unigram_variance$ci_lower`, `r unigram_variance$ci_upper`]. The average variance under the trigram model was `r trigram_variance$empirical_stat` [`r trigram_variance$ci_lower`, `r trigram_variance$ci_upper`]. Matching our observation, these confidence intervals do not overlap.
+
+```{r cor-data}
+cor_data <- left_join(cosines, wals, by = c("language1", "language2")) %>%
+  filter(language1 < language2) %>%
+  group_by(gram, measure) %>%
+  nest() %>%
+  mutate(wals_cor = map(data, ~cor.test(.x$cosine, .x$wals_dist,
+                                        use = "pairwise") %>% tidy())) %>%
+  select(-data) %>%
+  unnest(cols = c(wals_cor)) %>%
+  select(-method, -alternative)
+
+type_cor_data <- left_join(cosines, wals_types, 
+                           by = c("language1", "language2")) %>%
+  filter(language1 < language2, !is.na(type)) %>%
+  group_by(gram, measure, type) %>%
+  nest() %>%
+  mutate(wals_cor = map(data, ~cor.test(.x$cosine, .x$wals_dist,
+                                          use = "pairwise") %>% tidy())) %>%
+  select(-data) %>%
+  unnest(cols = c(wals_cor)) %>%
+  ungroup() %>%
+  mutate(type = factor(type, levels = c("nom_syntax", "clauses", 
+                                        "verb_categories", "phonology", 
+                                         "nom_categories","word_order"),
+                       labels = c("nom. syntax", "clauses", 
+                                  "verb categories", "phonology", 
+                                  "nom. categories", "word order")),
+           gram = factor(gram, levels = c("unigram", "trigram")),
+         measure = factor(measure, levels = c("raw", "imputed"),
+                          labels = c("raw WALS features",
+                                     "imputed WALS features"))) %>%
+  select(-method, -alternative)
+
+wals_stats_uni_raw <- filter(cor_data, measure == "raw", 
+                            gram == "unigram")
+wals_stats_uni_imputed <- filter(cor_data, measure == "imputed", 
+                            gram == "unigram")
+
+wals_stats_tri_raw <- filter(cor_data, measure == "raw", 
+                            gram == "trigram")
+wals_stats_tri_imputed <- filter(cor_data, measure == "imputed", 
+                            gram == "trigram")
+
+```
+
+```{r dendro, fig.width = 6, fig.height = 7, fig.align = "center", set.cap.width=T, fig.cap = "A dendrogram constructed by hierarchically clustering languages in the six most-well represented families on Wikipedia according to the similarities of their characteristic information curves. Languages are colored according to their language family."}
+dendro_data <- b %>%
+  ungroup() %>%
+  filter(gram == "trigram", source == "wikipedia") %>%
+  filter(family %in% top_families$family) %>%
+  select(-gram, -source, -family, -genus) %>% 
+  column_to_rownames("language") %>%
+  dist() %>% 
+  hclust() %>%
+  dendro_data()
+
+labs <- label(dendro_data) %>%
+  as_tibble() %>%
+  left_join(b %>% ungroup() %>% distinct(language, genus, family), 
+            by = c("label" = "language"))
+
+ggplot(segment(dendro_data)) +
+  geom_segment(aes(x=x, y=y, xend=xend, yend=yend)) +
+  geom_text(data = labs,
+               aes(label=label, x=x, y=0, colour=family),
+            size = 1.2, nudge_y = 0, hjust = 1) +
+  theme_dendro() +
+  coord_flip() +
+  scale_color_ptol()
+```
+
+Together, these results suggest that the characteristic information curves of different languages may diverge from the UID prediction because of the influence of idiosyncratic syntactic properties of these languages that prevent them from being optimal codes. If this is the case, then languages that are more similar to either phylogentically may also have more similar information curves. Figure \ref{fig:dendro} shows a dendrogram produced by hierarchichally clustering on the basis of cosine similarity of information curves. All of the languages that belong from the families shown in Figure \ref{fig:family-curves} are represented. Although not all members of each language family are clustered closely together, but some structure is certainly apparent. For instance, all of the Austronesian languages are quite similar.
+
+To test the hypothesis that linguistic similarity leads to information curve similarity, we considered the relationship between the typological features of languages and their characteristic information curves. For each pair of languages, we computed the characteristic curve similarity using cosine distance, and their typological similarity using number of shared WALS features (both raw and imputed). Under the unigram model, the two similarity measures were significantly but very weakly correlated ($r_{raw} =$ `r wals_stats_uni_raw$estimate`, $t_{raw} =$ `r wals_stats_uni_raw$statistic`, $p_{raw}$ `r papaja::printp(wals_stats_uni_raw$p.value)`; $r_{imputed} =$ `r wals_stats_uni_imputed$estimate`, $t_{imputed} =$ `r wals_stats_uni_imputed$statistic`, $p_{imputed} =$ `r papaja::printp(wals_stats_uni_imputed$p.value)`). Under the trigram model, this correlation was still low, but an order of magnitude stronger ($r_{raw} =$ `r wals_stats_tri_raw$estimate`, $t_{raw} =$ `r wals_stats_tri_raw$statistic`, $p_{raw}$ `r papaja::printp(wals_stats_tri_raw$p.value)`; $r_{imputed} =$ `r wals_stats_tri_imputed$estimate`, $t_{imputed} =$ `r wals_stats_tri_imputed$statistic`, $p_{imputed}$ `r papaja::printp(wals_stats_tri_imputed$p.value)`).
+
+To understand which typological features contribute to these similarities, we split the WALS features by type, with categories such as nominative categories and nominative syntax describing morphology while word order describes subject-verb-object and head-modifier word orders. Figure \ref{fig:type-cors} shows the correlation between the similarity of information curves under both the unigram and trigram models and the number of features of each of these types two-languages shared. Under the unigram model, word order features and possibly nominal category features appear to predict information curve similarity. In contrast, under the trigram model, all features types except for possibly nominal syntax are reliably correlated with information curve similarity. Thus, almost all of the typological features represented in WALS are reflected in the characteristic information curves of languages. These analyses suggest that languages may be pressured to be optimal codes, but that the historical influences on the structures of languages may put in place limits on the degree of efficiency of these codes.
+
+```{r type-cors, fig.height = 3, fig.width=7, fig.align="center", fig.cap="Pairwise correlations between languages' normalized information curves and the number of linguistic features they share of each type. Error bars indicate 95\\% confidence intervals."}
+type_annotations <- tibble(type = c("phonology", "phonology"),
+                          estimate = c(-.03, .1),
+                          gram = c("unigram", "trigram"),
+                          measure = c("imputed", "imputed")) %>%
+    mutate(type = factor(type, levels = c("nom syntax", "clauses", 
+                                          "verb categories", "phonology", 
+                                          "nom categories", "word order")),
+           gram = factor(gram, levels = c("unigram", "trigram")),
+           measure = factor(measure, levels = c("raw", "imputed"),
+                            labels = c("raw WALS features",
+                                       "imputed WALS features")))
+
+ggplot(type_cor_data, aes(x = type, y = estimate, color = gram)) + 
+  facet_wrap(~ measure) +
+  geom_pointrange(aes(ymin = conf.low, ymax = conf.high),
+                  position = position_dodge(.5)) +
+  geom_hline(aes(yintercept = 0), linetype = "dashed") + 
+  scale_color_ptol() +
+  scale_y_continuous(limits = c(-.1, .25)) +
+  theme_few() +
+  theme(legend.position = "none", aspect.ratio = 1,
+        axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1)) + 
+  labs(x = "", y = "correlation") + 
+  geom_text(aes(label = gram), data = type_annotations)
+```
+
+# General Discussion
+
+Why do languages have the regularities we observe in them? The particular features of any one language may owe their origin to a diverse set of ecological pressures, features of the population of speakers, or other idiosyncratic causes [@maddieson2015; @lupyan2010]. Despite the difficulty of explaining variability across languages, significant progress in explaining universals has been made by taking an optimal coding perspective on language. If languages have evolved to be efficient codes for transmitting information, they should all have certain predictable features [@anderson1989; @shannon1948]. 
+
+One such predicted feature has been called the Uniform Information Density hypothesis--speakers should try to keep the amount of information they transmit constant rather than produce spikes that lead to difficulties in comprehension [@aylett2004; @genzel2002; @levy2007]. @genzel2002 developed a clever method to confirm this prediction at the level of sentences in an article, and a variety of other results have confirmed similar results at a variety of other levels of language [e.g. @jaeger2010; @van-son2005]. However, recent work from @yu2016 suggests that this prediction may not hold at the level on subsequent words within a sentence.
+
+In this paper, we build the method employed by @yu2016 to develop a novel method for quantifying how information is typically distributed across the words of a sentence. We showed that English--whether written or spoken, whether produced by adults or children--has a prototypical information structure. Further, this prototypical structure is broadly in line with the predictions of the Uniform Information Density Hypothesis. 
+
+However, the same prediction does not hold for many other languages. Instead, the characteristic information curves of languages are at least partially influenced by a variety of features of their typological structure (e.g. word order). These top-down constraints appear to place limits on the extent to which languages can approximate optimal codes. These results represent a small first step towards answering the question of how much these constraints shape speakers' productions, and how speakers interact with them. 
